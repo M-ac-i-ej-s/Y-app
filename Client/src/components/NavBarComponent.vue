@@ -4,26 +4,36 @@
             <div class="navbar-menu-image">
                 <img class="navbar-menu-image-value" src="../assets/Ylogo.png" alt="yLogo">
             </div>
-            <div class="navbar-menu-link shadow">
-                <v-icon class="navbar-menu-link-icon" icon="mdi-home-outline"/>
-                <span class="navbar-menu-link-label">Home</span>
-            </div>
-            <div class="navbar-menu-link shadow">
-                <v-icon class="navbar-menu-link-icon" icon="mdi-magnify"/>
-                <span class="navbar-menu-link-label">Explore</span>
-            </div>
-            <div class="navbar-menu-link shadow">
-                <v-icon class="navbar-menu-link-icon" icon="mdi-bookmark-outline"/>
-                <span class="navbar-menu-link-label">Bookmarks</span>
-            </div>
-            <div class="navbar-menu-link shadow">
-                <v-icon class="navbar-menu-link-icon" icon="mdi-account-cancel-outline"/>
-                <span class="navbar-menu-link-label">Blocked users</span>
-            </div>
-            <div class="navbar-menu-link shadow">
-                <v-icon class="navbar-menu-link-icon" icon="mdi-account-outline"/>
-                <span class="navbar-menu-link-label">Profile</span>
-            </div>
+            <router-link class="navbar-menu-redirect" to="/home">
+                <div class="navbar-menu-link shadow">
+                    <v-icon class="navbar-menu-link-icon" icon="mdi-home-outline"/>
+                    <span class="navbar-menu-link-label">Home</span>
+                </div>
+            </router-link>
+            <router-link class="navbar-menu-redirect" to="/explore">
+                <div class="navbar-menu-link shadow">
+                    <v-icon class="navbar-menu-link-icon" icon="mdi-magnify"/>
+                    <span class="navbar-menu-link-label">Explore</span>
+                </div>
+            </router-link>
+            <router-link class="navbar-menu-redirect" to="/:id/bookmarks">
+                <div class="navbar-menu-link shadow">
+                    <v-icon class="navbar-menu-link-icon" icon="mdi-bookmark-outline"/>
+                    <span class="navbar-menu-link-label">Bookmarks</span>
+                </div>
+            </router-link>
+            <router-link class="navbar-menu-redirect" to="/:id/blockedUsers">
+                <div class="navbar-menu-link shadow">
+                    <v-icon class="navbar-menu-link-icon" icon="mdi-account-cancel-outline"/>
+                    <span class="navbar-menu-link-label">Blocked users</span>
+                </div>
+            </router-link>
+            <router-link class="navbar-menu-redirect" to="/:login">
+                <div class="navbar-menu-link shadow">
+                    <v-icon class="navbar-menu-link-icon" icon="mdi-account-outline"/>
+                    <span class="navbar-menu-link-label">Profile</span>
+                </div>
+            </router-link>
             <div class="navbar-menu-link">
                 <v-btn v-if="this.width > 768" class="navbar-menu-link-button" color="#582b5a">Post</v-btn>
                 <v-btn v-else icon="mdi-plus" color="#582b5a"/>
@@ -124,6 +134,10 @@ export default {
                 padding: 5px;
                 margin: 10px;
             }
+        }
+        .navbar-menu-redirect {
+            text-decoration: none;
+            color: black;
         }
         .navbar-menu-link {
             display: flex;
