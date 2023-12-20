@@ -32,12 +32,37 @@
 
 <script>
 import BaseDialog from '../base/BaseDialog.vue'
-
+import { login } from '../services/auth.service';
+import { mapMutations } from 'vuex';
+import router from '../router';
+import authHeader from '../services/auth-header';
 
 export default {
     components: {
         BaseDialog
     },
+    data() {
+        return {
+            email: null,
+            password: null,
+            borderError: 'black'
+        }
+    },
+    methods: {
+        onLogin() {
+            login(values.email, values.password)
+                .then((response) => {
+                    this.loggedIn(response.User);
+                    authHeader();
+                    router.push('/home');
+                })
+                .catch(() => {
+                    console.log('error');
+            })
+        },
+        ...mapMutations(['loggedIn', 'loggedOut']),
+    },
+
 }
 </script>
 <style lang="scss" scoped>

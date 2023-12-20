@@ -15,6 +15,12 @@ const UserSchema = new mongoose.Schema(
         website: {type: String, required: false},
         birthDay: {type: Date, required: false},
         joinDate: {type: Date, required: false},
+        followers: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+        following: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+        posts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
+        blockedUsers: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+        savedPosts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
+
     }
 );
 

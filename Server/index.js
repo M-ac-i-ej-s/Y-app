@@ -4,14 +4,14 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 
-import userRouter from './routes/user.route';
+import userRouter from './routes/user.route.js';
 
 dotenv.config();
 const app = express();
 mongoose.set('strictQuery', false)
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-const whitelist = ['https://localhost:3001','https://localhost:3000' ];
+const whitelist = ['https://localhost:3001','https://localhost:3000', 'http://localhost:5173/' ];
 const corsOptions = {
     credentials: true,
     origin: function (origin, callback) {

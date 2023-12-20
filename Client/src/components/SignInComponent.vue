@@ -33,13 +33,13 @@
                     ></v-text-field>
                 </div>
                 <div class="sign-component-not-nescessary">
-                    <div v-if="!photo" class="sign-component-not-nescessary-photo">
-                        <input class="sign-component-not-nescessary-photo-input" type="file" @change="savePhoto">
+                    <div v-if="!avatar" class="sign-component-not-nescessary-avatar">
+                        <input class="sign-component-not-nescessary-avatar-input" type="file" @change="saveavatar">
                         <v-icon icon="mdi-camera-outline"></v-icon>
                     </div>
-                    <div v-else class="sign-component-not-nescessary-photo">
-                        <input class="sign-component-not-nescessary-photo-input" type="file" @change="savePhoto">
-                        <v-img class="sign-component-not-nescessary-photo-value" :src="photo" alt="photo" aspect-ratio="1/1" :width="100"/>
+                    <div v-else class="sign-component-not-nescessary-avatar">
+                        <input class="sign-component-not-nescessary-avatar-input" type="file" @change="saveavatar">
+                        <v-img class="sign-component-not-nescessary-avatar-value" :src="avatar" alt="avatar" aspect-ratio="1/1" :width="100"/>
                     </div>
                     <v-textarea class="sign-component-not-nescessary-bio" label="bio, describe yourself" variant="outlined"/>
                 </div>
@@ -60,6 +60,9 @@
 </template>
 <script>
 import BaseDialog from '../base/BaseDialog.vue'
+import router from '../router';
+import { register } from '../services/auth.service';
+import authHeader from '../services/auth-header';
 
 export default {
     components: {
@@ -67,12 +70,27 @@ export default {
     },
     data() {
         return {
-            photo: null
+            avatar: null,
+            login: String,
+            email: String,
+            telNumber : String,
+            password : String,
+            bio: String,
         }
     },
     methods : {
-        savePhoto(event) {
-            this.photo = URL.createObjectURL(event.target.files[0])
+        saveAvatar(event) {
+            this.avatar = URL.createObjectURL(event.target.files[0])
+        },
+        onRegister() {
+            register(this.login, this.email, this.telNumber, this.password, this.bio, this.avatar)
+                .then(() => {
+                    router.push('/home');
+                    authHeader();
+                })
+                .catch(() => {
+                    console.log('error');
+                });
         }
     },
 }
@@ -112,7 +130,7 @@ export default {
             flex-direction: column;
             align-items: center;
             gap: 10px;
-            .sign-component-not-nescessary-photo {
+            .sign-component-not-nescessary-avatar {
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -122,12 +140,12 @@ export default {
                 height: 150px;
                 cursor: pointer;
                 border: 1px solid #c5c5c5;
-                .sign-component-not-nescessary-photo-value {
+                .sign-component-not-nescessary-avatar-value {
                     border-radius:90px;
                     background-color:transparent;
                     cursor: pointer;
                 }
-                .sign-component-not-nescessary-photo-input {
+                .sign-component-not-nescessary-avatar-input {
                     opacity: 0;
                     position: absolute;
                     cursor: pointer;
