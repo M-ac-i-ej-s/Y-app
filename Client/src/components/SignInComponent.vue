@@ -38,11 +38,11 @@
                 </div>
                 <div class="sign-component-not-nescessary">
                     <div v-if="!avatar" class="sign-component-not-nescessary-avatar">
-                        <input class="sign-component-not-nescessary-avatar-input" type="file" @change="saveavatar">
+                        <input class="sign-component-not-nescessary-avatar-input" type="file" @change="saveAvatar">
                         <v-icon icon="mdi-camera-outline"></v-icon>
                     </div>
                     <div v-else class="sign-component-not-nescessary-avatar">
-                        <input class="sign-component-not-nescessary-avatar-input" type="file" @change="saveavatar">
+                        <input class="sign-component-not-nescessary-avatar-input" type="file" @change="saveAvatar">
                         <v-img class="sign-component-not-nescessary-avatar-value" :src="avatar" alt="avatar" aspect-ratio="1/1" :width="100"/>
                     </div>
                     <v-textarea class="sign-component-not-nescessary-bio" label="bio, describe yourself" variant="outlined" v-model="bio"/>
@@ -99,7 +99,7 @@ export default {
     },
 }
 </script>
-<style lang="scss">
+<style scoped lang="scss">
 .signInComponent {
     .sign-label {
         font-size: 2vw;
