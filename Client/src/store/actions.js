@@ -7,3 +7,8 @@ const loggedOut = (state) => {
     state.data.user = null;
     state.data.isLogged = false;
 }
+
+export default {
+    loggedIn,
+    loggedOut
+}

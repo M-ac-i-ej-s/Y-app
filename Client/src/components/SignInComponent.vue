@@ -10,24 +10,28 @@
                         class="sign-component-nescessary-value"
                         label="Login*"
                         variant="outlined"
+                        v-model="login"
                         prepend-icon="mdi-account-outline"
                     ></v-text-field>
                     <v-text-field
                         class="sign-component-nescessary-value"
                         label="Email*"
                         variant="outlined"
+                        v-model="email"
                         prepend-icon="mdi-email-outline"
                     ></v-text-field>
                     <v-text-field
                         class="sign-component-nescessary-value"
                         label="Telephone Number*"
                         variant="outlined"
+                        v-model="telNumber"
                         prepend-icon="mdi-phone-outline"
                     ></v-text-field>
                     <v-text-field
                         class="sign-component-nescessary-value"
                         label="Password*"
                         variant="outlined"
+                        v-model="password"
                         prepend-icon="mdi-lock-outline"
                         type="password"
                     ></v-text-field>
@@ -41,7 +45,7 @@
                         <input class="sign-component-not-nescessary-avatar-input" type="file" @change="saveavatar">
                         <v-img class="sign-component-not-nescessary-avatar-value" :src="avatar" alt="avatar" aspect-ratio="1/1" :width="100"/>
                     </div>
-                    <v-textarea class="sign-component-not-nescessary-bio" label="bio, describe yourself" variant="outlined"/>
+                    <v-textarea class="sign-component-not-nescessary-bio" label="bio, describe yourself" variant="outlined" v-model="bio"/>
                 </div>
                 <div class="sign-component-info">
                     <span class="sign-component-info-label">* - nescessary to complete creating the account</span>
@@ -50,8 +54,8 @@
                     <v-btn class="sign-component-buttons-label" rounded="xl" color="grey">
                         Clear
                     </v-btn>
-                    <v-btn class="sign-component-buttons-label" rounded="xl" color="purple-darken-2">
-                        Create account
+                    <v-btn class="sign-component-buttons-label" rounded="xl" color="purple-darken-2" @click="onRegister">
+                        Create account 
                     </v-btn>
                 </div>
             </div>
@@ -71,11 +75,11 @@ export default {
     data() {
         return {
             avatar: null,
-            login: String,
-            email: String,
-            telNumber : String,
-            password : String,
-            bio: String,
+            login: '',
+            email: '',
+            telNumber: '',
+            password: '',
+            bio: ''
         }
     },
     methods : {
@@ -88,8 +92,8 @@ export default {
                     router.push('/home');
                     authHeader();
                 })
-                .catch(() => {
-                    console.log('error');
+                .catch((err) => {
+                    console.log(err);
                 });
         }
     },

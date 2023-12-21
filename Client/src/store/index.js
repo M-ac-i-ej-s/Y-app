@@ -1,5 +1,5 @@
 import { createStore, createLogger } from 'vuex'
-import mutations from './mutations'
+import actions from './actions'
 
 const state = {
     data: {
@@ -10,6 +10,6 @@ const state = {
 
 export default createStore({
     state,
-    mutations,
+    actions,
     plugins: [createLogger()]
 })

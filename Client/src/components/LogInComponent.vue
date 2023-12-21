@@ -12,17 +12,19 @@
                     class="login-component-actions-buttons-value"
                     label="Email"
                     variant="outlined"
+                    v-model="email"
                     prepend-icon="mdi-email-outline"
                     ></v-text-field>
                     <v-text-field
                     class="login-component-actions-buttons-value"
                     label="Password"
                     variant="outlined"
+                    v-model="password"
                     prepend-icon="mdi-lock-outline"
                     ></v-text-field>
                 </div>
                 <div class="login-component-actions-login">
-                <v-btn class="login-component-actions-login-button" rounded="xl" color="purple-darken-2">
+                <v-btn class="login-component-actions-login-button" rounded="xl" color="purple-darken-2" @click="onLogin">
                     Log In
                 </v-btn>
                 </div>
@@ -45,19 +47,18 @@ export default {
         return {
             email: null,
             password: null,
-            borderError: 'black'
         }
     },
     methods: {
         onLogin() {
-            login(values.email, values.password)
+            login(this.email, this.password)
                 .then((response) => {
                     this.loggedIn(response.User);
                     authHeader();
                     router.push('/home');
                 })
-                .catch(() => {
-                    console.log('error');
+                .catch((err) => {
+                    console.log(err);
             })
         },
         ...mapMutations(['loggedIn', 'loggedOut']),
