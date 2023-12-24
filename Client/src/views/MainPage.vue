@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="mainPage">
         <NavBarComponent/>
         <router-view/>
     </div>
@@ -14,5 +14,10 @@ export default {
 }
 </script>
 <style lang="scss">
-    
+.mainPage {
+    display: flex;
+    @media screen and (min-width: 768px) {
+        justify-content: center;
+    }
+}
 </style>

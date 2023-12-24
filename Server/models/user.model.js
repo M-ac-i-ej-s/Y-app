@@ -20,7 +20,9 @@ const UserSchema = new mongoose.Schema(
         posts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
         blockedUsers: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
         savedPosts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
-
+        backgroundPhoto: {type: String, required: false},
+        likedPosts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
+        repliedPosts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
     }
 );
 
