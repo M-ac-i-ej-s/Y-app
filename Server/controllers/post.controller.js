@@ -4,10 +4,9 @@ import Post from '../models/post.model.js';
 export const createPost = async (req, res) => {
     const id = req.user;
     const text = req.body.text;
-    console.log(text)
     const newPost = new Post({
         _id: new mongoose.Types.ObjectId(),
-        id: id,
+        user: id,
         text: text,
         likes: [],
         replies: [],
@@ -43,10 +42,19 @@ export const getPost = async (req, res) => {
 
 export const getUsersPosts = async (req, res) => {
     const id = req.user;
-    try {
-        const posts = await Post.find({ user: id });
-        res.status(200).json(posts);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+    console.log(req.user)
+    await Post.find({ user: id }).then((posts) => {
+        res.status(200).json({
+            success: true,
+            message: 'Users posts',
+            Posts: posts,
+        })
+        })
+        .catch((err) => {
+            res.status(500).json({
+                success: false,
+                message: 'This user does not exist',
+                error: err.message,
+            });
+        });
 }

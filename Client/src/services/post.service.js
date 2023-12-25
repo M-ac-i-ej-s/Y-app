@@ -7,6 +7,7 @@ export const getUsersPosts = async () => {
         headers: authHeader(),
     },
     ).then((response) => {
+        console.log(response);
         return response.data.Posts;
     });
 }

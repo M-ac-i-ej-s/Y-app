@@ -1,6 +1,6 @@
 <template>
     <div class="profileSlot">
-        <v-tabs class="profile-slot-tabs" v-model="tabs" color="primary" grow>
+        <v-tabs class="profile-slot-tabs" v-model="tabs" color="purple-darken-2" grow>
             <v-tab :value="1">
                 <span class="profile-slot-tabs-label">
                     Posts
@@ -34,12 +34,24 @@
     </div>
 </template>
 <script>
+import {getUsersPosts} from '../services/post.service';
+
 export default {
     data() {
       return {
         tabs: null,
+        posts: []
       }
     },
+    methods: {
+        async getUsersPost() {
+            this.posts = await getUsersPosts();
+        }
+    },
+    mounted() {
+        this.getUsersPost();
+        console.log(this.posts)
+    }
   }
 </script>
 <style lang="scss">
