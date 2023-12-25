@@ -6,26 +6,37 @@
                     <img class="creating-post-avatar-value" src="../assets/dummy-avatar.png" alt="">
                 </div>
                 <div class="creating-post-textarea">
-                    <textarea class="creating-post-textarea-value" maxlength="200" placeholder="What is happening!?"></textarea>
+                    <textarea v-model="text" class="creating-post-textarea-value" maxlength="200" placeholder="What is happening!?"></textarea>
                 </div>
             </div>
             <v-divider></v-divider>
             <div class="creating-post-button">
-                <v-btn class="creating-post-button-value" rounded="xl" color="#582b5a">Post</v-btn>
+                <v-btn class="creating-post-button-value" rounded="xl" color="#582b5a" @click="post">Post</v-btn>
             </div>
         </div>
     </BaseDialog>
 </template>
 <script>
 import BaseDialog from '../base/BaseDialog.vue'
+import { createPost } from '../services/post.service.js'
 
 export default {
     props: {
-        width: Object
+        width: Number
+    },
+    data() {
+        return {
+            text: ''
+        }
     },
     components: {
         BaseDialog
-    }
+    },
+    methods: {
+        post() {
+            createPost(this.text)
+        }
+    },
 }
 </script>
 <style lang="scss">
