@@ -1,9 +1,10 @@
 <template>
     <v-dialog :width="dialogWidth" class="Component">
         <template v-slot:activator="{ props }">
-          <v-btn class="component-button" rounded="xl" v-bind="props" :color="buttonColor">
+          <v-btn v-if="isNav && width > 768" class="component-button" rounded="xl" v-bind="props" :color="buttonColor">
             {{ buttonLabel }}
           </v-btn>
+          <v-btn v-else icon="mdi-plus" color="#582b5a" v-bind="props"/>
         </template>
 
         <template v-slot:default="{ isActive }">
@@ -38,6 +39,14 @@ export default {
         buttonColor: {
             type: String,
             default: 'white'
+        },
+        isNav: {
+            type: Boolean,
+            default: false
+        },
+        width: {
+            type: Number,
+            default: 0
         }
     }
 }

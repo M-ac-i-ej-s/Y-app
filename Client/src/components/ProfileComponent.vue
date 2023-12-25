@@ -1,14 +1,17 @@
 <template>
     <div class="profileComponent">
         <ProfileCardComponent/>
+        <ProfileSlotsComponent/>
     </div>
 </template>
 <script>
 import ProfileCardComponent from './ProfileCardComponent.vue';
+import ProfileSlotsComponent from './ProfileSlotsComponent.vue';
 
 export default {
     components: {
-        ProfileCardComponent
+        ProfileCardComponent,
+        ProfileSlotsComponent
     }
 }
 </script>

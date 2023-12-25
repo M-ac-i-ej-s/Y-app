@@ -28,23 +28,24 @@
                     <span class="navbar-menu-link-label">Blocked users</span>
                 </div>
             </router-link>
-            <router-link class="navbar-menu-redirect" to="/:login">
+            <router-link class="navbar-menu-redirect" :to="'/' + userLogin">
                 <div class="navbar-menu-link shadow">
                     <v-icon class="navbar-menu-link-icon" icon="mdi-account-outline"/>
                     <span class="navbar-menu-link-label">Profile</span>
                 </div>
             </router-link>
             <div class="navbar-menu-link">
-                <v-btn v-if="this.width > 768" class="navbar-menu-link-button" color="#582b5a">Post</v-btn>
-                <v-btn v-else icon="mdi-plus" color="#582b5a"/>
+                <CreatingPostComponent :width="width"/>
+                <!-- <v-btn v-if="this.width > 768" class="navbar-menu-link-button" color="#582b5a">Post</v-btn>
+                <v-btn v-else icon="mdi-plus" color="#582b5a"/> -->
             </div>
         </div>
         <div class="navbar-profile" @click="logOut">
             <div class="navbar-profile-data">
                 <img class="navbar-profile-data-value" src="../assets/dummy-avatar.png" alt="avatar">
-                <span v-if="this.width > 768" class="navbar-profile-data-login">Login</span>
+                <span v-if="width > 768" class="navbar-profile-data-login">Login</span>
             </div>
-            <div v-if="this.width > 768" class="navbar-profile-more">
+            <div v-if="width > 768" class="navbar-profile-more">
                 <v-icon icon="mdi-logout" size="2vw"/>
             </div>
             <v-tooltip
@@ -58,12 +59,18 @@
 </template>
 <script>
 import Swal from 'sweetalert2'
+import store from '../store';
+import CreatingPostComponent from './CreatingPostComponent.vue';
 
 export default {
     name: 'NavBarComponent',
+    components: {
+        CreatingPostComponent
+    },
     data() {
         return {
-            width: window.innerWidth
+            width: window.innerWidth,
+            userLogin: store.state.data.user.user.login
         }
     },
     methods: {
@@ -108,7 +115,7 @@ export default {
     justify-content: space-between;
     @media screen and (max-width: 768px) {
         align-items: center;
-        margin: 0 0 0 10px;
+        margin: 0 10px 0 10px;
     }
     .navbar-menu {
         display: flex;

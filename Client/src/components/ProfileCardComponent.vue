@@ -1,11 +1,11 @@
 <template >
-    <div class="profileCardComponent">
+    <div v-if="user" class="profileCardComponent">
         <div class="profile-card-info">
             <div class="profile-card-info-name">
-                <span>Login</span>
+                <span>{{ user.login }}</span>
             </div>
             <div class="profile-card-info-posts">
-                <span>0 Posts</span>
+                <span>{{ user.posts.length }} Posts</span>
             </div>
         </div>
         <div class="profile-card-background-photo">
@@ -17,10 +17,10 @@
                     <img class="profile-card-values-credentials-image-value" src="../assets/dummy-avatar.png" alt="">
                 </div>
                 <div class="profile-card-values-credentials-login">
-                    <span>Login</span>
+                    <span>{{ user.login }}</span>
                 </div>
                 <div class="profile-card-values-credentials-bio">
-                    <span>This is a test bio juhu juhu</span>
+                    <span>{{ user.bio }}</span>
                 </div>
                 <div class="profile-card-values-credentials-annotations">
                     <div class="profile-card-values-credentials-annotations-value">
@@ -33,16 +33,16 @@
                     </div>
                     <div class="profile-card-values-credentials-annotations-value">
                         <v-icon icon="mdi-calendar-month-outline"/>
-                        <span>Joined October 2023</span>
+                        <span>Joined {{ user.joinDate.toLocaleString('en-us', { month: 'long' }) }} {{ user.joinDate.getFullYear() }}</span>
                     </div>
                 </div>
                 <div class="profile-card-values-credentials-stats">
                     <div class="profile-card-values-credentials-stats-follow">
-                        <span class="profile-card-values-credentials-stats-follow-num">0</span>
+                        <span class="profile-card-values-credentials-stats-follow-num">{{ user.following.length }}</span>
                         <span class="profile-card-values-credentials-stats-follow-label">Following</span>
                     </div>
                     <div class="profile-card-values-credentials-stats-follow">
-                        <span class="profile-card-values-credentials-stats-follow-num">0</span>
+                        <span class="profile-card-values-credentials-stats-follow-num">{{ user.followers.length }}</span>
                         <span class="profile-card-values-credentials-stats-follow-label">Followers</span>
                     </div>
                 </div>
@@ -62,15 +62,30 @@
     </div>
 </template>
 <script>
+import getUserService from '../services/user.service.js';
+import store from '../store'
+
 export default {
     data() {
         return {
             isYourProfile: true,
             isFollowed: true,
             isHovering: false,
+            user: null
         }
     },
+    methods: {
+        getUser() {
+            this.user = store.state.data.user.user;
+        }
+    },
+    mounted() {
+        this.getUser();
+        console.log(this.user)
+        this.user.joinDate = new Date(this.user.joinDate);
+    }
 }
+
 </script>
 <style lang="scss">
 .profileCardComponent {
