@@ -41,8 +41,7 @@ export const getPost = async (req, res) => {
 }
 
 export const getUsersPosts = async (req, res) => {
-    const id = req.user;
-    console.log(req.user)
+    const id = req.params.id;
     await Post.find({ user: id }).then((posts) => {
         res.status(200).json({
             success: true,

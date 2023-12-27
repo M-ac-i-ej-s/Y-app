@@ -62,27 +62,24 @@
     </div>
 </template>
 <script>
-import getUserService from '../services/user.service.js';
-import store from '../store'
-
 export default {
-    data() {
-        return {
-            isYourProfile: true,
-            isFollowed: true,
-            isHovering: false,
-            user: null
+    props: {
+        isYourProfile: {
+            type: Boolean,
+            required: true
+        },
+        isFollowed: {
+            type: Boolean,
+            required: true
+        },
+        isHovering: {
+            type: Boolean,
+            required: true
+        },
+        user: {
+            type: [Object, null],
+            required: true
         }
-    },
-    methods: {
-        getUser() {
-            this.user = store.state.data.user.user;
-        }
-    },
-    mounted() {
-        this.getUser();
-        console.log(this.user)
-        this.user.joinDate = new Date(this.user.joinDate);
     }
 }
 

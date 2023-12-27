@@ -108,6 +108,7 @@ export default {
 </script>
 <style lang="scss">
 .NavBarComponent {
+    position:sticky;
     width: 15%;
     height: 100vh;
     display: flex;

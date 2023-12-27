@@ -2,14 +2,19 @@ import axios from "axios";
 import authHeader from "./auth-header";
 const API_URL = 'http://localhost:3001/posts/';
 
-export const getUsersPosts = async () => {
-    await axios.get(API_URL + 'user',{
-        headers: authHeader(),
-    },
-    ).then((response) => {
-        console.log(response);
+export const getUsersPosts = async (id) => { 
+    try {
+        const response = await axios.get(API_URL + id,
+        {
+            headers: authHeader(),
+        }
+        );
+    
         return response.data.Posts;
-    });
+    } catch (error) {
+        console.error('Error fetching user posts:', error);
+        throw error; // You might want to handle errors appropriately in your component
+    }
 }
 
 export const createPost = async (text) => {

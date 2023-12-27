@@ -9,7 +9,7 @@ export const getUser = async (req, res) => {
             res.status(200).json({
                 success: true,
                 message: 'Single User',
-                User: singleUser,
+                User: singleUser[0],
             });
         })
         .catch((err) => {

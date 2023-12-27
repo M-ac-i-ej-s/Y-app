@@ -20,7 +20,25 @@
             </v-tab>
         </v-tabs>
         <v-window class="profile-slot-windows" v-model="tabs">
-            <v-window-item v-for="i in 3" :key="i" :value="i">
+            <v-window-item :value="1">
+                <div v-if="posts">
+                    <PostComponent v-for="post in posts" :key="post._id" :post="post" :user="user"/>
+                </div>
+                <div v-else>
+                    ...loading
+                </div>
+            </v-window-item>
+            <v-window-item :value="2">
+                <v-card>
+                <v-card-text>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+                    ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                    aliquip ex ea commodo consequat.
+                </v-card-text>
+                </v-card>
+            </v-window-item>
+            <v-window-item :value="3">
                 <v-card>
                 <v-card-text>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -34,24 +52,52 @@
     </div>
 </template>
 <script>
-import {getUsersPosts} from '../services/post.service';
+import { getUsersPosts } from '../services/post.service';
+import PostComponent from './PostComponent.vue';
+import _ from 'lodash';
 
 export default {
+    components: {
+    PostComponent,
+},
+    props: {
+        user: {
+            type: [Object, null],
+            required: true
+        },
+        isYourProfile: {
+            type: Boolean,
+            required: true
+        },
+        isFollowed: {
+            type: Boolean,
+            required: true
+        },
+    },
     data() {
       return {
         tabs: null,
-        posts: []
+        posts: null
       }
     },
     methods: {
-        async getUsersPost() {
-            this.posts = await getUsersPosts();
-        }
+        async getUsersPostService() {
+            try {
+                const res = await getUsersPosts(this.user?._id);
+
+                res.forEach(post => {
+                    post.date = new Date(post.date);
+                });
+
+                this.posts = res;
+            } catch (error) {
+                console.error('Error in getUsersPostService:', error);
+            }
+        },
     },
     mounted() {
-        this.getUsersPost();
-        console.log(this.posts)
-    }
+        this.getUsersPostService();
+    },  
   }
 </script>
 <style lang="scss">

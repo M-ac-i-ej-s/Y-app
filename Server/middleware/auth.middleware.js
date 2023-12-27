@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 const jwtSecret = toString(process.env.TOKEN_SECRET);
 
-export const loggedIn = (req, res, next) => {
+export const loggedIn = (req, res, next) => { 
     const token = req.header('access-token');
     if (!token) {
         return res.status(401).json({ msg: 'No token, authorization denied' });
