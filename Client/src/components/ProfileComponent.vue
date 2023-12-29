@@ -29,35 +29,26 @@ export default {
         }
     },
     methods: {
-        getUser() {
-            this.user = store.state.data.user.user;
-        },
-        async getDiffUser() {
+        async getUserService() {
             try {
                 const res = await getUser(this.$route.params.username);
+                console.log(res)
                 this.user = res;
+                this.user.joinDate = new Date(this.user.joinDate);
             } catch (error) {
                 console.error('Error in getUser:', error);
             }
         },
     },
     mounted() {
-        const user = store.state.data.user.user;
-        if(user.login === this.$route.params.username) {
-            this.getUser();
-            this.isYourProfile = true;
-        } else {
-            this.getDiffUser();
-            this.isYourProfile = false;
-        }
+        this.getUserService();
 
-        this.user.joinDate = new Date(this.user.joinDate);
+        if (store.state.data.user.user.login === this.$route.params.username) {
+            this.isYourProfile = true;
+        }
     }
 }
 </script>
 <style lang="scss">
-.profileComponent {
-    border-left:1px solid #e0e0e0;
-    border-right:1px solid #e0e0e0;
-}
+
 </style>

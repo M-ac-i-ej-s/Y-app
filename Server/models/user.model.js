@@ -13,7 +13,6 @@ const UserSchema = new mongoose.Schema(
         avatar: {type: String, required: false},
         location: {type: String, required: false},
         website: {type: String, required: false},
-        birthDay: {type: Date, required: false},
         joinDate: {type: Date, required: false},
         followers: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
         following: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],

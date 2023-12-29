@@ -35,18 +35,18 @@
                 </div>
             </router-link>
             <div class="navbar-menu-link">
-                <CreatingPostComponent :width="width"/>
-                <!-- <v-btn v-if="this.width > 768" class="navbar-menu-link-button" color="#582b5a">Post</v-btn>
+                <CreatingPostComponent :width="width" :login="userLogin"/>
+                <!-- <v-btn v-if="this.width > 1200" class="navbar-menu-link-button" color="#582b5a">Post</v-btn>
                 <v-btn v-else icon="mdi-plus" color="#582b5a"/> -->
             </div>
         </div>
         <div class="navbar-profile" @click="logOut">
             <div class="navbar-profile-data">
                 <img class="navbar-profile-data-value" src="../assets/dummy-avatar.png" alt="avatar">
-                <span v-if="width > 768" class="navbar-profile-data-login">Login</span>
+                <span v-if="width > 1200" class="navbar-profile-data-login">{{userLogin}}</span>
             </div>
-            <div v-if="width > 768" class="navbar-profile-more">
-                <v-icon icon="mdi-logout" size="2vw"/>
+            <div v-if="width > 1200" class="navbar-profile-more">
+                <v-icon icon="mdi-logout" size="1.5vw"/>
             </div>
             <v-tooltip
                 activator="parent"
@@ -61,6 +61,8 @@
 import Swal from 'sweetalert2'
 import store from '../store';
 import CreatingPostComponent from './CreatingPostComponent.vue';
+import router from '../router';
+import { mapMutations } from 'vuex';
 
 export default {
     name: 'NavBarComponent',
@@ -85,16 +87,19 @@ export default {
                 }).then((result) => {
                 if (result.isConfirmed) {
                     Swal.fire({
-                    title: "Your logged out",
-                    text: "Bye bye!",
-                    icon: "success"
+                        title: "Your logged out",
+                        text: "Bye bye!",
+                        icon: "success"
                     });
+                    this.loggedOut();
+                    router.push('/');
                 }
                 });
         },
         handleResize() {
             this.width = parseInt(window.innerWidth)
-        }
+        },
+        ...mapMutations(['loggedIn', 'loggedOut']),
     },
     mounted() {
     // Add an event listener to watch for changes in window width
@@ -108,20 +113,30 @@ export default {
 </script>
 <style lang="scss">
 .NavBarComponent {
-    position:sticky;
+    position:fixed;
     width: 15%;
     height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    @media screen and (max-width: 768px) {
+    margin: 0 900px 0 0;
+    @media screen and (max-width: 1500px) {
+        margin: 0 820px 0 0;
+    }
+    @media screen and (max-width: 1200px) {
         align-items: center;
-        margin: 0 10px 0 10px;
+        margin: 0 725px 0 0;
+    }
+    @media screen and (max-width: 700px) {
+        margin: 0 500px 0 0;
+    }
+    @media screen and (max-width: 500px) {
+        margin: 0 385px 0 0;
     }
     .navbar-menu {
         display: flex;
         flex-direction: column;
-        @media screen and (max-width: 768px) {
+        @media screen and (max-width: 1200px) {
             align-items: center; 
         }
         .navbar-menu-image {
@@ -159,21 +174,21 @@ export default {
                 border-radius: 90px;
             }
             .navbar-menu-link-label {
-                font-size: 1.3vw;
+                font-size: 1vw;
                 padding: 0 0 0 15px;
-                @media screen and (max-width: 768px) {
+                @media screen and (max-width: 1200px) {
                     display: none;
                 }
             }
             .navbar-menu-link-button {
                     width: 100%;
                     font-weight: 700;
-                    font-size: 0.8vw;
+                    font-size: 1vw;
                     border-radius: 20px;
             }
             .navbar-menu-link-icon {
-                font-size: 2vw;
-                @media screen and (max-width: 768px) {
+                font-size: 1.8vw;
+                @media screen and (max-width: 1200px) {
                     font-size: 40px;
                 }
             }
@@ -187,7 +202,7 @@ export default {
         margin: 0 0 20px 10px;
         transition: 0.2s ease;
         cursor: pointer;
-        @media screen and (max-width: 768px) {
+        @media screen and (max-width: 1200px) {
             margin: 0 0 20px 0;
         }
         &:hover {
@@ -202,7 +217,7 @@ export default {
                 width: 70px;
             }
             .navbar-profile-data-login {
-                font-size: 1.3vw;
+                font-size: 1vw;
                 padding: 0 0 0 10px;
             }
         }

@@ -3,8 +3,8 @@ import User from '../models/user.model.js';
 import bcrypt from 'bcrypt';
 
 export const getUser = async (req, res) => {
-    const userId = req.params.login;
-    await User.find({_id: userId})
+    const userLogin = req.params.login;
+    await User.find({login: userLogin})
         .then((singleUser) => {
             res.status(200).json({
                 success: true,
@@ -64,4 +64,80 @@ export const createUser = async (req, res) => {
                 });
         }
     });
+};
+
+export const updateUser = async (req, res) => {
+    const userId = req.params.id;
+    const updateObject = req.body;
+    await User.updateOne({ _id: userId }, { $set: updateObject })
+        .then(() => {
+            res.status(200).json({
+                success: true,
+                message: 'User is updated',
+                updateUser: updateObject,
+            });
+        })
+        .catch((err) => {
+            res.status(500).json({
+                success: false,
+                message: 'Server error. Please try again.',
+                error: err.message,
+            });
+        });
+};
+
+export const updateLikedPosts = async (req, res) => {
+    const userLogin = req.params.login;
+    const postId = req.body.id;
+
+    const user = await User.findOne({ login: userLogin });
+    const index = user.likedPosts.findIndex((id) => id === String(postId));
+    if (index === -1) {
+        user.likedPosts.push(postId);
+    } else {
+        user.likedPosts = user.likedPosts.filter((id) => id !== String(login));
+    }
+
+    await User.updateOne({login: userLogin}, user, { new: true })
+                                    .then(() => {
+                                        res.status(200).json({
+                                            success: true,
+                                            message: 'User is updated',
+                                            updateUser: user,
+                                        });
+                                    }).catch((err) => {
+                                        res.status(500).json({
+                                            success: false,
+                                            message: 'Server error. Please try again.',
+                                            error: err.message,
+                                        });
+                                    })
+};
+
+export const updateSavedPosts = async (req, res) => {
+    const userLogin = req.params.login;
+    const postId = req.body.id;
+
+    const user = await User.findOne({ login: userLogin });
+    const index = user.savedPosts.findIndex((id) => id === String(postId));
+    if (index === -1) {
+        user.savedPosts.push(postId);
+    } else {
+        user.savedPosts = user.savedPosts.filter((id) => id !== String(login));
+    }
+
+    await User.updateOne({login: userLogin}, user, { new: true })
+                                    .then(() => {
+                                        res.status(200).json({
+                                            success: true,
+                                            message: 'User is updated',
+                                            updateUser: user,
+                                        });
+                                    }).catch((err) => {
+                                        res.status(500).json({
+                                            success: false,
+                                            message: 'Server error. Please try again.',
+                                            error: err.message,
+                                        });
+                                    })
 };

@@ -67,6 +67,7 @@ import BaseDialog from '../base/BaseDialog.vue'
 import router from '../router';
 import { register } from '../services/auth.service';
 import authHeader from '../services/auth-header';
+import { mapMutations } from 'vuex';
 
 export default {
     components: {
@@ -88,14 +89,16 @@ export default {
         },
         onRegister() {
             register(this.login, this.email, this.telNumber, this.password, this.bio, this.avatar)
-                .then(() => {
+                .then((response) => {
+                    this.loggedIn(response.User);
                     router.push('/home');
                     authHeader();
                 })
                 .catch((err) => {
                     console.log(err);
                 });
-        }
+        },
+        ...mapMutations(['loggedIn', 'loggedOut']),
     },
 }
 </script>

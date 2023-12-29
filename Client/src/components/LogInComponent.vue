@@ -21,6 +21,7 @@
                     variant="outlined"
                     v-model="password"
                     prepend-icon="mdi-lock-outline"
+                    type="password"
                     ></v-text-field>
                 </div>
                 <div class="login-component-actions-login">
@@ -37,7 +38,6 @@ import BaseDialog from '../base/BaseDialog.vue'
 import { login } from '../services/auth.service';
 import { mapMutations } from 'vuex';
 import router from '../router';
-import authHeader from '../services/auth-header';
 
 export default {
     components: {
@@ -54,7 +54,6 @@ export default {
             login(this.email, this.password)
                 .then((response) => {
                     this.loggedIn(response.User);
-                    authHeader();
                     router.push('/home');
                 })
                 .catch((err) => {

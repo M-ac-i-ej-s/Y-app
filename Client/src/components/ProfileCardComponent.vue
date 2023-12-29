@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="profile-card-background-photo">
-            <img src="" alt="">
+            <img class="profile-card-background-photo-value" src="../assets/dummy-background.jpg" alt="">
         </div>
         <div class="profile-card-values">
             <div class="profile-card-values-credentials">
@@ -49,7 +49,9 @@
             </div>
         </div>
         <div class="profile-card-buttons">
-                    <v-btn v-if="isYourProfile" class="profile-card-values-buttons-edit" color="#582b5a">Edit profile</v-btn>
+                    <div v-if="isYourProfile">
+                        <EditProfileComponent :user="user"/> 
+                    </div>
                     <div v-else class="profile-card-values-buttons-follow">
                         <v-icon icon="mdi-dots-horizontal" class="profile-card-values-buttons-follow-more"/>
                         <v-btn v-if="!isFollowed" class="profile-card-values-buttons-follow-button" color="#582b5a">Follow</v-btn>
@@ -62,7 +64,12 @@
     </div>
 </template>
 <script>
+import EditProfileComponent from './EditProfileComponent.vue';
+
 export default {
+    components: {
+        EditProfileComponent
+    },
     props: {
         isYourProfile: {
             type: Boolean,
@@ -101,17 +108,38 @@ export default {
     }
     .profile-card-background-photo {
         width: 600px;
-        height: 200px;
+        max-height: 200px;
         background-color: rgb(216, 216, 216);
+        @media screen and (max-width: 700px) {
+                width: 100%;
+                height: auto;
+                max-height: 200px;
+        }
+        .profile-card-background-photo-value {
+            width: 600px;
+            max-height: 200px;
+            object-fit: cover;
+            @media screen and (max-width: 700px) {
+                width: 100%;
+                height: auto;
+                max-height: 200px;
+            }
+        }
     }
     .profile-card-values {
         display: flex;
         width: 600px;
         position: absolute;
         top: 175px;
+        @media screen and (max-width: 700px) {
+            width: 100%;
+        }
         .profile-card-values-credentials {
             width: 600px;
             padding: 0 20px 0 20px;
+            @media screen and (max-width: 700px) {
+                width: 100%;
+            }
             .profile-card-values-credentials-image {
                 .profile-card-values-credentials-image-value {
                     width: 150px;
@@ -131,6 +159,9 @@ export default {
             .profile-card-values-credentials-annotations {
                 display: flex;
                 gap: 15px;
+                @media screen and (max-width: 700px) {
+                    flex-direction: column;
+                }
                 .profile-card-values-credentials-annotations-value {
                     display: flex;
                     gap: 5px;
@@ -157,7 +188,7 @@ export default {
             .profile-card-values-buttons-edit {
                 width: 150px;
                 font-weight: 700;
-                font-size: 0.8vw;
+                font-size: 15px;
                 border-radius: 20px;
             }
             .profile-card-values-buttons-follow {

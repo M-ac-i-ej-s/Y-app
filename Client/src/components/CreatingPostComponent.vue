@@ -19,10 +19,12 @@
 <script>
 import BaseDialog from '../base/BaseDialog.vue'
 import { createPost } from '../services/post.service.js'
+import { reloadPage } from '../utils/utils';
 
 export default {
     props: {
-        width: Number
+        width: Number,
+        login: String
     },
     data() {
         return {
@@ -34,7 +36,13 @@ export default {
     },
     methods: {
         post() {
-            createPost(this.text)
+            createPost(this.text, this.login)
+                .then(() => {
+                    reloadPage();
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
         }
     },
 }
