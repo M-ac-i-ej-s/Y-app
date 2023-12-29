@@ -95,7 +95,7 @@ export const updateLikedPosts = async (req, res) => {
     if (index === -1) {
         user.likedPosts.push(postId);
     } else {
-        user.likedPosts = user.likedPosts.filter((id) => id !== String(login));
+        user.likedPosts = user.likedPosts.filter((id) => id !== String(postId));
     }
 
     await User.updateOne({login: userLogin}, user, { new: true })
@@ -123,7 +123,7 @@ export const updateSavedPosts = async (req, res) => {
     if (index === -1) {
         user.savedPosts.push(postId);
     } else {
-        user.savedPosts = user.savedPosts.filter((id) => id !== String(login));
+        user.savedPosts = user.savedPosts.filter((id) => id !== String(postId));
     }
 
     await User.updateOne({login: userLogin}, user, { new: true })
@@ -140,4 +140,32 @@ export const updateSavedPosts = async (req, res) => {
                                             error: err.message,
                                         });
                                     })
+};
+
+export const updatePosts = async (req, res) => {
+    const userLogin = req.params.login;
+    const postId = req.body.id;
+
+    const user = await User.findOne({ login: userLogin });
+    const index = user.posts.findIndex((id) => id === String(postId));
+    if (index === -1) {
+        user.posts.push(postId);
+    } else {
+        user.posts = user.posts.filter((id) => id !== String(postId));
+    }
+
+    await User.updateOne({login: userLogin}, user, { new: true })
+                                .then(() => {
+                                    res.status(200).json({
+                                        success: true,
+                                        message: 'User is updated',
+                                        updateUser: user,
+                                    });
+                                }).catch((err) => {
+                                    res.status(500).json({
+                                        success: false,
+                                        message: 'Server error. Please try again.',
+                                        error: err.message,
+                                    });
+                                });
 };

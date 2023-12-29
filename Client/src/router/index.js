@@ -6,6 +6,7 @@ import ExploreComponent from '../components/ExploreComponent.vue'
 import BookmarksComponent from '../components/BookmarksComponent.vue'
 import BlockedUsersComponent from '../components/BlockedUsersComponent.vue'
 import ProfileComponent from '../components/ProfileComponent.vue'
+import ExpandedPostComponent from '../components/ExpandedPostComponent.vue'
 
 const routes = [
   {
@@ -43,6 +44,11 @@ const routes = [
         name: 'Profile',
         component: ProfileComponent
       },
+      {
+        path: '/:username/:id',
+        name: 'Post',
+        component: ExpandedPostComponent
+      }
     ]
   }
 ]

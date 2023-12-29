@@ -53,3 +53,16 @@ export const updateSavedPosts = async (login, id) => {
         throw error; // You might want to handle errors appropriately in your component
     }
 }
+
+export const updatePosts = async (login, id) => {
+    try {
+        const response = await axios.patch(API_URL + login + '/posts', {id}, {
+            headers: authHeader(),
+        })
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating user:', error);
+        throw error; // You might want to handle errors appropriately in your component
+    }
+};

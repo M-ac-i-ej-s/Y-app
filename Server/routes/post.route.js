@@ -8,7 +8,10 @@ import {
     likePost, 
     getAllLikedPosts, 
     savePost, 
-    getAllSavedPosts 
+    getAllSavedPosts,
+    postReply,
+    getPostReplies,
+    updateReplies
 } from '../controllers/post.controller.js';
 import { loggedIn } from '../middleware/auth.middleware.js';
 
@@ -22,5 +25,10 @@ postRouter.patch('/:id/likePost',loggedIn, likePost);
 postRouter.get('/:login/likedPosts',loggedIn, getAllLikedPosts);
 postRouter.patch('/:id/savePost',loggedIn, savePost);
 postRouter.get('/:login/savedPosts',loggedIn, getAllSavedPosts);
+postRouter.get('/one/:id', getPost);
+postRouter.post('/:id',loggedIn, postReply);
+postRouter.get('/:id/replies',loggedIn, getPostReplies);
+postRouter.patch('/:id/replies',loggedIn, updateReplies);
+
 
 export default postRouter;

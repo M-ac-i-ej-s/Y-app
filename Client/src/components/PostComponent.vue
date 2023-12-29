@@ -1,5 +1,5 @@
 <template>
-        <div class="postComponent" v-if="post">
+        <div class="postComponent" v-if="post" @click="onClick">
             <div class="post-component-values">
                 <div class="post-component-values-container">
                     <div class="post-component-values-container-image">
@@ -32,6 +32,10 @@
                     <v-icon icon="mdi-comment-outline" class="post-component-stats-values-icon comment"/>
                     <span>{{ post.replies.length }}</span>
                 </div>
+                <div class="post-component-stats-values">
+                    <v-icon icon="mdi-repeat-variant" class="post-component-stats-values-icon repeat"/>
+                    <span>{{ post.repeats.length }}</span>
+                </div>
                 <div class="post-component-stats-values" @click="onSave">
                     <v-icon v-if="!isSavedByUser" icon="mdi-bookmark-outline" class="post-component-stats-values-icon bookmark"/>
                     <v-icon v-else icon="mdi-bookmark" class="post-component-stats-values-icon bookmark" color="#add8e6"/>
@@ -42,8 +46,9 @@
 </template>
 <script>
 import { getUser, updateLikedPosts, updateSavedPosts } from '../services/user.service';
-import { deletePost,likePost, savePost  } from '../services/post.service';
+import { deletePost,likePost, savePost, updateReplies  } from '../services/post.service';
 import { reloadPage } from '../utils/utils';
+import router from '../router';
 import Swal from 'sweetalert2'
 import store from '../store';
 
@@ -82,7 +87,16 @@ export default {
                 confirmButtonText: "Delete"
                 }).then( async (result) => {
                 if (result.isConfirmed) {
+                    if(this.post.isReply) {
+                        try {
+                            await updateReplies(this.post._id);
+                        } catch (error) {
+                            console.error('Error in deletePost:', error);
+                        }
+                    }
+
                     await deletePost(this.post._id);
+
                     Swal.fire({
                         title: "The post has been deleted",
                         icon: "success"
@@ -146,6 +160,9 @@ export default {
             } catch (error) {
                 console.error('Error in onSave:', error);
             }
+        },
+        onClick() {
+            router.push('/' + this.post.user + '/' + this.post._id);
         }
     },
     mounted() {
@@ -161,8 +178,13 @@ export default {
 .postComponent {
     border-bottom: 1px solid #e0e0e0;
     padding: 20px;
+    transition: 0.2s ease;
+    cursor: pointer;
     @media screen and (max-width: 700px) {
         width: 100%;
+    }
+    &:hover {
+        background-color: #e9e9e9;
     }
     .post-component-values {
         display: flex;
@@ -171,7 +193,7 @@ export default {
             display: flex;
             width: 100%;
             .post-component-values-container-image {
-                width: 50px;
+                width: 55px;
                 height: 50px;
                 border-radius: 50%;
                 overflow: hidden;
@@ -232,6 +254,9 @@ export default {
                 }
                 &.bookmark:hover {
                     color: #add8e6;
+                }
+                &.repeat:hover {
+                    color: #99a127;
                 }
             }
         }

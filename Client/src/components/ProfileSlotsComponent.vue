@@ -22,7 +22,9 @@
         <v-window class="profile-slot-windows" v-model="tabs">
             <v-window-item :value="1">
                 <div class="profile-slot-windows-post" v-if="posts">
-                    <PostComponent v-for="post in posts" :key="post._id" :post="post" :user="user"/>
+                    <div v-for="post in posts" :key="post._id" >
+                        <PostComponent v-if="!post.isReply" :post="post" :user="user"/>
+                    </div>  
                 </div>
                 <div v-else>
                     ...loading
@@ -40,7 +42,9 @@
             </v-window-item>
             <v-window-item :value="3">
                 <div class="profile-slot-windows-post" v-if="likedPosts">
-                    <PostComponent v-for="post in likedPosts" :key="post._id" :post="post" :user="user"/>
+                    <div v-for="post in likedPosts" :key="post._id">
+                        <PostComponent :post="post" :user="user"/>
+                    </div>
                 </div>
                 <div v-else>
                     ...loading

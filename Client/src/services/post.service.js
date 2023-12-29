@@ -1,5 +1,6 @@
 import axios from "axios";
 import authHeader from "./auth-header";
+import { updatePosts } from "./user.service";
 const API_URL = 'http://localhost:3001/posts/';
 
 export const getUsersPosts = async (login) => { 
@@ -29,7 +30,8 @@ export const createPost = async (text, login) => {
                     'Content-Type': 'application/json',
                 },
             },
-            ).then((response) => {
+            ).then(async (response) => {
+                await updatePosts(login, response.data._id);
                 return response.data.Post;
             }).catch((error) => {
                 console.log(error);
@@ -39,7 +41,8 @@ export const createPost = async (text, login) => {
 export const deletePost = async (id) => {
     await axios.delete(API_URL + id, {
         headers: authHeader(),
-    }).then((response) => {
+    }).then(async (response) => {
+        await updatePosts(login, response.data._id);
         return response.data;
     }).catch((error) => {
         console.log(error);
@@ -89,3 +92,50 @@ export const getAllSavedPosts = async (login) => {
         throw error; // You might want to handle errors appropriately in your component
     }
 };
+
+export const getPost = async (id) => {
+    try {
+        const response = await axios.get(API_URL + 'one/' + id, {
+            headers: authHeader(),
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching user posts:', error);
+        throw error; // You might want to handle errors appropriately in your component
+    }
+};
+
+export const postReply = async (id, text, login) => {
+    await axios.post(API_URL + id, {
+        text: text,
+        login: login,
+    }, {
+        headers: authHeader(),
+    }).then((response) => {
+        return response.data;
+    }).catch((error) => {
+        console.log(error);
+    });
+};
+
+export const getPostReplies = async (id) => {
+    try {
+        const response = await axios.get(API_URL + id + '/replies', {
+            headers: authHeader(),
+        });
+        return response.data.Posts;
+    } catch (error) {
+        console.error('Error fetching user posts:', error);
+        throw error; // You might want to handle errors appropriately in your component
+    }
+};
+
+export const updateReplies = async (id) => {
+    await axios.patch(API_URL + id + '/replies',  {
+        headers: authHeader(),
+    }).then((response) => {
+        return response.data;
+    }).catch((error) => {
+        console.log(error);
+    });
+}

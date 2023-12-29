@@ -11,6 +11,8 @@ const PostSchema = new mongoose.Schema(
         replies: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
         date: {type: Date, required: true},
         saves: [{type: String}],
+        repeats: [{type: String}],
+        isReply: {type: Boolean, required: true},
     }
 );
 

@@ -12,9 +12,33 @@ export const createPost = async (req, res) => {
         replies: [],
         date: new Date(),
         saves: [],
+        isReply: false,
     });
     try {
         await newPost.save();
+        res.status(201).json(newPost);
+    } catch (error) {
+        res.status(409).json({ message: error.message });
+    }
+};
+
+export const postReply = async (req, res) => {
+    const id = req.params.id;
+    const login = req.body.login;
+    const text = req.body.text;
+    const newPost = new Post({
+        _id: new mongoose.Types.ObjectId(),
+        user: login,
+        text: text,
+        likes: [],
+        replies: [],
+        date: new Date(),
+        saves: [],
+        isReply: true,
+    });
+    try {
+        await newPost.save();
+        await Post.findByIdAndUpdate(id, { $push: { replies: newPost._id } });
         res.status(201).json(newPost);
     } catch (error) {
         res.status(409).json({ message: error.message });
@@ -31,7 +55,7 @@ export const getAllPosts = async (req, res) => {
 }
 
 export const getPost = async (req, res) => {
-    const { id } = req.params;
+    const id = req.params.id;
     try {
         const post = await Post.findById(id);
         res.status(200).json(post);
@@ -153,4 +177,48 @@ export const getAllSavedPosts = async (req, res) => {
                 error: err.message,
             });
         });
+};
+
+export const getPostReplies = async (req, res) => {
+    const posts = [];
+    const id = req.params.id;
+    await Post.findById(id).then(async (post) => {
+        for (let i = 0; i < post.replies.length; i++) {
+            await Post.findById(post.replies[i]).then((reply) => {
+                posts.push(reply);
+            });
+        }
+        res.status(200).json({
+            success: true,
+            message: 'Replies',
+            Posts: posts,
+        })
+    }).catch((err) => {
+        res.status(500).json({
+            success: false,
+            message: 'This post does not exist',
+            error: err.message,
+        });
+    });
+};
+
+export const updateReplies = async (req, res) => {
+    const { postId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(postId)) return res.status(404).send('No post with that id');
+    const post = await Post.findById(postId);
+    post.replies = post.replies.filter((id) => id !== String(postId));
+    await Post.findByIdAndUpdate(id, post, { new: true })
+                                    .then(() => {
+                                        res.status(200).json({
+                                            success: true,
+                                            message: 'Post is updated',
+                                            updatePost: post,
+                                        });
+                                    }).catch((err) => {
+                                        res.status(500).json({
+                                            success: false,
+                                            message: 'Server error. Please try again.',
+                                            error: err.message,
+                                        });
+                                    })
 };
