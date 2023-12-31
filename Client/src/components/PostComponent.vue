@@ -129,12 +129,6 @@ export default {
             }
 
             try {
-                updateLikedPosts(store.state.data.user.user.login, this.post._id);
-            } catch (error) {
-                console.error('Error in onLike:', error);
-            }
-
-            try {
                 likePost(this.post._id, store.state.data.user.user.login);
             } catch (error) {
                 console.error('Error in onLike:', error);
@@ -147,12 +141,6 @@ export default {
                 this.numSaves++;
             } else {
                 this.numSaves--;
-            }
-
-            try {
-                updateSavedPosts(store.state.data.user.user.login, this.post._id);
-            } catch (error) {
-                console.error('Error in onSave:', error);
             }
 
             try {

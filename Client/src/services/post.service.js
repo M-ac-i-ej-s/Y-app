@@ -1,6 +1,12 @@
 import axios from "axios";
 import authHeader from "./auth-header";
-import { updatePosts } from "./user.service";
+import { 
+    updatePosts, 
+    updateSavedPosts, 
+    updateLikedPosts, 
+    updateUserReplies 
+} from "./user.service";
+
 const API_URL = 'http://localhost:3001/posts/';
 
 export const getUsersPosts = async (login) => { 
@@ -42,7 +48,10 @@ export const deletePost = async (id) => {
     await axios.delete(API_URL + id, {
         headers: authHeader(),
     }).then(async (response) => {
-        await updatePosts(login, response.data._id);
+        await updatePosts(login, id);
+        await updateLikedPosts(login, id);
+        await updateSavedPosts(login, id);
+        await updateReplies(login,id);
         return response.data;
     }).catch((error) => {
         console.log(error);
@@ -52,7 +61,8 @@ export const deletePost = async (id) => {
 export const likePost = async (id, login) => {
     await axios.patch(API_URL + id + '/likePost', {login}, {
         headers: authHeader(),
-    }).then((response) => {
+    }).then(async (response) => {
+        await updateLikedPosts(login, id);
         return response.data;
     }).catch((error) => {
         console.log(error);
@@ -74,7 +84,8 @@ export const getAllLikedPosts = async (login) => {
 export const savePost = async (id, login) => {
     await axios.patch(API_URL + id + '/savePost', {login}, {
         headers: authHeader(),
-    }).then((response) => {
+    }).then(async (response) => {
+        await updateSavedPosts(login, id);
         return response.data;
     }).catch((error) => {
         console.log(error);
@@ -111,8 +122,9 @@ export const postReply = async (id, text, login) => {
         login: login,
     }, {
         headers: authHeader(),
-    }).then((response) => {
-        return response.data;
+    }).then(async (response) => {
+        await updateUserReplies(login, id);
+        return response.data;   
     }).catch((error) => {
         console.log(error);
     });

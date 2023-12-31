@@ -66,3 +66,16 @@ export const updatePosts = async (login, id) => {
         throw error; // You might want to handle errors appropriately in your component
     }
 };
+
+export const updateUserReplies = async (login, id) => {
+    try {
+        const response = await axios.patch(API_URL + login + '/replies', {id}, {
+            headers: authHeader(),
+        })
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating user:', error);
+        throw error; // You might want to handle errors appropriately in your component
+    }
+};
