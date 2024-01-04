@@ -90,8 +90,29 @@ export const getUsersPosts = async (req, res) => {
 export const deletePost = async (req, res) => {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No post with that id');
+
+    const post = await Post.findById(id);
+    if(post.replies.length > 0) {
+        post.replies.forEach(async (reply) => {
+            await deletePostRecursively(reply);
+        });
+    }
+
     await Post.findByIdAndRemove(id);
     res.json({ message: 'Post deleted successfully' });
+};
+
+export const deletePostRecursively = async (postId) => {
+    const id = postId;
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No post with that id');
+    const post = await Post.findById(id);
+    if(post.replies.length > 0) {
+        post.replies.forEach(async (reply) => {
+            await deletePostRecursively(reply);
+        });
+    }
+
+    await Post.findByIdAndRemove(id);
 };
 
 export const likePost = async (req, res) => {
@@ -105,7 +126,7 @@ export const likePost = async (req, res) => {
     } else {
         post.likes = post.likes.filter((loginLiked) => loginLiked !== login);
     }
-    const updatedPost = await Post.findByIdAndUpdate(id, post, { new: true })
+    await Post.findByIdAndUpdate(id, post, { new: true })
                                     .then(() => {
                                         res.status(200).json({
                                             success: true,
