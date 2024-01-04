@@ -1,5 +1,5 @@
 <template>
-        <div class="postComponent" v-if="post" @click="onClick">
+        <div class="postComponent" v-if="post" @click="redirectToPost">
             <div class="post-component-values">
                 <div class="post-component-values-container">
                     <div class="post-component-values-container-image">
@@ -16,7 +16,7 @@
                                 </span>
                             </div>
                             <div>
-                                <v-icon class="post-component-values-container-user-info-values-more" icon="mdi-delete-outline" @click="deletePost"></v-icon>
+                                <v-icon class="post-component-values-container-user-info-values-more" icon="mdi-delete-outline" @click.stop="deletePost"></v-icon>
                             </div>
                         </div>
                         <div>
@@ -54,6 +54,7 @@ import { reloadPage } from '../utils/utils';
 import router from '../router';
 import Swal from 'sweetalert2'
 import store from '../store';
+import { watch } from 'vue';
 
 export default {
     props: {
@@ -152,7 +153,7 @@ export default {
                 console.error('Error in onSave:', error);
             }
         },
-        onClick() {
+        redirectToPost() {
             router.push('/' + this.post.user + '/' + this.post._id);
         },
         redirectToReplied() {
@@ -161,7 +162,6 @@ export default {
     },
     mounted() {
         this.getUser();
-
         this.checkIfLiked();
         this.checkIfSaved();
     }

@@ -3,6 +3,10 @@ const loggedIn = (state, user) => {
     state.data.isLogged = true;
 }
 
+const reLogUser = (state, user) => {
+    state.data.user = {user: user, token: state.data.user.token};
+}
+
 const loggedOut = (state) => {
     state.data.user = null;
     state.data.isLogged = false;
@@ -10,5 +14,6 @@ const loggedOut = (state) => {
 
 export default {
     loggedIn,
-    loggedOut
+    loggedOut,
+    reLogUser,
 }

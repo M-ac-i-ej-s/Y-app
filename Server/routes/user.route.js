@@ -6,7 +6,9 @@ import {
     updateLikedPosts,
     updateSavedPosts,
     updatePosts,
-    updateReplies
+    updateReplies,
+    updateFollowers,
+    updateFollowing
 } from '../controllers/user.controller.js';
 import { loggedIn } from '../middleware/auth.middleware.js';
 
@@ -19,5 +21,7 @@ userRouter.patch('/:login/likedPosts',loggedIn, updateLikedPosts);
 userRouter.patch('/:login/savedPosts',loggedIn, updateSavedPosts);
 userRouter.patch('/:login/posts',loggedIn, updatePosts);
 userRouter.patch('/:login/replies',loggedIn, updateReplies);
+userRouter.patch('/:login/followers',loggedIn, updateFollowers);
+userRouter.patch('/:login/following',loggedIn, updateFollowing);
 
 export default userRouter;

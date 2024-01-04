@@ -60,7 +60,7 @@ import PostComponent from './PostComponent.vue';
 export default {
     components: {
     PostComponent,
-},
+    },
     props: {
         user: {
             type: [Object, null],
@@ -129,7 +129,14 @@ export default {
         this.getUsersPostService();
         this.getAllLikedPostsService();
         this.getAllRepliesService();
-    },  
+    },
+    watch: {
+        '$route.params.username': function() {
+            this.getUsersPostService();
+            this.getAllLikedPostsService();
+            this.getAllRepliesService();
+        }
+    }  
   }
 </script>
 <style lang="scss">

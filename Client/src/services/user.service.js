@@ -79,3 +79,35 @@ export const updateUserReplies = async (login, id) => {
         throw error; // You might want to handle errors appropriately in your component
     }
 };
+
+export const updateFollowers = async (login, user) => {
+    try {
+        const response = await axios.patch(API_URL + login + '/followers', {user}, {
+            headers: authHeader(),
+        })
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating user:', error);
+        throw error; // You might want to handle errors appropriately in your component
+    }
+};
+
+export const updateFollowing = async (login, user) => {
+    try {
+        const response = await axios.patch(API_URL + login + '/following', {user}, {
+            headers: authHeader(),
+        })
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating user:', error);
+        throw error; // You might want to handle errors appropriately in your component
+    }
+};
+
+export const updateBothFollow = async (login, user) => {
+    const followers = await updateFollowers(login, user);
+    const following = await updateFollowing(login, user);
+    return {followers, following};
+};

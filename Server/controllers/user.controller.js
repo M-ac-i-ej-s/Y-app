@@ -198,3 +198,61 @@ export const updateReplies = async (req, res) => {
                                     });
                                 });
 };
+
+export const updateFollowing = async (req, res) => {
+    const userLogin = req.params.login;
+    const followerUser = req.body.user;
+
+    const user = await User.findOne({ login: userLogin });
+    const index = user.following.findIndex((login) => String(login) === String(followerUser));
+
+    if (index === -1) {
+        user.following.push(followerUser);
+    } else {
+        user.following = user.following.filter((login) => String(login) !== String(followerUser));
+    }
+
+    await User.updateOne({login: userLogin}, user, { new: true })
+                                .then(() => {
+                                    res.status(200).json({
+                                        success: true,
+                                        message: 'User is updated',
+                                        updateUser: user,
+                                    });
+                                }).catch((err) => {
+                                    res.status(500).json({
+                                        success: false,
+                                        message: 'Server error. Please try again.',
+                                        error: err.message,
+                                    });
+                                });
+};
+
+export const updateFollowers = async (req, res) => {
+    const userLogin = req.params.login;
+    const followerUser = req.body.user;
+
+    const user = await User.findOne({ login: followerUser });
+    const index = user.followers.findIndex((login) => String(login) === String(userLogin));
+
+    if (index === -1) {
+        user.followers.push(userLogin);
+    } else {
+        user.followers = user.followers.filter((login) => String(login) !== String(userLogin));
+    }
+
+    await User.updateOne({login: followerUser}, user, { new: true })
+                                .then(() => {
+                                    res.status(200).json({
+                                        success: true,
+                                        message: 'User is updated',
+                                        updateUser: user,
+                                    });
+                                }).catch((err) => {
+                                    res.status(500).json({
+                                        success: false,
+                                        message: 'Server error. Please try again.',
+                                        error: err.message,
+                                    });
+                                });
+};

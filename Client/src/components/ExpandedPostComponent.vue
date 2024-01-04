@@ -35,7 +35,7 @@
         </div>
         <div class="expanded-post-replies">
             <div v-if="postReplies.length > 0">
-                <PostComponent :post="reply" v-for="reply in postReplies" :key="reply._id"/>
+                <PostComponent v-for="reply in postReplies" :post="reply" :key="reply._id"/>
             </div>
             <div v-else>
                 No replies yet...
@@ -56,7 +56,7 @@ export default {
     data() {
         return {
             post: null,
-            postReplies: []
+            postReplies: [],
         }
     },
     methods: {
@@ -99,6 +99,12 @@ export default {
     mounted() {
         this.getPost();
         this.getPostReplies();
+    },
+    watch: {
+        '$route.params.id': function() {
+            this.getPost();
+            this.getPostReplies();
+        }
     }
 }
 </script>

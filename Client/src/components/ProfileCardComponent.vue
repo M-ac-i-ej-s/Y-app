@@ -5,7 +5,7 @@
                 <span>{{ user.login }}</span>
             </div>
             <div class="profile-card-info-posts">
-                <span>{{ user.posts.length }} Posts</span>
+                <span>{{ user.posts.length }} Posts and Replies</span>
             </div>
         </div>
         <div class="profile-card-background-photo">
@@ -54,10 +54,10 @@
                     </div>
                     <div v-else class="profile-card-values-buttons-follow">
                         <v-icon icon="mdi-dots-horizontal" class="profile-card-values-buttons-follow-more"/>
-                        <v-btn v-if="!isFollowed" class="profile-card-values-buttons-follow-button" color="#582b5a">Follow</v-btn>
+                        <v-btn v-if="isFollowed" class="profile-card-values-buttons-follow-button" color="#582b5a" @click="updateFollowers">Follow</v-btn>
                         <div v-else @mouseover="isHovering = true" @mouseleave="isHovering = false">
                             <v-btn v-if="!isHovering" class="profile-card-values-buttons-follow-button following" color="#582b5a">Following</v-btn>
-                            <v-btn v-else class="profile-card-values-buttons-follow-button" color="red">Unfollow</v-btn>
+                            <v-btn v-else class="profile-card-values-buttons-follow-button" color="red" @click="updateFollowers">Unfollow</v-btn>
                         </div>
                 </div>
         </div>
@@ -85,6 +85,10 @@ export default {
         },
         user: {
             type: [Object, null],
+            required: true
+        },
+        updateFollowers: {
+            type: Function,
             required: true
         }
     }
