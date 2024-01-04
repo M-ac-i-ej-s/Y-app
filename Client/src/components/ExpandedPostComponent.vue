@@ -74,7 +74,7 @@ export default {
         },
         async postReply() {
             try {
-                await postReply(this.$route.params.id,this.$refs.text.textContent ,store.state.data.user.user.login);
+                await postReply(this.$route.params.id,this.$refs.text.textContent ,store.state.data.user.user.login,this.$route.params.username);
                 reloadPage();
             } catch (error) {
                 console.error('Error in postReply:', error);

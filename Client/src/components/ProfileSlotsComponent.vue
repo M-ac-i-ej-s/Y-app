@@ -31,14 +31,14 @@
                 </div>
             </v-window-item>
             <v-window-item :value="2">
-                <!-- <v-card>
-                <v-card-text>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                    ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                    aliquip ex ea commodo consequat.
-                </v-card-text>
-                </v-card> -->
+                <div class="profile-slot-windows-post" v-if="likedPosts">
+                    <div v-for="post in replies" :key="post._id">
+                        <PostComponent :post="post" :user="user"/>
+                    </div>
+                </div>
+                <div v-else>
+                    ...loading
+                </div>
             </v-window-item>
             <v-window-item :value="3">
                 <div class="profile-slot-windows-post" v-if="likedPosts">
@@ -54,7 +54,7 @@
     </div>
 </template>
 <script>
-import { getUsersPosts, getAllLikedPosts } from '../services/post.service';
+import { getUsersPosts, getAllLikedPosts, getAllReplies } from '../services/post.service';
 import PostComponent from './PostComponent.vue';
 
 export default {
@@ -79,7 +79,8 @@ export default {
       return {
         tabs: null,
         posts: null,
-        likedPosts: null
+        likedPosts: null,
+        replies: null
       }
     },
     methods: {
@@ -110,10 +111,24 @@ export default {
                 console.error('Error in getAllLikedPostsService:', error);
             }
         },
+        async getAllRepliesService() {
+            try {
+                const res = await getAllReplies(this.user?.login);
+                
+                res.forEach(post => {
+                    post.date = new Date(post.date);
+                });
+
+                this.replies = res.reverse();
+            } catch (error) {
+                console.error('Error in getAllRepliesService:', error);
+            }
+        },
     },
     mounted() {
         this.getUsersPostService();
         this.getAllLikedPostsService();
+        this.getAllRepliesService();
     },  
   }
 </script>

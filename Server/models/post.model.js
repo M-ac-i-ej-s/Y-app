@@ -13,6 +13,7 @@ const PostSchema = new mongoose.Schema(
         saves: [{type: String}],
         repeats: [{type: String}],
         isReply: {type: Boolean, required: true},
+        replyTo: {type: Object},
     }
 );
 

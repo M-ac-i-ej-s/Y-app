@@ -11,7 +11,8 @@ import {
     getAllSavedPosts,
     postReply,
     getPostReplies,
-    updateReplies
+    updateReplies,
+    getAllReplies
 } from '../controllers/post.controller.js';
 import { loggedIn } from '../middleware/auth.middleware.js';
 
@@ -29,6 +30,7 @@ postRouter.get('/one/:id', getPost);
 postRouter.post('/:id',loggedIn, postReply);
 postRouter.get('/:id/replies',loggedIn, getPostReplies);
 postRouter.patch('/:id/replies',loggedIn, updateReplies);
+postRouter.get('/:login/allReplies',loggedIn, getAllReplies);
 
 
 export default postRouter;

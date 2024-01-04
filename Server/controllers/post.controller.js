@@ -26,6 +26,7 @@ export const postReply = async (req, res) => {
     const id = req.params.id;
     const login = req.body.login;
     const text = req.body.text;
+    const user = req.body.user;
     const newPost = new Post({
         _id: new mongoose.Types.ObjectId(),
         user: login,
@@ -35,6 +36,10 @@ export const postReply = async (req, res) => {
         date: new Date(),
         saves: [],
         isReply: true,
+        replyTo: {
+            id: id,
+            user: user,
+        }
     });
     try {
         await newPost.save();
@@ -221,4 +226,22 @@ export const updateReplies = async (req, res) => {
                                             error: err.message,
                                         });
                                     })
+};
+
+export const getAllReplies = async (req, res) => {
+    const login = req.params.login;
+    await Post.find({ user: login, isReply: true }).then((posts) => {
+        res.status(200).json({
+            success: true,
+            message: 'Replies',
+            Posts: posts,
+        })
+        })
+        .catch((err) => {
+            res.status(500).json({
+                success: false,
+                message: 'This user does not exist',
+                error: err.message,
+            });
+        });
 };

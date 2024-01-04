@@ -11,6 +11,9 @@
                                 <span class="post-component-values-container-user-info-values-login">{{ user?.login }}</span>
                                 <v-icon icon="mdi-circle-small"></v-icon>
                                 <span class="post-component-values-container-user-info-values-date">{{ post.date.toLocaleString('en-us', { month: 'short' }) }} {{ post.date.getDate() }} {{ post.date.getFullYear() }}</span>
+                                <span v-if="post.isReply" class="post-component-values-container-user-info-values-link" @click.stop="redirectToReplied">
+                                        @Reply to {{ post.replyTo.user }}
+                                </span>
                             </div>
                             <div>
                                 <v-icon class="post-component-values-container-user-info-values-more" icon="mdi-delete-outline" @click="deletePost"></v-icon>
@@ -23,7 +26,7 @@
                 </div>
             </div>
             <div class="post-component-stats">
-                <div class="post-component-stats-values" @click="onLike">
+                <div class="post-component-stats-values" @click.stop="onLike">
                     <v-icon v-if="!isLikedByUser" icon="mdi-heart-outline" class="post-component-stats-values-icon heart"/>
                     <v-icon v-else icon="mdi-heart" class="post-component-stats-values-icon heart liked" color="red"/>
                     <span>{{ numLikes }}</span>
@@ -36,7 +39,7 @@
                     <v-icon icon="mdi-repeat-variant" class="post-component-stats-values-icon repeat"/>
                     <span>{{ post.repeats.length }}</span>
                 </div>
-                <div class="post-component-stats-values" @click="onSave">
+                <div class="post-component-stats-values" @click.stop="onSave">
                     <v-icon v-if="!isSavedByUser" icon="mdi-bookmark-outline" class="post-component-stats-values-icon bookmark"/>
                     <v-icon v-else icon="mdi-bookmark" class="post-component-stats-values-icon bookmark" color="#add8e6"/>
                     <span>{{ numSaves }}</span>
@@ -45,7 +48,7 @@
         </div>
 </template>
 <script>
-import { getUser, updateLikedPosts, updateSavedPosts } from '../services/user.service';
+import { getUser } from '../services/user.service';
 import { deletePost,likePost, savePost, updateReplies  } from '../services/post.service';
 import { reloadPage } from '../utils/utils';
 import router from '../router';
@@ -151,6 +154,9 @@ export default {
         },
         onClick() {
             router.push('/' + this.post.user + '/' + this.post._id);
+        },
+        redirectToReplied() {
+            router.push('/' + this.post.replyTo.user + '/' + this.post.replyTo.id);
         }
     },
     mounted() {
@@ -213,6 +219,13 @@ export default {
                         color: gray;
                         &:hover {
                             color: #db2020;
+                        }
+                    }
+                    .post-component-values-container-user-info-values-link {
+                        text-decoration: none;
+                        color: #582b5a;
+                        &:hover {
+                            text-decoration: underline;
                         }
                     }
                 }

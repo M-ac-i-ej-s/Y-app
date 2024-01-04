@@ -116,10 +116,11 @@ export const getPost = async (id) => {
     }
 };
 
-export const postReply = async (id, text, login) => {
+export const postReply = async (id, text, login, user) => {
     await axios.post(API_URL + id, {
         text: text,
         login: login,
+        user: user
     }, {
         headers: authHeader(),
     }).then(async (response) => {
@@ -151,3 +152,15 @@ export const updateReplies = async (id) => {
         console.log(error);
     });
 }
+
+export const getAllReplies = async (login) => {
+    try {
+        const response = await axios.get(API_URL + login + '/allReplies', {
+            headers: authHeader(),
+        });
+        return response.data.Posts;
+    } catch (error) {
+        console.error('Error fetching user posts:', error);
+        throw error; // You might want to handle errors appropriately in your component
+    }
+};
