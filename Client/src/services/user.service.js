@@ -111,3 +111,54 @@ export const updateBothFollow = async (login, user) => {
     const following = await updateFollowing(login, user);
     return {followers, following};
 };
+
+export const getAllFollowers = async (login) => {
+    try {
+        const response = await axios.get(API_URL + login + '/followers',{
+            headers: authHeader(),
+        })
+    
+        return response.data.Users;
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        throw error; // You might want to handle errors appropriately in your component
+    }
+};
+
+export const getAllFollowing = async (login) => {
+    try {
+        const response = await axios.get(API_URL + login + '/following',{
+            headers: authHeader(),
+        })
+    
+        return response.data.Users;
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        throw error; // You might want to handle errors appropriately in your component
+    }
+};
+
+export const updateBlockedUsers = async (login, user) => {
+    try {
+        const response = await axios.patch(API_URL + login + '/blockedUsers', {user}, {
+            headers: authHeader(),
+        })
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating user:', error);
+        throw error; // You might want to handle errors appropriately in your component
+    }
+};
+
+export const getAllBlockedUsers = async (login) => {
+    try {
+        const response = await axios.get(API_URL + login + '/blockedUsers',{
+            headers: authHeader(),
+        })
+        return response.data.Users;
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        throw error; // You might want to handle errors appropriately in your component
+    }
+};

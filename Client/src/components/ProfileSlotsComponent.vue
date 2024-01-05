@@ -22,18 +22,28 @@
         <v-window class="profile-slot-windows" v-model="tabs">
             <v-window-item :value="1">
                 <div class="profile-slot-windows-post" v-if="posts">
-                    <div v-for="post in posts" :key="post._id" >
-                        <PostComponent v-if="!post.isReply" :post="post" :user="user"/>
-                    </div>  
+                    <div v-if="posts.length > 0">
+                        <div v-for="post in posts" :key="post._id" >
+                            <PostComponent v-if="!post.isReply" :post="post" :user="user"/>
+                        </div>  
+                    </div>
+                    <div v-else>
+                        <ExeptionComponent text="posts"/>
+                    </div>    
                 </div>
                 <div v-else>
                     ...loading
                 </div>
             </v-window-item>
             <v-window-item :value="2">
-                <div class="profile-slot-windows-post" v-if="likedPosts">
-                    <div v-for="post in replies" :key="post._id">
-                        <PostComponent :post="post" :user="user"/>
+                <div class="profile-slot-windows-post" v-if="replies">
+                    <div v-if="replies.length > 0">
+                        <div v-for="post in replies" :key="post._id">
+                            <PostComponent :post="post" :user="user"/>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <ExeptionComponent text="replies"/>
                     </div>
                 </div>
                 <div v-else>
@@ -42,9 +52,14 @@
             </v-window-item>
             <v-window-item :value="3">
                 <div class="profile-slot-windows-post" v-if="likedPosts">
-                    <div v-for="post in likedPosts" :key="post._id">
-                        <PostComponent :post="post" :user="user"/>
+                    <div v-if="likedPosts.length > 0">
+                        <div v-for="post in likedPosts" :key="post._id">
+                            <PostComponent :post="post" :user="user"/>
+                        </div>
                     </div>
+                    <div v-else>
+                        <ExeptionComponent text="likes"/>
+                    </div>    
                 </div>
                 <div v-else>
                     ...loading
@@ -56,10 +71,12 @@
 <script>
 import { getUsersPosts, getAllLikedPosts, getAllReplies } from '../services/post.service';
 import PostComponent from './PostComponent.vue';
+import ExeptionComponent from './ExeptionComponent.vue';
 
 export default {
     components: {
-    PostComponent,
+        PostComponent,
+        ExeptionComponent
     },
     props: {
         user: {
@@ -142,13 +159,13 @@ export default {
 <style lang="scss">
 .profileSlot {
     padding: 175px 0 0 0;
-    @media screen and (max-width: 700px) {
+    @media screen and (max-width: 850px) {
         padding: 250px 0 0 0;
     }
     .profile-slot-tabs {
         width: 600px;
         border-bottom: 1px solid #e0e0e0;
-        @media screen and (max-width: 700px) {
+        @media screen and (max-width: 850px) {
             width: 100%;
         }
         .profile-slot-tabs-label {
@@ -157,11 +174,11 @@ export default {
     }
     .profile-slot-windows {
         width: 600px;
-        @media screen and (max-width: 700px) {
+        @media screen and (max-width: 850px) {
             width: 100%;
         }
         .profile-slot-windows-post {
-            @media screen and (max-width: 700px) {
+            @media screen and (max-width: 850px) {
                 display: flex;
                 flex-direction: column;
             }

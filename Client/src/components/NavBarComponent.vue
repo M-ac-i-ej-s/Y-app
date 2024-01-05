@@ -16,13 +16,13 @@
                     <span class="navbar-menu-link-label">Explore</span>
                 </div>
             </router-link>
-            <router-link class="navbar-menu-redirect" to="/:id/bookmarks">
+            <router-link class="navbar-menu-redirect" :to="'/' + userId + '/bookmarks'">
                 <div class="navbar-menu-link shadow">
                     <v-icon class="navbar-menu-link-icon" icon="mdi-bookmark-outline"/>
                     <span class="navbar-menu-link-label">Bookmarks</span>
                 </div>
             </router-link>
-            <router-link class="navbar-menu-redirect" to="/:id/blockedUsers">
+            <router-link class="navbar-menu-redirect" :to="'/' + userId + '/blockedUsers'">
                 <div class="navbar-menu-link shadow">
                     <v-icon class="navbar-menu-link-icon" icon="mdi-account-cancel-outline"/>
                     <span class="navbar-menu-link-label">Blocked users</span>
@@ -72,7 +72,8 @@ export default {
     data() {
         return {
             width: window.innerWidth,
-            userLogin: store.state.data.user.user.login
+            userLogin: store.state.data.user.user.login,
+            userId: store.state.data.user.user._id
         }
     },
     methods: {
@@ -127,11 +128,11 @@ export default {
         align-items: center;
         margin: 0 725px 0 0;
     }
-    @media screen and (max-width: 700px) {
-        margin: 0 500px 0 0;
+    @media screen and (max-width: 850px) {
+        margin: 0 575px 0 0;
     }
-    @media screen and (max-width: 500px) {
-        margin: 0 385px 0 0;
+    @media screen and (max-width: 650px) {
+        margin: 0 475px 0 0;
     }
     .navbar-menu {
         display: flex;

@@ -7,6 +7,8 @@ import BookmarksComponent from '../components/BookmarksComponent.vue'
 import BlockedUsersComponent from '../components/BlockedUsersComponent.vue'
 import ProfileComponent from '../components/ProfileComponent.vue'
 import ExpandedPostComponent from '../components/ExpandedPostComponent.vue'
+import ShowFollowComponent from '../components/ShowFollowComponent.vue'
+import ErrorPageComponent from '../components/ErrorPageComponent.vue'
 
 const routes = [
   {
@@ -48,6 +50,21 @@ const routes = [
         path: '/:username/:id',
         name: 'Post',
         component: ExpandedPostComponent
+      },
+      {
+        path: '/:username/followers',
+        name: 'Followers',
+        component: ShowFollowComponent
+      },
+      {
+        path: '/:username/following',
+        name: 'Following',
+        component: ShowFollowComponent
+      },
+      {
+        path: '/:pathMatch(.*)*',
+        name: 'Error',
+        component: ErrorPageComponent
       }
     ]
   }

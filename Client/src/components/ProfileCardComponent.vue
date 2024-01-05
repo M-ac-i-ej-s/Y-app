@@ -23,11 +23,11 @@
                     <span>{{ user.bio }}</span>
                 </div>
                 <div class="profile-card-values-credentials-annotations">
-                    <div class="profile-card-values-credentials-annotations-value">
+                    <div v-if="user.location" class="profile-card-values-credentials-annotations-value">
                         <v-icon icon="mdi-map-marker-outline"/>
                         <span>Gdańsk, PL</span>
                     </div>
-                    <div class="profile-card-values-credentials-annotations-value">
+                    <div v-if="user.website" class="profile-card-values-credentials-annotations-value">
                         <v-icon icon="mdi-link"/>
                         <a href="facebook.com">facebook.com</a>
                     </div>
@@ -37,11 +37,11 @@
                     </div>
                 </div>
                 <div class="profile-card-values-credentials-stats">
-                    <div class="profile-card-values-credentials-stats-follow">
+                    <div class="profile-card-values-credentials-stats-follow"  @click="goToFollowing">
                         <span class="profile-card-values-credentials-stats-follow-num">{{ user.following.length }}</span>
                         <span class="profile-card-values-credentials-stats-follow-label">Following</span>
                     </div>
-                    <div class="profile-card-values-credentials-stats-follow">
+                    <div class="profile-card-values-credentials-stats-follow" @click="goToFollowers">
                         <span class="profile-card-values-credentials-stats-follow-num">{{ user.followers.length }}</span>
                         <span class="profile-card-values-credentials-stats-follow-label">Followers</span>
                     </div>
@@ -53,13 +53,29 @@
                         <EditProfileComponent :user="user"/> 
                     </div>
                     <div v-else class="profile-card-values-buttons-follow">
-                        <v-icon icon="mdi-dots-horizontal" class="profile-card-values-buttons-follow-more"/>
-                        <v-btn v-if="isFollowed" class="profile-card-values-buttons-follow-button" color="#582b5a" @click="updateFollowers">Follow</v-btn>
-                        <div v-else @mouseover="isHovering = true" @mouseleave="isHovering = false">
-                            <v-btn v-if="!isHovering" class="profile-card-values-buttons-follow-button following" color="#582b5a">Following</v-btn>
-                            <v-btn v-else class="profile-card-values-buttons-follow-button" color="red" @click="updateFollowers">Unfollow</v-btn>
+                        <v-menu v-if="!isFollowed" v-model="menu" :close-on-content-click="false" location="start" class="profile-card-values-buttons-follow-block">
+                            <template v-slot:activator="{ props }">
+                                <v-btn v-bind="props" icon="mdi-dots-horizontal" size="x-small"/>
+                            </template>
+
+                            <v-btn v-if="!isBlocked" prepend-icon="mdi-account-cancel" color="red" rounded="xl" @click="updateBlockedUsers">
+                                Block this user
+                            </v-btn>
+                            <v-btn v-else prepend-icon="mdi-account-check" color="green" rounded="xl" @click="updateBlockedUsers">
+                                Unblock this user
+                            </v-btn>
+                        </v-menu>
+                        <div v-if="isBlocked">
+                            <v-btn color="red" rounded="xl">Blocked</v-btn>
                         </div>
-                </div>
+                        <div v-else>
+                            <v-btn v-if="!isFollowed" class="profile-card-values-buttons-follow-button" color="#582b5a" @click="updateFollowers">Follow</v-btn>
+                            <div v-else @mouseover="isHovering = true" @mouseleave="isHovering = false">
+                                <v-btn v-if="!isHovering" class="profile-card-values-buttons-follow-button following" color="#582b5a">Following</v-btn>
+                                <v-btn v-else class="profile-card-values-buttons-follow-button" color="red" @click="updateFollowers">Unfollow</v-btn>
+                            </div>
+                        </div>
+                    </div>
         </div>
     </div>
 </template>
@@ -83,6 +99,10 @@ export default {
             type: Boolean,
             required: true
         },
+        isBlocked: {
+            type: Boolean,
+            required: true
+        },
         user: {
             type: [Object, null],
             required: true
@@ -90,8 +110,25 @@ export default {
         updateFollowers: {
             type: Function,
             required: true
+        },
+        updateBlockedUsers: {
+            type: Function,
+            required: true
         }
-    }
+    },
+    data() {
+        return {
+            menu: false
+        }
+    },
+    methods: {
+        goToFollowers() {
+            this.$router.push(`/${this.user.login}/followers`);
+        },
+        goToFollowing() {
+            this.$router.push(`/${this.user.login}/following`);
+        }
+    },
 }
 
 </script>
@@ -114,8 +151,8 @@ export default {
         width: 600px;
         max-height: 200px;
         background-color: rgb(216, 216, 216);
-        @media screen and (max-width: 700px) {
-                width: 100%;
+        @media screen and (max-width: 850px) {
+                width: 450px;
                 height: auto;
                 max-height: 200px;
         }
@@ -123,7 +160,7 @@ export default {
             width: 600px;
             max-height: 200px;
             object-fit: cover;
-            @media screen and (max-width: 700px) {
+            @media screen and (max-width: 850px) {
                 width: 100%;
                 height: auto;
                 max-height: 200px;
@@ -135,13 +172,13 @@ export default {
         width: 600px;
         position: absolute;
         top: 175px;
-        @media screen and (max-width: 700px) {
+        @media screen and (max-width: 850px) {
             width: 100%;
         }
         .profile-card-values-credentials {
             width: 600px;
             padding: 0 20px 0 20px;
-            @media screen and (max-width: 700px) {
+            @media screen and (max-width: 850px) {
                 width: 100%;
             }
             .profile-card-values-credentials-image {
@@ -163,7 +200,7 @@ export default {
             .profile-card-values-credentials-annotations {
                 display: flex;
                 gap: 15px;
-                @media screen and (max-width: 700px) {
+                @media screen and (max-width: 850px) {
                     flex-direction: column;
                 }
                 .profile-card-values-credentials-annotations-value {
@@ -176,12 +213,19 @@ export default {
                 padding: 10px 0 0 0;
                 display: flex;
                 gap: 15px;
-                .profile-card-values-credentials-stats-follow-num {
-                    font-weight: 700;
-                    padding: 0 5px 0 0;
-                }
-                .profile-card-values-credentials-stats-follow-label {
-                    color: gray;
+                .profile-card-values-credentials-stats-follow {
+                    cursor: pointer;
+                    height: 20px;
+                    &:hover {
+                        border-bottom: 1px solid gray;
+                    }
+                    .profile-card-values-credentials-stats-follow-num {
+                        font-weight: 700;
+                        padding: 0 5px 0 0;
+                    }
+                    .profile-card-values-credentials-stats-follow-label {
+                        color: gray;
+                    }
                 }
             }
         }
@@ -197,13 +241,13 @@ export default {
             }
             .profile-card-values-buttons-follow {
                 display: flex;
-                align-items: center;
+                // align-items: center;
                 gap: 10px;
                 .profile-card-values-buttons-follow-more {
                     cursor: pointer;
                     border-radius: 90px;
                     border: 1px solid gray;
-                    padding: 10px;
+                    padding: 3px;
                     transition: 0.2s ease;
                     &:hover {
                         background-color: #e9e9e9;
@@ -212,7 +256,7 @@ export default {
                 .profile-card-values-buttons-follow-button {
                     width: 150px;
                     font-weight: 700;
-                    font-size: 0.8vw;
+                    font-size: 13px;
                     border-radius: 20px;
                     &.following {
                         background-color: #e9e9e9;

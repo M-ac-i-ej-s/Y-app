@@ -20,7 +20,7 @@ export default {
     display: flex;
     justify-content: center;
     height: 150vh;
-    @media screen and (max-width: 500px) {
+    @media screen and (max-width: 650px) {
             justify-content: flex-end;
     }
     .main-page-router {

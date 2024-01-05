@@ -10,20 +10,25 @@
                 <v-tooltip activator="parent" location="bottom">Clear all bookmarks</v-tooltip>
             </div>
         </div>
-        <div>
+        <div v-if="savedPosts.length > 0">
             <PostComponent v-for="post in savedPosts" :key="post._id" :post="post" />
         </div>
+        <div v-else>
+            <ExeptionComponent text="bookmarks"/>
+        </div>    
     </div>
 </template>
 <script>
 import { getAllSavedPosts, savePost } from '../services/post.service';
 import Swal from 'sweetalert2';
 import PostComponent from './PostComponent.vue';
+import ExeptionComponent from './ExeptionComponent.vue';
 import store from '../store';
 
 export default {
     components: {
-        PostComponent
+        PostComponent,
+        ExeptionComponent
     },
     data() {
         return {
@@ -79,6 +84,9 @@ export default {
 <style lang="scss">
 .bookmarksComponent {
     width: 600px;
+    @media screen and (max-width: 850px) {
+        width: 450px;
+    }
     .bookmark-component {
         display: flex;
         justify-content: space-between;

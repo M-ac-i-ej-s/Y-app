@@ -8,7 +8,11 @@ import {
     updatePosts,
     updateReplies,
     updateFollowers,
-    updateFollowing
+    updateFollowing,
+    getAllFollowers,
+    getAllFollowing,
+    getAllBlockedUsers,
+    updateBlockedUsers
 } from '../controllers/user.controller.js';
 import { loggedIn } from '../middleware/auth.middleware.js';
 
@@ -23,5 +27,9 @@ userRouter.patch('/:login/posts',loggedIn, updatePosts);
 userRouter.patch('/:login/replies',loggedIn, updateReplies);
 userRouter.patch('/:login/followers',loggedIn, updateFollowers);
 userRouter.patch('/:login/following',loggedIn, updateFollowing);
+userRouter.get('/:login/followers',loggedIn, getAllFollowers);
+userRouter.get('/:login/following',loggedIn, getAllFollowing);
+userRouter.get('/:login/blockedUsers',loggedIn, getAllBlockedUsers);
+userRouter.patch('/:login/blockedUsers',loggedIn, updateBlockedUsers);
 
 export default userRouter;

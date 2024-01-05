@@ -256,3 +256,90 @@ export const updateFollowers = async (req, res) => {
                                     });
                                 });
 };
+
+export const getAllFollowers = async (req, res) => {
+    const userLogin = req.params.login;
+    await User.find({ following: userLogin }).then((users) => {
+        res.status(200).json({
+            success: true,
+            message: 'Followers',
+            Users: users,
+        })
+        })
+        .catch((err) => {
+            res.status(500).json({
+                success: false,
+                message: 'This user does not exist',
+                error: err.message,
+            });
+        });
+};
+
+export const getAllFollowing = async (req, res) => {
+    const userLogin = req.params.login;
+    await User.find({ followers: userLogin }).then((users) => {
+        res.status(200).json({
+            success: true,
+            message: 'Following',
+            Users: users,
+        })
+        })
+        .catch((err) => {
+            res.status(500).json({
+                success: false,
+                message: 'This user does not exist',
+                error: err.message,
+            });
+        });
+};
+
+export const getAllBlockedUsers = async (req, res) => {
+    const userLogin = req.params.login;
+    
+    const user = await User.findOne({ login: userLogin });
+    const blockedUsers = user.blockedUsers;
+
+    await User.find({ login: {$in: blockedUsers} }).then((users) => {
+        res.status(200).json({
+            success: true,
+            message: 'Blocked users',
+            Users: users,
+        })
+        })
+        .catch((err) => {
+            res.status(500).json({
+                success: false,
+                message: 'This user does not exist',
+                error: err.message,
+            });
+        });
+};
+
+export const updateBlockedUsers = async (req, res) => {
+    const userLogin = req.params.login;
+    const blockedUser = req.body.user;
+
+    const user = await User.findOne({ login: userLogin });
+    const index = user.blockedUsers.findIndex((login) => String(login) === String(blockedUser));
+
+    if (index === -1) {
+        user.blockedUsers.push(blockedUser);
+    } else {
+        user.blockedUsers = user.blockedUsers.filter((login) => String(login) !== String(blockedUser));
+    }
+
+    await User.updateOne({login: userLogin}, user, { new: true })
+                                .then(() => {
+                                    res.status(200).json({
+                                        success: true,
+                                        message: 'User is updated',
+                                        updateUser: user,
+                                    });
+                                }).catch((err) => {
+                                    res.status(500).json({
+                                        success: false,
+                                        message: 'Server error. Please try again.',
+                                        error: err.message,
+                                    });
+                                });
+};
