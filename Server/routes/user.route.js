@@ -12,7 +12,8 @@ import {
     getAllFollowers,
     getAllFollowing,
     getAllBlockedUsers,
-    updateBlockedUsers
+    updateBlockedUsers,
+    getSearchUsers
 } from '../controllers/user.controller.js';
 import { loggedIn } from '../middleware/auth.middleware.js';
 
@@ -31,5 +32,6 @@ userRouter.get('/:login/followers',loggedIn, getAllFollowers);
 userRouter.get('/:login/following',loggedIn, getAllFollowing);
 userRouter.get('/:login/blockedUsers',loggedIn, getAllBlockedUsers);
 userRouter.patch('/:login/blockedUsers',loggedIn, updateBlockedUsers);
+userRouter.get('/search', loggedIn, getSearchUsers);
 
 export default userRouter;

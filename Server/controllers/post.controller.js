@@ -266,3 +266,31 @@ export const getAllReplies = async (req, res) => {
             });
         });
 };
+
+export const getSearchedPosts = async (req, res) => {
+    const text = req.query.q;
+    const type = req.query.f;
+    const {start, end} = req.body;
+    await Post.find({ text: { $regex: text, $options: 'i' } }).then((posts) => {
+        if(type === 'live') {
+            posts.sort((a, b) => b.date - a.date);
+        } else {
+            posts.sort((a, b) => b.likes.length - a.likes.length);
+        }
+
+        const posts = posts.slice(start, end);
+
+        res.status(200).json({
+            success: true,
+            message: 'Searched posts',
+            Posts: posts,
+        })
+        })
+        .catch((err) => {
+            res.status(500).json({
+                success: false,
+                message: 'This user does not exist',
+                error: err.message,
+            });
+        });
+};

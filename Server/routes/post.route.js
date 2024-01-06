@@ -12,13 +12,14 @@ import {
     postReply,
     getPostReplies,
     updateReplies,
-    getAllReplies
+    getAllReplies,
+    getSearchedPosts
 } from '../controllers/post.controller.js';
 import { loggedIn } from '../middleware/auth.middleware.js';
 
 const postRouter = express.Router();
 
-postRouter.get('/', getAllPosts);
+postRouter.get('/',loggedIn, getAllPosts);
 postRouter.post('/',loggedIn, createPost);
 postRouter.get('/:id',loggedIn, getUsersPosts);
 postRouter.delete('/:id',loggedIn, deletePost);
@@ -31,6 +32,7 @@ postRouter.post('/:id',loggedIn, postReply);
 postRouter.get('/:id/replies',loggedIn, getPostReplies);
 postRouter.patch('/:id/replies',loggedIn, updateReplies);
 postRouter.get('/:login/allReplies',loggedIn, getAllReplies);
+postRouter.get('/search', loggedIn, getSearchedPosts)
 
 
 export default postRouter;

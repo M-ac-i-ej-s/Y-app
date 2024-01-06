@@ -343,3 +343,23 @@ export const updateBlockedUsers = async (req, res) => {
                                     });
                                 });
 };
+
+export const getSearchUsers = async (req, res) => {
+    const userLogin = req.body.login;
+    const search = req.query.q;
+
+    await User.find({ login: {$regex: search, $options: 'i'}, login: {$nin: userLogin} }).then((users) => {
+        res.status(200).json({
+            success: true,
+            message: 'Search users',
+            Users: users,
+        })
+        })
+        .catch((err) => {
+            res.status(500).json({
+                success: false,
+                message: 'This user does not exist',
+                error: err.message,
+            });
+        });
+};
