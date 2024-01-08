@@ -162,3 +162,22 @@ export const getAllBlockedUsers = async (login) => {
         throw error; // You might want to handle errors appropriately in your component
     }
 };
+
+export const getUsersExplore = async (login, text, seenIds) => {
+    try {
+        const response = await axios.get(API_URL + login + '/search', {
+            params: {
+                q: text,
+                seenIds: seenIds.join(','),
+            },
+            headers: {
+                ...authHeader(),
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data.Users;
+    } catch (error) {
+        console.error('Error fetching user users:', error);
+        throw error; // You might want to handle errors appropriately in your component
+    }
+};

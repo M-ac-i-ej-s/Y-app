@@ -22,10 +22,10 @@
                 <template v-slot:activator="{ props }">
                     <v-btn v-bind="props" icon="mdi-dots-horizontal" size="x-small"/>
                 </template>
-                <v-btn v-if="!isBlocked" prepend-icon="mdi-account-cancel" color="red" rounded="xl" @click="updateBlockedUsers">
+                <v-btn v-if="!isBlocked" prepend-icon="mdi-account-cancel" color="red" rounded="xl" @click="updateBlockedUsersService">
                    Block this user
                 </v-btn>
-                <v-btn v-else prepend-icon="mdi-account-check" color="green" rounded="xl" @click="updateBlockedUsers">
+                <v-btn v-else prepend-icon="mdi-account-check" color="green" rounded="xl" @click="updateBlockedUsersService">
                    Unblock this user
                 </v-btn>
             </v-menu>
@@ -45,7 +45,9 @@
 <script>
 import router from '../router';
 import store from '../store';
-import { updateBothFollow } from '../services/user.service';
+import { mapMutations } from 'vuex';
+import { updateBothFollow, updateBlockedUsers, getUser } from '../services/user.service';
+
 
 export default {
     name: 'ProfileShowcase',
@@ -58,12 +60,13 @@ export default {
         return {
             isFollowed: false,
             isHovering: false,
+            userCloud: null,
             menu: false,
         }
     },
     methods: {
         isFollow() {
-            if(this.user.followers.includes(this.$route.params.username)) {
+            if(this.user.followers.includes(this.user.login)) {
                 this.isFollowed = true;
             } else {
                 this.isFollowed = false;
@@ -87,10 +90,31 @@ export default {
             } catch (error) {
                 console.error('Error in updateBothFollowService:', error);
             }
-        }
+        },
+        async updateBlockedUsersService() {
+            try {
+                await updateBlockedUsers(store.state.data.user.user.login, this.user.login);
+                await this.getUserFromCloudService();
+                await this.reLogUser(this.userCloud);
+                this.isBlocked = !this.isBlocked;
+            } catch (error) {
+                console.error('Error in updateBlockedUsersService:', error);
+            }
+        },
+        async getUserFromCloudService() {
+            try {
+                const res = await getUser(store.state.data.user.user.login);
+                this.userCloud = res;
+                this.userCloud.joinDate = new Date(this.userCloud.joinDate);
+            } catch (error) {
+                console.error('Error in getUser:', error);
+            }
+        },
+        ...mapMutations(['reLogUser'])
     },
     mounted() {
         this.isFollow();
+        this.isBlocked();
     }
 }
 </script>

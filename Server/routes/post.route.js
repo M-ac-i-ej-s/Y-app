@@ -21,6 +21,7 @@ const postRouter = express.Router();
 
 postRouter.get('/',loggedIn, getAllPosts);
 postRouter.post('/',loggedIn, createPost);
+postRouter.get('/search', loggedIn, getSearchedPosts)
 postRouter.get('/:id',loggedIn, getUsersPosts);
 postRouter.delete('/:id',loggedIn, deletePost);
 postRouter.patch('/:id/likePost',loggedIn, likePost);
@@ -32,7 +33,6 @@ postRouter.post('/:id',loggedIn, postReply);
 postRouter.get('/:id/replies',loggedIn, getPostReplies);
 postRouter.patch('/:id/replies',loggedIn, updateReplies);
 postRouter.get('/:login/allReplies',loggedIn, getAllReplies);
-postRouter.get('/search', loggedIn, getSearchedPosts)
 
 
 export default postRouter;

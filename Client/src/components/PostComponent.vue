@@ -54,7 +54,6 @@ import { reloadPage } from '../utils/utils';
 import router from '../router';
 import Swal from 'sweetalert2'
 import store from '../store';
-import { watch } from 'vue';
 
 export default {
     props: {

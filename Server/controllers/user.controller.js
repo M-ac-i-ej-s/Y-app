@@ -345,21 +345,18 @@ export const updateBlockedUsers = async (req, res) => {
 };
 
 export const getSearchUsers = async (req, res) => {
-    const userLogin = req.body.login;
+    const userLogin = req.params.login;
+    let seenIds = [];
+    if(req.query.seenIds !== '') {
+        seenIds = req.query.seenIds.split(',');
+    }
     const search = req.query.q;
 
-    await User.find({ login: {$regex: search, $options: 'i'}, login: {$nin: userLogin} }).then((users) => {
+    await User.find({ login: {$regex: search, $options: 'i',$nin: userLogin}, _id: {$nin: seenIds} }).sort({followers: -1}).limit(10).then((users) => {
         res.status(200).json({
             success: true,
             message: 'Search users',
-            Users: users,
+            Users: users || [],
         })
         })
-        .catch((err) => {
-            res.status(500).json({
-                success: false,
-                message: 'This user does not exist',
-                error: err.message,
-            });
-        });
 };

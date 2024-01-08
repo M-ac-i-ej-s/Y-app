@@ -164,3 +164,24 @@ export const getAllReplies = async (login) => {
         throw error; // You might want to handle errors appropriately in your component
     }
 };
+
+export const getPostsExplore = async (login, type, text, seenIds) => {
+    try {
+        const response = await axios.get(API_URL + '/search', {
+                params: {
+                    q: text,
+                    f: type,
+                    seenIds: seenIds.join(','),
+                    login: login,
+                },
+                headers: {
+                    ...authHeader(),
+                    'Content-Type': 'application/json',
+                },
+    });
+        return response.data.Posts;
+    } catch (error) {
+        console.error('Error fetching user posts:', error);
+        throw error; // You might want to handle errors appropriately in your component
+    }
+}

@@ -19,6 +19,7 @@ import { loggedIn } from '../middleware/auth.middleware.js';
 
 const userRouter = express.Router();
 
+userRouter.get('/:login/search', loggedIn, getSearchUsers);
 userRouter.get('/:login',loggedIn, getUser)
 userRouter.post('/', createUser);
 userRouter.put('/:id',loggedIn, updateUser);
@@ -32,6 +33,5 @@ userRouter.get('/:login/followers',loggedIn, getAllFollowers);
 userRouter.get('/:login/following',loggedIn, getAllFollowing);
 userRouter.get('/:login/blockedUsers',loggedIn, getAllBlockedUsers);
 userRouter.patch('/:login/blockedUsers',loggedIn, updateBlockedUsers);
-userRouter.get('/search', loggedIn, getSearchUsers);
 
 export default userRouter;
