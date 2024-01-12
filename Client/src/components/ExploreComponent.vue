@@ -5,7 +5,11 @@
             <v-btn class="explore-nav-button" icon="mdi-magnify" color="#582b5a" @click="onSearch"></v-btn>
         </div>
         <div v-if="posts && users">
-            <ExploreSlotsComponent :posts="posts" :users="users"/>
+            <ExploreSlotsComponent :posts="posts" :users="users" :switchRoutes="switchRoutes"/>
+        </div>
+        <div v-else class="explore-welcome">
+            <v-icon class="explore-welcome-icon" icon="mdi-arrow-up-bold-outline"/>
+            <span class="explore-welcome-text">Start looking, maybe you will find something awasome!</span>
         </div>
     </div>
 </template>
@@ -25,7 +29,8 @@ export default {
         return {
             posts: null,
             users: null,
-            seenPostsIds: [],
+            seenPostsTopIds: [],
+            seenPostsLatestIds: [],
             seenUsersIds: [],
             type: this.$route.query.y || '',
             text: this.$route.query.q || ''
@@ -33,18 +38,28 @@ export default {
     },
     methods: {
         async getPostsExploreService(lazyLoad = false) {
-            const seenIDs = (lazyLoad) ? this.seenUsersIds : [];
+            const seenIDs = (lazyLoad) ? ((this.type === 'live') ? this.seenPostsLatestIds : this.seenPostsTopIds)  : [];
             try {
                 const response = await getPostsExplore(store.state.data.user.user.login, this.type, this.text, seenIDs);
                 if(response.length !== 0) {
                     response.forEach(post => {
-                        this.seenPostsIds.push(post._id);
-                    });
-                    response.forEach(post => {
+                        if(this.type === 'live') {
+                            if(!this.seenPostsLatestIds.includes(post._id)) {
+                                this.seenPostsLatestIds.push(post._id);
+                            }
+                        } else if(this.type === '') {
+                            if(!this.seenPostsTopIds.includes(post._id)) {
+                                this.seenPostsTopIds.push(post._id);
+                            }
+                        }
                         post.date = new Date(post.date);
                     });
+                    if(!lazyLoad) {
+                        this.posts = [response]
+                    } else {
+                        this.posts = [...this.posts, response]
+                    }
                 }
-                this.posts = response;
             } catch (error) {
                 console.error('Error in getPostsExploreService:', error);
             }
@@ -54,9 +69,16 @@ export default {
             try {
                 const response = await getUsersExplore(store.state.data.user.user.login,this.text, seenIDs);
                 response.forEach(user => {
-                    this.seenUsersIds.push(user._id);
+                    if(!this.seenUsersIds.includes(user._id)) {
+                        this.seenUsersIds.push(user._id);
+                    }
                 });
-                this.users = response;
+                if(!lazyLoad) {
+                    this.users = [response]
+                } else {
+                    this.users = [...this.users, response]
+                }
+                console.log(this.users)
             } catch (error) {
                 console.error('Error in getUsersExploreService:', error);
             }
@@ -64,18 +86,64 @@ export default {
         onSearch() {
             if(this.type === '') {
                 router.push(`/explore?q=${this.text}`)
-                this.getPostsExploreService();
-                this.getUsersExploreService();
             } else {
                 router.push(`/explore?q=${this.text}&f=${this.type}`)
             }
-        }
+        },
+        switchRoutes(slot) {
+            if(slot === 'top') {
+                router.push(`/explore?q=${this.text}`)
+            } else if(slot === 'latest') {
+                router.push(`/explore?q=${this.text}&y=live`)
+            } else if(slot === 'people') {
+                router.push(`/explore?q=${this.text}&y=people`)
+            }
+        },
+        checkScroll() {
+            const maxScrollPosition = document.documentElement.scrollHeight - window.innerHeight;
+            if (window.scrollY === maxScrollPosition) {
+                if(this.type === '' || this.type === 'live') {
+                    this.getPostsExploreService(true);
+                } else if(this.type === 'people') {
+                    this.getUsersExploreService(true);
+                }
+            }
+        },
     },
     mounted() {
-        if(this.text !== '') {
+        window.addEventListener('scroll', this.checkScroll);
+        if(this.$route.query.q !== undefined) {
             this.getPostsExploreService();
             this.getUsersExploreService();
         }
+    },
+    unmounted() {
+        this.posts = null;
+        this.users = null;
+        this.seenPostsIds = [];
+        this.seenUsersIds = [];
+    },  
+    watch: {
+        '$route.query.q': function() {
+            if(this.$route.query.q !== undefined) {
+                this.text = this.$route.query.q;
+                this.getPostsExploreService();
+                this.getUsersExploreService();
+            } else {
+                this.text = '';
+                this.posts = null;
+                this.users = null;
+                this.seenPostsIds = [];
+                this.seenUsersIds = [];
+            }
+        },
+        '$route.query.y': function() {
+            this.type = this.$route.query.y || '';
+            this.getPostsExploreService();
+        }
+    },
+    beforeDestroy() {
+        window.removeEventListener('scroll', this.checkScroll);
     },
 }
 </script>
@@ -104,6 +172,21 @@ export default {
                 font-size: 25px;
                 font-weight: 700;
             }
+        }
+    }
+    .explore-welcome {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 10px 100px 10px 100px;
+        .explore-welcome-icon {
+            font-size: 100px;
+            color: #582b5a;
+        }
+        .explore-welcome-text {
+            font-size: 35px;
+            font-weight: 700;
         }
     }
 }

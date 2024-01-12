@@ -26,6 +26,7 @@ export default {
     flex-direction: column;
     align-items: center;
     padding: 50px 0 0 0;
+    text-align: center;
     .expetion-post-oops {
         font-size: 50px;
         font-weight: bold;

@@ -15,7 +15,7 @@
                                         @Reply to {{ post.replyTo.user }}
                                 </span>
                             </div>
-                            <div>
+                            <div v-if="post.login === userState">
                                 <v-icon class="post-component-values-container-user-info-values-more" icon="mdi-delete-outline" @click.stop="deletePost"></v-icon>
                             </div>
                         </div>
@@ -68,7 +68,8 @@ export default {
             isLikedByUser: false,
             isSavedByUser: false,
             numLikes: this.post.likes.length,
-            numSaves: this.post.saves.length
+            numSaves: this.post.saves.length,
+            userState: store.state.data.user.user.login
         }
     },
     methods: {
@@ -110,14 +111,14 @@ export default {
         },
         checkIfLiked() {
             this.post.likes.forEach(like => {
-                if (like === store.state.data.user.user.login) {
+                if (like === this.userState) {
                     this.isLikedByUser = true;
                 }
             });
         },
         checkIfSaved() {
             this.post.saves.forEach(save => {
-                if (save === store.state.data.user.user.login) {
+                if (save === this.userState) {
                     this.isSavedByUser = true;
                 }
             });
@@ -132,7 +133,7 @@ export default {
             }
 
             try {
-                likePost(this.post._id, store.state.data.user.user.login);
+                likePost(this.post._id, this.userState);
             } catch (error) {
                 console.error('Error in onLike:', error);
             }
@@ -147,7 +148,7 @@ export default {
             }
 
             try {
-                savePost(this.post._id, store.state.data.user.user.login);
+                savePost(this.post._id, this.userState);
             } catch (error) {
                 console.error('Error in onSave:', error);
             }

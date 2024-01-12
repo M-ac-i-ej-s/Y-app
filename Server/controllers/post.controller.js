@@ -275,7 +275,7 @@ export const getSearchedPosts = async (req, res) => {
         seenIds = req.query.seenIds.split(',');
     }
     const login = req.query.login;
-    if(type === 'live') {
+    if(type === 'live' && type !== 'people') {
         await Post.find({ text: { $regex: text, $options: 'i' }, _id: {$nin: seenIds}, user: {$nin: login} }).sort({date:-1}).limit(10).then((posts) => {
             res.status(200).json({
                 success: true,
@@ -284,7 +284,7 @@ export const getSearchedPosts = async (req, res) => {
             })
             })
     } else {
-        await Post.find({ text: { $regex: text, $options: 'i' }, _id: {$nin: seenIds} }).sort({likes:-1}).limit(10).then((posts) => {
+        await Post.find({ text: { $regex: text, $options: 'i' }, _id: {$nin: seenIds},user: {$nin: login}}).sort({likes:-1}).limit(10).then((posts) => {
             res.status(200).json({
                 success: true,
                 message: 'Searched posts',

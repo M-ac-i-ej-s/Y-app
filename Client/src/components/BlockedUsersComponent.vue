@@ -18,10 +18,10 @@
                 <v-tooltip activator="parent" location="bottom">Unblock all users</v-tooltip>
             </div>
         </div>
-        <div>
+        <div v-if="blockedUsers?.length > 0">
             <ProfileShowcaseComponent v-for="user in blockedUsers" :key="user._id" :user="user"/>
         </div>
-        <div>
+        <div v-else>
             <ExeptionComponent text="blocked users"/>
         </div>
     </div>
