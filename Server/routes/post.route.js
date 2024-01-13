@@ -13,7 +13,8 @@ import {
     getPostReplies,
     updateReplies,
     getAllReplies,
-    getSearchedPosts
+    getSearchedPosts,
+    getPostsByFollowedUsers
 } from '../controllers/post.controller.js';
 import { loggedIn } from '../middleware/auth.middleware.js';
 
@@ -33,6 +34,7 @@ postRouter.post('/:id',loggedIn, postReply);
 postRouter.get('/:id/replies',loggedIn, getPostReplies);
 postRouter.patch('/:id/replies',loggedIn, updateReplies);
 postRouter.get('/:login/allReplies',loggedIn, getAllReplies);
+postRouter.get('/:login/followedPosts',loggedIn, getPostsByFollowedUsers);
 
 
 export default postRouter;

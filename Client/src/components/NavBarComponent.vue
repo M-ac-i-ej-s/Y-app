@@ -36,8 +36,6 @@
             </router-link>
             <div class="navbar-menu-link">
                 <CreatingPostComponent :width="width" :login="userLogin"/>
-                <!-- <v-btn v-if="this.width > 1200" class="navbar-menu-link-button" color="#582b5a">Post</v-btn>
-                <v-btn v-else icon="mdi-plus" color="#582b5a"/> -->
             </div>
         </div>
         <div class="navbar-profile" @click="logOut">

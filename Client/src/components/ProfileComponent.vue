@@ -1,19 +1,19 @@
 <template>
-    <div>
-    <div class="profileComponent" v-if="user && isFollowed !== null">
-        <ProfileCardComponent 
-            :isYourProfile="isYourProfile" 
-            :isFollowed="isFollowed" 
-            :isHovering="isHovering" 
-            :isBlocked="isBlocked" 
-            :user="user" 
-            :updateFollowers="updateFollowersService"
-            :updateBlockedUsers="updateBlockedUsersService"/>
-        <ProfileSlotsComponent :isYourProfile="isYourProfile" :isFollowed="isFollowed" :user="user"/>
-    </div>
-    <div v-else>
-        ...loading
-    </div>
+    <div class="Profile">
+        <div class="profileComponent" v-if="user && isFollowed !== null">
+            <ProfileCardComponent 
+                :isYourProfile="isYourProfile" 
+                :isFollowed="isFollowed" 
+                :isHovering="isHovering" 
+                :isBlocked="isBlocked" 
+                :user="user" 
+                :updateFollowers="updateFollowersService"
+                :updateBlockedUsers="updateBlockedUsersService"/>
+            <ProfileSlotsComponent :isYourProfile="isYourProfile" :isFollowed="isFollowed" :user="user"/>
+        </div>
+        <div v-else>
+            ...loading
+        </div>
     </div>
 </template>
 <script>
@@ -125,5 +125,9 @@ export default {
 }
 </script>
 <style lang="scss">
-
+.Profile {
+    min-height: 150vh;
+    border-left:1px solid #e0e0e0;
+    border-right:1px solid #e0e0e0;
+}
 </style>

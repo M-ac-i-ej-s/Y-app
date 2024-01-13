@@ -185,3 +185,21 @@ export const getPostsExplore = async (login, type, text, seenIds) => {
         throw error; // You might want to handle errors appropriately in your component
     }
 }
+
+export const getPostsByFollowedUsers = async (login, seenIds) => {
+    try {
+        const response = await axios.get(API_URL + login + '/followedPosts', {
+            params: {
+                seenIds: seenIds.join(','),
+            },
+            headers: {
+                ...authHeader(),
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data.Posts;
+    } catch (error) {
+        console.error('Error fetching user posts:', error);
+        throw error; // You might want to handle errors appropriately in your component
+    }
+};

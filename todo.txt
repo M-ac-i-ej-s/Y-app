@@ -1,5 +1,9 @@
--Home page
 -Reposts to posts
 -loader
 -validations
 -unblock all users
+-data in user object
+-avatar / background changes
+-images to posts
+-loading =/= error connection =/= no posts
+-who to follow component

@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import Post from '../models/post.model.js';
+import User from '../models/user.model.js';
 
 export const createPost = async (req, res) => {
     const login = req.body.login;
@@ -292,4 +293,20 @@ export const getSearchedPosts = async (req, res) => {
                 })
             })
     }
+};
+
+export const getPostsByFollowedUsers = async (req, res) => {
+    const login = req.params.login;
+    let seenIds = [];
+    if(req.query.seenIds !== '') {
+        seenIds = req.query.seenIds.split(',');
+    }
+    const user = await User.find({ login: login });
+    await Post.find({ user: {$in: user[0].following}, _id: {$nin: seenIds} }).sort({date:-1}).limit(10).then((posts) => {
+        res.status(200).json({
+            success: true,
+            message: 'Followed users posts',
+            Posts: posts || [],
+        })
+        })
 };
