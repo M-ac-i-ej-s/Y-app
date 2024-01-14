@@ -73,6 +73,7 @@ export const postRepost = async (req, res) => {
     });
     try {
         await newPost.save();
+        await Post.findByIdAndUpdate(id, { $push: { reposts: newPost._id } });
         res.status(201).json(newPost);
     } catch (error) {
         res.status(409).json({ message: error.message });

@@ -25,7 +25,7 @@
                     </div>
                 </div>
             </div>
-            <div v-if="repostPost" class="create-writing-repost-to">
+            <div v-if="isRepost && repostPost" class="create-writing-repost-to" @click.stop="redirectToRepost">
                 <div class="create-writing-repost-to-container">
                     <div class="create-writing-repost-to-container-image">
                         <img class="create-writing-repost-to-container-image-value" src="../assets/dummy-avatar.png" alt="">
@@ -50,7 +50,7 @@
                 </div>
                 <div class="post-component-stats-values">
                     <v-icon icon="mdi-comment-outline" class="post-component-stats-values-icon comment"/>
-                    <span>{{ post.replies.length }}</span>
+                    <span>{{ numReplies }}</span>
                 </div>
                 <div class="post-component-stats-values">
                     <CreateRepostComponent :post="post" :user="user"/>
@@ -72,6 +72,7 @@ import { reloadPage } from '../utils/utils';
 import router from '../router';
 import Swal from 'sweetalert2'
 import store from '../store';
+import { watch } from 'vue';
 
 export default {
     name: 'PostComponent',
@@ -92,6 +93,8 @@ export default {
             isRepost: false,
             numLikes: this.post.likes.length,
             numSaves: this.post.saves.length,
+            numReplies: this.post.replies.length,
+            numRepost: this.post.repeats.length,
             userState: store.state.data.user.user.login,
             repostPost: null
         }
@@ -159,6 +162,8 @@ export default {
                 } catch (error) {
                     console.error('Error in checkIfRepost:', error);
                 }
+            } else {
+                this.isRepost = false;
             }
         },
         onLike() {
@@ -196,6 +201,16 @@ export default {
         },
         redirectToReplied() {
             router.push('/' + this.post.replyTo.user + '/' + this.post.replyTo.id);
+        },
+        redirectToRepost() {
+            router.push('/' + this.repostPost.user + '/' + this.repostPost._id);
+        },
+        readActions() {
+            this.numLikes = this.post.likes.length;
+            this.numSaves = this.post.saves.length;
+            this.numReplies = this.post.replies.length;
+            this.numRepost = this.post.repeats.length;
+
         }
     },
     mounted() {
@@ -203,6 +218,15 @@ export default {
         this.checkIfLiked();
         this.checkIfSaved();
         this.checkIfRepost();
+    },
+    watch: {
+        post: function() {
+            this.getUser();
+            this.checkIfLiked();
+            this.checkIfSaved();
+            this.checkIfRepost();
+            this.readActions();
+        }
     }
 }
 

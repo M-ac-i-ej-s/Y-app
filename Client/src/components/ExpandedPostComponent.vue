@@ -7,7 +7,7 @@
         </div>
         <div>
             <div v-if="post">
-            <PostComponent :post="post"/>
+                <PostComponent :post="post"/>
             </div>
             <div v-else>
                 <span>
@@ -37,7 +37,7 @@
             <div v-if="postReplies.length > 0">
                 <PostComponent v-for="reply in postReplies" :post="reply" :key="reply._id"/>
             </div>
-            <div v-else>
+            <div class="expanded-post-replies-exaption" v-else>
                 No replies yet...
             </div>
         </div>
@@ -164,6 +164,12 @@ export default {
                 height: 40px;
                 font-weight: 700;
             }
+        }
+    }
+    .expanded-post-replies {
+        .expanded-post-replies-exaption {
+            padding: 10px 20px 10px 20px;
+            font-size: 20px;
         }
     }
 }

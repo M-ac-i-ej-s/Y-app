@@ -1,7 +1,7 @@
 <template>
     <v-dialog :width="dialogWidth" class="Component">
         <template v-slot:activator="{ props }">
-            <div v-if="!isRepost">
+            <div v-if="!isRepost" class="component-container">
                 <v-btn v-if="!isNav || width > 1200" class="component-button" rounded="xl" v-bind="props" :color="buttonColor">
                     {{ buttonLabel }}
                 </v-btn>
@@ -58,6 +58,14 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.component-container {
+    width: 100%;
+    .component-button {
+        width: 100%;
+        font-weight: 700;
+        color: #582b5a;
+}
+}
 .component-icon {
     color: gray;
     cursor: pointer;
@@ -115,9 +123,5 @@ export default {
         }
     }
 }
-.component-button {
-        width: 100%;
-        font-weight: 700;
-        color: #582b5a;
-}
+
 </style>
