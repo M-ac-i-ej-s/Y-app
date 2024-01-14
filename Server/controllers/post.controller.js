@@ -51,6 +51,34 @@ export const postReply = async (req, res) => {
     }
 };
 
+export const postRepost = async (req, res) => {
+    const id = req.params.id;
+    const login = req.body.login;
+    const text = req.body.text;
+    const user = req.body.user;
+    const newPost = new Post({
+        _id: new mongoose.Types.ObjectId(),
+        user: login,
+        text: text,
+        likes: [],
+        replies: [],
+        date: new Date(),
+        saves: [],
+        isReply: false,
+        isRepost: true,
+        repostFrom: {
+            id: id,
+            user: user,
+        }
+    });
+    try {
+        await newPost.save();
+        res.status(201).json(newPost);
+    } catch (error) {
+        res.status(409).json({ message: error.message });
+    }
+};
+
 export const getAllPosts = async (req, res) => {
     try {
         const posts = await Post.find();

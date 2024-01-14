@@ -6,4 +6,4 @@
 -avatar / background changes
 -images to posts
 -loading =/= error connection =/= no posts
--who to follow component
+-who to follow component - today 

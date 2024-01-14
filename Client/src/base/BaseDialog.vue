@@ -1,10 +1,15 @@
 <template>
     <v-dialog :width="dialogWidth" class="Component">
         <template v-slot:activator="{ props }">
-          <v-btn v-if="!isNav || width > 1200" class="component-button" rounded="xl" v-bind="props" :color="buttonColor">
-            {{ buttonLabel }}
-          </v-btn>
-          <v-btn v-else icon="mdi-plus" color="#582b5a" v-bind="props"/>
+            <div v-if="!isRepost">
+                <v-btn v-if="!isNav || width > 1200" class="component-button" rounded="xl" v-bind="props" :color="buttonColor">
+                    {{ buttonLabel }}
+                </v-btn>
+                <v-btn v-else icon="mdi-plus" color="#582b5a" v-bind="props"/>
+            </div>
+            <div v-else>
+                <v-icon class="component-icon" icon="mdi-repeat-variant" v-bind="props"/>
+            </div>
         </template>
 
         <template v-slot:default="{ isActive }">
@@ -44,11 +49,24 @@ export default {
             type: Boolean,
             default: false
         },
-        width: Number
+        width: Number,
+        isRepost: {
+            type: Boolean,
+            default: false
+        }
     }
 }
 </script>
 <style lang="scss" scoped>
+.component-icon {
+    color: gray;
+    cursor: pointer;
+    transition: 0.2s ease;
+    border-radius: 50%;
+    &:hover {
+        color: #99a127;
+    }
+}
 .Component {
     .component {
         padding: 10px 10px 20px 10px;

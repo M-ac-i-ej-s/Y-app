@@ -23,6 +23,9 @@ export default {
     flex-direction: column;
     align-items: center;
     padding: 200px 0 0 0;
+    min-height: 150vh;
+    border-left:1px solid #e0e0e0;
+    border-right:1px solid #e0e0e0;  
     .error-page-oops {
         font-size: 50px;
         font-weight: bold;

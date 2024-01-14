@@ -14,7 +14,8 @@ import {
     updateReplies,
     getAllReplies,
     getSearchedPosts,
-    getPostsByFollowedUsers
+    getPostsByFollowedUsers,
+    postRepost
 } from '../controllers/post.controller.js';
 import { loggedIn } from '../middleware/auth.middleware.js';
 
@@ -22,6 +23,7 @@ const postRouter = express.Router();
 
 postRouter.get('/',loggedIn, getAllPosts);
 postRouter.post('/',loggedIn, createPost);
+postRouter.post('/:id/repost',loggedIn, postRepost);
 postRouter.get('/search', loggedIn, getSearchedPosts)
 postRouter.get('/:id',loggedIn, getUsersPosts);
 postRouter.delete('/:id',loggedIn, deletePost);

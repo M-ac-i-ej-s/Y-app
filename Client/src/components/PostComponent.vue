@@ -1,5 +1,5 @@
 <template>
-        <div class="postComponent" v-if="post" @click="redirectToPost">
+        <div class="postComponent" v-if="post && user" @click="redirectToPost">
             <div class="post-component-values">
                 <div class="post-component-values-container">
                     <div class="post-component-values-container-image">
@@ -25,6 +25,23 @@
                     </div>
                 </div>
             </div>
+            <div v-if="repostPost" class="create-writing-repost-to">
+                <div class="create-writing-repost-to-container">
+                    <div class="create-writing-repost-to-container-image">
+                        <img class="create-writing-repost-to-container-image-value" src="../assets/dummy-avatar.png" alt="">
+                    </div>
+                    <div>
+                        <span class="create-writing-repost-to-container-values login">{{ repostPost.user }}</span>
+                        <v-icon icon="mdi-circle-small"></v-icon>
+                        <span class="create-writing-repost-to-container-values">{{ repostPost.date.toLocaleString('en-us', { month: 'short' }) }} {{ repostPost.date.getDate() }} {{ repostPost.date.getFullYear() }}</span>
+                        <div class="create-writing-repost-to-container-text">
+                            <span class="create-writing-repost-to-container-text-value">
+                                {{ repostPost.text }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="post-component-stats">
                 <div class="post-component-stats-values" @click.stop="onLike">
                     <v-icon v-if="!isLikedByUser" icon="mdi-heart-outline" class="post-component-stats-values-icon heart"/>
@@ -36,7 +53,7 @@
                     <span>{{ post.replies.length }}</span>
                 </div>
                 <div class="post-component-stats-values">
-                    <v-icon icon="mdi-repeat-variant" class="post-component-stats-values-icon repeat"/>
+                    <CreateRepostComponent :post="post" :user="user"/>
                     <span>{{ post.repeats.length }}</span>
                 </div>
                 <div class="post-component-stats-values" @click.stop="onSave">
@@ -48,14 +65,19 @@
         </div>
 </template>
 <script>
+import CreateRepostComponent from './CreateRepostComponent.vue';
 import { getUser } from '../services/user.service';
-import { deletePost,likePost, savePost, updateReplies  } from '../services/post.service';
+import { deletePost,likePost, savePost, updateReplies, getPost  } from '../services/post.service';
 import { reloadPage } from '../utils/utils';
 import router from '../router';
 import Swal from 'sweetalert2'
 import store from '../store';
 
 export default {
+    name: 'PostComponent',
+    components: {
+        CreateRepostComponent
+    },
     props: {
         post: {
             type: Object,
@@ -67,9 +89,11 @@ export default {
             user: null,
             isLikedByUser: false,
             isSavedByUser: false,
+            isRepost: false,
             numLikes: this.post.likes.length,
             numSaves: this.post.saves.length,
-            userState: store.state.data.user.user.login
+            userState: store.state.data.user.user.login,
+            repostPost: null
         }
     },
     methods: {
@@ -123,6 +147,20 @@ export default {
                 }
             });
         },
+        async checkIfRepost() {
+            if(this.post.isRepost) {
+                this.isRepost = true;
+                try {
+                    const response = await getPost(this.post.repostFrom.id);
+
+                    response.date = new Date(response.date);
+
+                    this.repostPost = response;
+                } catch (error) {
+                    console.error('Error in checkIfRepost:', error);
+                }
+            }
+        },
         onLike() {
             this.isLikedByUser = !this.isLikedByUser;
 
@@ -164,6 +202,7 @@ export default {
         this.getUser();
         this.checkIfLiked();
         this.checkIfSaved();
+        this.checkIfRepost();
     }
 }
 
@@ -232,6 +271,33 @@ export default {
             }
         }
     }
+    .create-writing-repost-to {
+            padding: 20px;
+            margin: 10px 20px 0 20px;
+            border: 1px solid #d3d3d3;
+            border-radius: 20px;
+            &:hover {
+                background-color: #f5f5f5;
+            }
+            .create-writing-repost-to-container {
+                display: flex;
+                align-items: center;
+                .create-writing-repost-to-container-image {
+                    padding: 0 10px 0 10px;
+                    .create-writing-repost-to-container-image-value {
+                        width: 50px;
+                        height: 50px;
+                        border-radius: 50%;
+                    }
+                }
+            }
+            .create-writing-repost-to-container-values {
+                font-size: 14px;
+                &.login {
+                    font-weight: 700;
+                }
+            }
+        }
     .post-component-stats {
         display: flex;
         justify-content: space-around;
@@ -255,9 +321,6 @@ export default {
                 }
                 &.bookmark:hover {
                     color: #add8e6;
-                }
-                &.repeat:hover {
-                    color: #99a127;
                 }
             }
         }

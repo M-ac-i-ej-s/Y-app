@@ -203,3 +203,23 @@ export const getPostsByFollowedUsers = async (login, seenIds) => {
         throw error; // You might want to handle errors appropriately in your component
     }
 };
+
+export const postRepost = async (id, login, text, user) => {
+    try {
+        const response = await axios.post(API_URL + id + '/repost', {
+            login: login,
+            text: text,
+            user: user,
+        }, {
+            headers: {
+                ...authHeader(),
+                'Content-Type': 'application/json',
+            },
+        });
+        await updatePosts(login, response.data._id);
+        return response.data.Post;
+    } catch (error) {
+        console.error('Error reposting post:', error);
+        throw error; // You might want to handle errors appropriately in your component
+    }
+}

@@ -110,7 +110,10 @@ export default {
 </script>
 <style lang="scss">
 .expandedPostComponent {
-    width: 600px;   
+    width: 600px; 
+    min-height: 150vh;
+    border-left:1px solid #e0e0e0;
+    border-right:1px solid #e0e0e0;  
     .expanded-post-label {
         padding: 5px 20px 5px 20px;
         .expanded-post-label-value {
