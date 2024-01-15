@@ -11,14 +11,15 @@
                 :updateBlockedUsers="updateBlockedUsersService"/>
             <ProfileSlotsComponent :isYourProfile="isYourProfile" :isFollowed="isFollowed" :user="user"/>
         </div>
-        <div v-else>
-            ...loading
+        <div class="profile-loader" v-else>
+            <LoaderComponent/>
         </div>
     </div>
 </template>
 <script>
 import ProfileCardComponent from './ProfileCardComponent.vue';
 import ProfileSlotsComponent from './ProfileSlotsComponent.vue';
+import LoaderComponent from './LoaderComponent.vue';
 import { getUser, updateBothFollow, updateBlockedUsers } from '../services/user.service';
 import router from '../router';
 import { mapMutations } from 'vuex';
@@ -27,7 +28,8 @@ import store from '../store'
 export default {
     components: {
         ProfileCardComponent,
-        ProfileSlotsComponent
+        ProfileSlotsComponent,
+        LoaderComponent
     },
     data() {
         return {
@@ -129,5 +131,8 @@ export default {
     min-height: 150vh;
     border-left:1px solid #e0e0e0;
     border-right:1px solid #e0e0e0;
+}
+.profile-loader {
+    width: 600px;
 }
 </style>

@@ -4,8 +4,13 @@
             <v-text-field v-model="text" variant="solo" placeholder="What are you going to search for hmm?"/>
             <v-btn class="explore-nav-button" icon="mdi-magnify" color="#582b5a" @click="onSearch"></v-btn>
         </div>
-        <div v-if="posts && users">
-            <ExploreSlotsComponent :posts="posts" :users="users" :switchRoutes="switchRoutes"/>
+        <div v-if="this.$route.query.q !== undefined">
+            <div v-if="posts && users">
+                <ExploreSlotsComponent :posts="posts" :users="users" :switchRoutes="switchRoutes"/>
+            </div>
+            <div v-else>
+                <LoaderComponent/>
+            </div>
         </div>
         <div v-else class="explore-welcome">
             <v-icon class="explore-welcome-icon" icon="mdi-arrow-up-bold-outline"/>
@@ -19,11 +24,13 @@ import { getPostsExplore } from '../services/post.service';
 import { getUsersExplore } from '../services/user.service';
 import router from '../router';
 import store from '../store';
+import LoaderComponent from './LoaderComponent.vue';
 
 export default {
     name: 'ExploreComponent',
     components: {
-        ExploreSlotsComponent
+        ExploreSlotsComponent,
+        LoaderComponent
     },
     data() {
         return {

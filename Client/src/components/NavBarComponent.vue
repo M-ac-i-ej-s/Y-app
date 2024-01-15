@@ -1,9 +1,11 @@
 <template>
     <div class="NavBarComponent">
         <div class="navbar-menu">
-            <div class="navbar-menu-image">
-                <img class="navbar-menu-image-value" src="../assets/Ylogo.png" alt="yLogo">
-            </div>
+            <router-link to="/home">
+                <div class="navbar-menu-image">
+                    <img class="navbar-menu-image-value" src="../assets/Ylogo.png" alt="yLogo">
+                </div>
+            </router-link>
             <router-link class="navbar-menu-redirect" to="/home">
                 <div class="navbar-menu-link shadow">
                     <v-icon class="navbar-menu-link-icon" icon="mdi-home-outline"/>

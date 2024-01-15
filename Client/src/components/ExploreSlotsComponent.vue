@@ -42,6 +42,9 @@
                                 There are no more posts
                                 <v-icon icon="mdi-cancel" color="#582b5a"/>
                             </div>
+                            <div v-if="pages.length === 10 && posts[posts.length-1] === pages">
+                                <LoaderComponent/>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -56,8 +59,11 @@
                             <PostComponent :post="post" />
                         </div>
                         <div class="explore-post-exaption" v-if="pages.length < 10">
-                                There are no more posts
-                                <v-icon icon="mdi-cancel" color="#582b5a"/>
+                            There are no more posts
+                            <v-icon icon="mdi-cancel" color="#582b5a"/>
+                        </div>
+                        <div v-if="pages.length === 10 && posts[posts.length-1] === pages">
+                            <LoaderComponent/>
                         </div>
                     </div> 
                 </div>
@@ -72,8 +78,11 @@
                             <ProfileShowcaseComponent :user="user"/>
                         </div>
                         <div class="explore-post-exaption" v-if="pages.length < 10">
-                                There are no more users
-                                <v-icon icon="mdi-cancel" color="#582b5a"/>
+                            There are no more users
+                            <v-icon icon="mdi-cancel" color="#582b5a"/>
+                        </div>
+                        <div v-if="pages.length === 10 && posts[posts.length-1] === pages">
+                            <LoaderComponent/>
                         </div>        
                     </div>
                 </div>
@@ -88,13 +97,15 @@
 import ProfileShowcaseComponent from './ProfileShowcaseComponent.vue';
 import PostComponent from './PostComponent.vue';
 import ExeptionComponent from './ExeptionComponent.vue';
+import LoaderComponent from './LoaderComponent.vue';
 
 export default {
     name: 'ExploreSlotsComponent',
     components: {
         ProfileShowcaseComponent,
         PostComponent,
-        ExeptionComponent
+        ExeptionComponent,
+        LoaderComponent
     },
     props: {
         users: {

@@ -22,10 +22,16 @@
                 <div v-if="following">
                     <ProfileShowcaseComponentVue v-for="follow in following" :key="follow._id" :user="follow"/>
                 </div>
+                <div v-else>
+                    <LoaderComponent/>
+                </div>
             </v-window-item>
             <v-window-item :value="2">
                 <div v-if="followers">
                     <ProfileShowcaseComponentVue v-for="follow in followers" :key="follow._id" :user="follow"/>
+                </div>
+                <div v-else>
+                    <LoaderComponent/>
                 </div>
             </v-window-item>
         </v-window>
@@ -33,13 +39,15 @@
 </template>
 <script>
 import ProfileShowcaseComponentVue from './ProfileShowcaseComponent.vue';
+import LoaderComponent from './LoaderComponent.vue';
 import { getUser, getAllFollowers, getAllFollowing } from '../services/user.service';
 import router from '../router';
 
 export default {
     name: 'ShowFollowComponent',
     components: {
-        ProfileShowcaseComponentVue
+        ProfileShowcaseComponentVue,
+        LoaderComponent
     },
     data() {
         return {

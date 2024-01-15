@@ -23,6 +23,9 @@
                         There are no more posts
                         <v-icon icon="mdi-cancel" color="#582b5a"/>
                     </div>
+                    <div v-if="pages.length === 10 && posts[posts.length-1] === pages">
+                        <LoaderComponent/>
+                    </div>
                 </div> 
             </div>
             <div v-else>
@@ -30,9 +33,7 @@
             </div>
         </div>
         <div v-else>
-            <span>
-                Loading...
-            </span>
+            <LoaderComponent/>
         </div>
     </div>
 </template>
@@ -40,6 +41,7 @@
 import CreatingPostComponent from './CreatingPostComponent.vue';
 import PostComponent from './PostComponent.vue';
 import ExeptionComponent from './ExeptionComponent.vue';
+import LoaderComponent from './LoaderComponent.vue';
 import store from '../store';
 import { reloadPage } from '../utils/utils';
 import { createPost, getPostsByFollowedUsers } from '../services/post.service';
@@ -49,7 +51,8 @@ export default {
     components: {
         CreatingPostComponent,
         PostComponent,
-        ExeptionComponent
+        ExeptionComponent,
+        LoaderComponent
     },
     data() {
         return {

@@ -1,4 +1,3 @@
--loader
 -validations
 -unblock all users
 -data in user object

@@ -10,12 +10,17 @@
                 <v-tooltip activator="parent" location="bottom">Clear all bookmarks</v-tooltip>
             </div>
         </div>
-        <div v-if="savedPosts.length > 0">
-            <PostComponent v-for="post in savedPosts" :key="post._id" :post="post" />
+        <div v-if="savedPosts">
+            <div v-if="savedPosts.length > 0">
+                <PostComponent v-for="post in savedPosts" :key="post._id" :post="post" />
+            </div>
+            <div v-else>
+                <ExeptionComponent text="bookmarks"/>
+            </div>  
         </div>
         <div v-else>
-            <ExeptionComponent text="bookmarks"/>
-        </div>    
+            <LoaderComponent/>
+        </div>  
     </div>
 </template>
 <script>
@@ -23,16 +28,18 @@ import { getAllSavedPosts, savePost } from '../services/post.service';
 import Swal from 'sweetalert2';
 import PostComponent from './PostComponent.vue';
 import ExeptionComponent from './ExeptionComponent.vue';
+import LoaderComponent from './LoaderComponent.vue';
 import store from '../store';
 
 export default {
     components: {
         PostComponent,
-        ExeptionComponent
+        ExeptionComponent,
+        LoaderComponent
     },
     data() {
         return {
-            savedPosts: []
+            savedPosts: null
         }
     },
     methods: {

@@ -18,17 +18,23 @@
                 <v-tooltip activator="parent" location="bottom">Unblock all users</v-tooltip>
             </div>
         </div>
-        <div v-if="blockedUsers?.length > 0">
-            <ProfileShowcaseComponent v-for="user in blockedUsers" :key="user._id" :user="user"/>
+        <div v-if="blockedUsers">
+            <div v-if="blockedUsers?.length > 0">
+                <ProfileShowcaseComponent v-for="user in blockedUsers" :key="user._id" :user="user"/>
+            </div>
+            <div v-else>
+                <ExeptionComponent text="blocked users"/>
+            </div>
         </div>
         <div v-else>
-            <ExeptionComponent text="blocked users"/>
+            <LoaderComponent/>
         </div>
     </div>
 </template>
 <script>
 import ProfileShowcaseComponent from './ProfileShowcaseComponent.vue';
 import ExeptionComponent from './ExeptionComponent.vue';
+import LoaderComponent from './LoaderComponent.vue';
 import store from '../store';
 import {getAllBlockedUsers} from '../services/user.service';
 
@@ -41,7 +47,8 @@ export default {
     },
     components: {
         ProfileShowcaseComponent,
-        ExeptionComponent
+        ExeptionComponent,
+        LoaderComponent
     },
     methods: {
         async getAllBlockedUsersService() {
