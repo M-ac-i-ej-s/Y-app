@@ -193,7 +193,6 @@ export default {
             this.loginTimer = setTimeout(async () => {
                     try {
                         const res = await checkIfUserExists(this.login);
-                        console.log(res)
                         if (res) {
                             this.loginError = true;
                             this.loginErrorMessage = 'This login is already taken';
@@ -220,7 +219,6 @@ export default {
                 this.emailTimer = setTimeout(async () => {
                     try {
                         const res = await checkIfEmailExists(this.email);
-                        console.log(res)
                         if (res) {
                             this.emailError = true;
                             this.emailErrorMessage = 'This email is already taken';
@@ -251,7 +249,6 @@ export default {
                 this.telNumberTimer = setTimeout(async () => {
                     try {
                         const res = await checkIfPhoneExists(this.telNumber);
-                        console.log(res)
                         if (res) {
                             this.telNumberError = true;
                             this.telNumberErrorMessage = 'This phone number is already taken';

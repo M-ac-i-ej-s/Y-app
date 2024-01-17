@@ -1,11 +1,5 @@
 import axios from "axios";
 import authHeader from "./auth-header";
-import { 
-    updatePosts, 
-    updateSavedPosts, 
-    updateLikedPosts, 
-    updateUserReplies 
-} from "./user.service";
 
 const API_URL = 'http://localhost:3001/posts/';
 
@@ -37,7 +31,6 @@ export const createPost = async (text, login) => {
                 },
             },
             ).then(async (response) => {
-                await updatePosts(login, response.data._id);
                 return response.data.Post;
             }).catch((error) => {
                 console.log(error);
@@ -48,10 +41,6 @@ export const deletePost = async (id) => {
     await axios.delete(API_URL + id, {
         headers: authHeader(),
     }).then(async (response) => {
-        await updatePosts(login, id);
-        await updateLikedPosts(login, id);
-        await updateSavedPosts(login, id);
-        await updateReplies(login,id);
         return response.data;
     }).catch((error) => {
         console.log(error);
@@ -62,7 +51,6 @@ export const likePost = async (id, login) => {
     await axios.patch(API_URL + id + '/likePost', {login}, {
         headers: authHeader(),
     }).then(async (response) => {
-        await updateLikedPosts(login, id);
         return response.data;
     }).catch((error) => {
         console.log(error);
@@ -85,7 +73,6 @@ export const savePost = async (id, login) => {
     await axios.patch(API_URL + id + '/savePost', {login}, {
         headers: authHeader(),
     }).then(async (response) => {
-        await updateSavedPosts(login, id);
         return response.data;
     }).catch((error) => {
         console.log(error);
@@ -124,7 +111,6 @@ export const postReply = async (id, text, login, user) => {
     }, {
         headers: authHeader(),
     }).then(async (response) => {
-        await updateUserReplies(login, id);
         return response.data;   
     }).catch((error) => {
         console.log(error);
@@ -216,7 +202,6 @@ export const postRepost = async (id, login, text, user) => {
                 'Content-Type': 'application/json',
             },
         });
-        await updatePosts(login, response.data._id);
         return response.data.Post;
     } catch (error) {
         console.error('Error reposting post:', error);

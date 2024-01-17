@@ -8,32 +8,32 @@
             </router-link>
             <router-link class="navbar-menu-redirect" to="/home">
                 <div class="navbar-menu-link shadow">
-                    <v-icon class="navbar-menu-link-icon" icon="mdi-home-outline"/>
-                    <span class="navbar-menu-link-label">Home</span>
-                </div>
+                    <v-icon class="navbar-menu-link-icon" :icon="(currentRouteName === 'home') ?  'mdi-home' : 'mdi-home-outline'"/>
+                    <span :class="`navbar-menu-link-label ${(currentRouteName === 'home') &&  'focus'}`">Home</span>
+                </div> 
             </router-link>
             <router-link class="navbar-menu-redirect" to="/explore">
                 <div class="navbar-menu-link shadow">
-                    <v-icon class="navbar-menu-link-icon" icon="mdi-magnify"/>
-                    <span class="navbar-menu-link-label">Explore</span>
+                    <v-icon class="navbar-menu-link-icon" icon="mdi-magnify" style="{{ font-weight: 400; }}"/>
+                    <span :class="`navbar-menu-link-label ${(currentRouteName === 'explore') &&  'focus'}`">Explore</span>
                 </div>
             </router-link>
             <router-link class="navbar-menu-redirect" :to="'/' + userId + '/bookmarks'">
                 <div class="navbar-menu-link shadow">
-                    <v-icon class="navbar-menu-link-icon" icon="mdi-bookmark-outline"/>
-                    <span class="navbar-menu-link-label">Bookmarks</span>
+                    <v-icon class="navbar-menu-link-icon" :icon="(currentRouteName === 'bookmarks') ? 'mdi-bookmark' : 'mdi-bookmark-outline'"/>
+                    <span :class="`navbar-menu-link-label ${(currentRouteName === 'bookmarks') &&  'focus'}`">Bookmarks</span>
                 </div>
             </router-link>
             <router-link class="navbar-menu-redirect" :to="'/' + userId + '/blockedUsers'">
                 <div class="navbar-menu-link shadow">
-                    <v-icon class="navbar-menu-link-icon" icon="mdi-account-cancel-outline"/>
-                    <span class="navbar-menu-link-label">Blocked users</span>
+                    <v-icon class="navbar-menu-link-icon" :icon="(currentRouteName === 'blockedUsers') ? 'mdi-account-cancel' : 'mdi-account-cancel-outline'"/>
+                    <span :class="`navbar-menu-link-label ${(currentRouteName === 'blockedUsers') &&  'focus'}`">Blocked users</span>
                 </div>
             </router-link>
             <router-link class="navbar-menu-redirect" :to="'/' + userLogin">
                 <div class="navbar-menu-link shadow">
-                    <v-icon class="navbar-menu-link-icon" icon="mdi-account-outline"/>
-                    <span class="navbar-menu-link-label">Profile</span>
+                    <v-icon class="navbar-menu-link-icon" :icon="(currentRouteName === userLogin) ? 'mdi-account' : 'mdi-account-outline'"/>
+                    <span :class="`navbar-menu-link-label ${(currentRouteName === userLogin) &&  'focus'}`">Profile</span>
                 </div>
             </router-link>
             <div class="navbar-menu-link">
@@ -73,7 +73,7 @@ export default {
         return {
             width: window.innerWidth,
             userLogin: store.state.data.user.user.login,
-            userId: store.state.data.user.user._id
+            userId: store.state.data.user.user._id,
         }
     },
     methods: {
@@ -105,6 +105,15 @@ export default {
     mounted() {
     // Add an event listener to watch for changes in window width
         window.addEventListener('resize', this.handleResize);
+    },
+    computed: {
+        currentRouteName() {
+            if(this.$route.path.split('/').length > 2) {
+                return this.$route.path.split('/')[2]
+            } else {
+                return this.$route.path.split('/')[1]
+            }
+        }
     },
     destroyed() {
     // Remove the event listener when the component is destroyed
@@ -177,6 +186,9 @@ export default {
             .navbar-menu-link-label {
                 font-size: 1vw;
                 padding: 0 0 0 15px;
+                &.focus {
+                    font-weight: 700;
+                }
                 @media screen and (max-width: 1200px) {
                     display: none;
                 }

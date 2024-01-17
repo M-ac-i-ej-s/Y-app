@@ -1,15 +1,16 @@
 <template>
     <div class="Profile">
-        <div class="profileComponent" v-if="user && isFollowed !== null">
+        <div class="profileComponent" v-if="user && isFollowed !== null && posts">
             <ProfileCardComponent 
                 :isYourProfile="isYourProfile" 
                 :isFollowed="isFollowed" 
                 :isHovering="isHovering" 
                 :isBlocked="isBlocked" 
                 :user="user" 
+                :postsLength="posts.length"
                 :updateFollowers="updateFollowersService"
                 :updateBlockedUsers="updateBlockedUsersService"/>
-            <ProfileSlotsComponent :isYourProfile="isYourProfile" :isFollowed="isFollowed" :user="user"/>
+            <ProfileSlotsComponent :isYourProfile="isYourProfile" :isFollowed="isFollowed" :user="user" :posts="posts"/>
         </div>
         <div class="profile-loader" v-else>
             <LoaderComponent/>
@@ -21,6 +22,7 @@ import ProfileCardComponent from './ProfileCardComponent.vue';
 import ProfileSlotsComponent from './ProfileSlotsComponent.vue';
 import LoaderComponent from './LoaderComponent.vue';
 import { getUser, updateBothFollow, updateBlockedUsers } from '../services/user.service';
+import { getUsersPosts } from '../services/post.service';
 import router from '../router';
 import { mapMutations } from 'vuex';
 import store from '../store'
@@ -38,6 +40,7 @@ export default {
             isHovering: false,
             isBlocked: false,
             user: null,
+            posts: null,
             userCloud: null
         }
     },
@@ -50,6 +53,7 @@ export default {
                 }
                 this.user = res;
                 this.user.joinDate = new Date(this.user.joinDate);
+                this.getUsersPostService();
             } catch (error) {
                 router.push('/errorpage');
             }
@@ -65,7 +69,6 @@ export default {
             }
         },
         checkIfFollowed() {
-            console.log(store.state.data.user.user.following)
             if (store.state.data.user.user.following.includes(this.$route.params.username)) {
                 this.isFollowed = true;
             } else {
@@ -102,6 +105,20 @@ export default {
                 await this.reLogUser(this.userCloud);
                 this.isBlocked = !this.isBlocked;
             } catch (error) {
+                router.push('/errorpage');
+            }
+        },
+        async getUsersPostService() {
+            try {
+                const res = await getUsersPosts(this.user?.login);
+
+                res.forEach(post => {
+                    post.date = new Date(post.date);
+                });
+
+                this.posts = res.reverse();
+            } catch (error) {
+                console.log(error);
                 router.push('/errorpage');
             }
         },

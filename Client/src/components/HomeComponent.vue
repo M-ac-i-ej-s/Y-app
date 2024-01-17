@@ -10,7 +10,7 @@
                 </div>
             </div>
             <div class="home-writing-button">
-                <v-btn class="home-writing-button-value" rounded="xl" color="#582b5a" @click="post">Post</v-btn>
+                <v-btn class="home-writing-button-value" rounded="xl" color="#582b5a" @click="onPost">Post</v-btn>
             </div>
         </div>
         <div v-if="posts">
@@ -63,7 +63,7 @@ export default {
         }
     },
     methods: {
-        post() {
+        onPost() {
             try {
                 createPost(this.$refs.text.textContent, this.userLogin)
                     .then(() => {
@@ -80,7 +80,6 @@ export default {
             const seenIDs = (lazyLoad) ? this.seenIds : [];
             try {
                 const response = await getPostsByFollowedUsers(this.userLogin, seenIDs);
-                console.log(response)
                 if(response.length !== 0) {
                     response.forEach(post => {
                         if(!this.seenIds.includes(post._id)) {
@@ -123,6 +122,9 @@ export default {
     min-height: 150vh;
     border-left:1px solid #e0e0e0;
     border-right:1px solid #e0e0e0;
+    @media screen and (max-width: 850px) {
+        width: 450px;
+    }
     .home-writing {
         padding: 20px 10px 20px 10px;
         border-bottom: 1px solid #d3d3d3;

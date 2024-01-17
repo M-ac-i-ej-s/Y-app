@@ -64,7 +64,6 @@ export default {
         async getPost() {
             try {
                 const res = await getPost(this.$route.params.id);
-                console.log(res);
 
                 res.date = new Date(res.date);
 
@@ -84,8 +83,6 @@ export default {
         async getPostReplies() {
             try {
                 const res = await getPostReplies(this.$route.params.id);
-
-                console.log(res);
 
                 res.forEach(reply => {
                     reply.date = new Date(reply.date);

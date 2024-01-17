@@ -58,7 +58,6 @@ export default {
         async postRepostService() {
             try {
                 if(this.$refs.text.textContent.length > 0) {
-                    console.log(this.$refs.text.textContent)
                     await postRepost(this.post._id, store.state.data.user.user.login, this.$refs.text.textContent, this.user.login);
                     await reloadPage();
                 }

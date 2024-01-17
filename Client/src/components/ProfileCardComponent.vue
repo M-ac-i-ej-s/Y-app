@@ -5,7 +5,7 @@
                 <span>{{ user.login }}</span>
             </div>
             <div class="profile-card-info-posts">
-                <span>{{ user.posts.length }} Posts and Replies</span>
+                <span>{{ postsLength }} Posts and Replies</span>
             </div>
         </div>
         <div class="profile-card-background-photo">
@@ -113,6 +113,10 @@ export default {
         },
         updateBlockedUsers: {
             type: Function,
+            required: true
+        },
+        postsLength: {
+            type: Number,
             required: true
         }
     },

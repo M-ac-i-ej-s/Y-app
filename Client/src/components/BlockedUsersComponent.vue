@@ -58,9 +58,6 @@ export default {
         async getUserService() {
             try {
                 const res = await getUser(store.state.data.user.user.login);
-                if(!res) {
-                    router.push('/404');
-                }
                 this.user = res;
                 this.user.joinDate = new Date(this.user.joinDate);
             } catch (error) {
@@ -70,7 +67,6 @@ export default {
         async getAllBlockedUsersService() {
             try {
                 const res = await getAllBlockedUsers(store.state.data.user.user.login);
-                console.log(res)
                 this.blockedUsers = res;
             } catch (error) {
                 router.push('/errorpage');

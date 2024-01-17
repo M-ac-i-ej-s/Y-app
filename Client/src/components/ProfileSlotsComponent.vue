@@ -84,6 +84,10 @@ export default {
             type: [Object, null],
             required: true
         },
+        posts: {
+            type: Array,
+            required: true
+        },
         isYourProfile: {
             type: Boolean,
             required: true
@@ -96,26 +100,11 @@ export default {
     data() {
       return {
         tabs: null,
-        posts: null,
         likedPosts: null,
         replies: null
       }
     },
     methods: {
-        async getUsersPostService() {
-            try {
-                const res = await getUsersPosts(this.user?.login);
-                console.log(res)
-
-                res.forEach(post => {
-                    post.date = new Date(post.date);
-                });
-
-                this.posts = res.reverse();
-            } catch (error) {
-                router.push('/errorpage');
-            }
-        },
         async getAllLikedPostsService() {
             try {
                 const res = await getAllLikedPosts(this.user?.login);
@@ -126,6 +115,7 @@ export default {
 
                 this.likedPosts = res.reverse();
             } catch (error) {
+                console.log(error);
                 router.push('/errorpage');
             }
         },
@@ -139,18 +129,18 @@ export default {
 
                 this.replies = res.reverse();
             } catch (error) {
+                console.log(error);
                 router.push('/errorpage');
             }
         },
     },
     mounted() {
-        this.getUsersPostService();
         this.getAllLikedPostsService();
         this.getAllRepliesService();
     },
     watch: {
         '$route.params.username': function() {
-            this.getUsersPostService();
+
             this.getAllLikedPostsService();
             this.getAllRepliesService();
         }

@@ -122,7 +122,6 @@ export default {
             this.loginTimer = setTimeout(async () => {
                     try {
                         const res = await checkIfUserExists(this.userEdited.login);
-                        console.log(res)
                         if (res) {
                             this.loginError = true;
                             this.loginErrorMessage = 'This login is already taken';

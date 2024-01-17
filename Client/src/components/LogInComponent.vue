@@ -63,7 +63,6 @@ export default {
                     router.push('/home');
                 })
                 .catch((err) => {
-                    console.log(err)
                     if(err.response.status === 400) {
                         this.password = null;
                         this.errorMessage = err.response.data.message;

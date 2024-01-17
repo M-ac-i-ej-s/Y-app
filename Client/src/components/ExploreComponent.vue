@@ -85,7 +85,6 @@ export default {
                 } else {
                     this.users = [...this.users, response]
                 }
-                console.log(this.users)
             } catch (error) {
                 router.push('/errorpage');
             }
@@ -118,7 +117,6 @@ export default {
         },
     },
     mounted() {
-        window.addEventListener('scroll', this.checkScroll);
         if(this.$route.query.q !== undefined) {
             this.getPostsExploreService();
             this.getUsersExploreService();
@@ -134,6 +132,7 @@ export default {
         '$route.query.q': function() {
             if(this.$route.query.q !== undefined) {
                 this.text = this.$route.query.q;
+                window.addEventListener('scroll', this.checkScroll);
                 this.getPostsExploreService();
                 this.getUsersExploreService();
             } else {
@@ -145,8 +144,9 @@ export default {
             }
         },
         '$route.query.y': function() {
-            this.type = this.$route.query.y || '';
-            this.getPostsExploreService();
+            if(this.$route.query.y !== undefined) {
+                this.getPostsExploreService();
+            }
         }
     },
     beforeDestroy() {

@@ -1,5 +1,5 @@
 <template>
-        <div class="postComponent" v-if="post && user" @click="redirectToPost">
+        <div :class="`postComponent ${isBlocked && 'blocked'}`" v-if="post && user" @click="redirectToPost">
             <div class="post-component-values">
                 <div class="post-component-values-container">
                     <div class="post-component-values-container-image" @click.stop="redirectToProfile">
@@ -72,7 +72,6 @@ import { reloadPage } from '../utils/utils';
 import router from '../router';
 import Swal from 'sweetalert2'
 import store from '../store';
-import { watch } from 'vue';
 
 export default {
     name: 'PostComponent',
@@ -91,6 +90,7 @@ export default {
             isLikedByUser: false,
             isSavedByUser: false,
             isRepost: false,
+            isBlocked: false,
             numLikes: this.post.likes.length,
             numSaves: this.post.saves.length,
             numReplies: this.post.replies.length,
@@ -150,6 +150,12 @@ export default {
                 }
             });
         },
+        checkIfBlocked() {
+            if(store.state.data.user.user.blockedUsers.includes(this.post.user)) {
+                this.isBlocked = true;
+            }
+            console.log(this.isBlocked)
+        },
         async checkIfRepost() {
             if(this.post.isRepost) {
                 this.isRepost = true;
@@ -160,7 +166,7 @@ export default {
 
                     this.repostPost = response;
                 } catch (error) {
-                    console.error('Error in checkIfRepost:', error);
+                    router.push('/errorpage');
                 }
             } else {
                 this.isRepost = false;
@@ -221,6 +227,7 @@ export default {
         this.checkIfLiked();
         this.checkIfSaved();
         this.checkIfRepost();
+        this.checkIfBlocked();
     },
     watch: {
         post: function() {
@@ -228,6 +235,7 @@ export default {
             this.checkIfLiked();
             this.checkIfSaved();
             this.checkIfRepost();
+            this.checkIfBlocked();
             this.readActions();
         }
     }
@@ -240,6 +248,9 @@ export default {
     padding: 20px;
     transition: 0.2s ease;
     cursor: pointer;
+    &.blocked {
+        filter: blur(3px);
+    }
     @media screen and (max-width: 700px) {
         width: 100%;
     }

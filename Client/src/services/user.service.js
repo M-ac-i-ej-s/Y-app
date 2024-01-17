@@ -28,58 +28,6 @@ export const updateUser = async (id, data) => {
     }
 };
 
-export const updateLikedPosts = async (login, id) => {
-    try {
-        const response = await axios.patch(API_URL + login + '/likedPosts', {id}, {
-            headers: authHeader(),
-        })
-        console.log(response.data);
-        return response.data;
-    } catch (error) {
-        console.error('Error updating user:', error);
-        throw error; // You might want to handle errors appropriately in your component
-    }
-};
-
-export const updateSavedPosts = async (login, id) => {
-    try {
-        const response = await axios.patch(API_URL + login + '/savedPosts', {id}, {
-            headers: authHeader(),
-        })
-        console.log(response.data);
-        return response.data;
-    } catch (error) {
-        console.error('Error updating user:', error);
-        throw error; // You might want to handle errors appropriately in your component
-    }
-}
-
-export const updatePosts = async (login, id) => {
-    try {
-        const response = await axios.patch(API_URL + login + '/posts', {id}, {
-            headers: authHeader(),
-        })
-        console.log(response.data);
-        return response.data;
-    } catch (error) {
-        console.error('Error updating user:', error);
-        throw error; // You might want to handle errors appropriately in your component
-    }
-};
-
-export const updateUserReplies = async (login, id) => {
-    try {
-        const response = await axios.patch(API_URL + login + '/replies', {id}, {
-            headers: authHeader(),
-        })
-        console.log(response.data);
-        return response.data;
-    } catch (error) {
-        console.error('Error updating user:', error);
-        throw error; // You might want to handle errors appropriately in your component
-    }
-};
-
 export const updateFollowers = async (login, user) => {
     try {
         const response = await axios.patch(API_URL + login + '/followers', {user}, {
