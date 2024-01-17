@@ -48,14 +48,14 @@
     </div>
 </template>
 <script>
-import ProfileShowcaseComponentVue from './ProfileShowcaseComponent.vue';
-import LoaderComponent from './LoaderComponent.vue';
-import ExeptionComponent from './ExeptionComponent.vue';
+import ProfileShowcaseComponentVue from '../components/ProfileShowcaseComponent.vue';
+import LoaderComponent from '../components/LoaderComponent.vue';
+import ExeptionComponent from '../components/ExeptionComponent.vue';
 import { getUser, getAllFollowers, getAllFollowing } from '../services/user.service';
 import router from '../router';
 
 export default {
-    name: 'ShowFollowComponent',
+    name: 'ShowFollowPage',
     components: {
         ProfileShowcaseComponentVue,
         LoaderComponent,

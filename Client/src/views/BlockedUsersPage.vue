@@ -32,9 +32,9 @@
     </div>
 </template>
 <script>
-import ProfileShowcaseComponent from './ProfileShowcaseComponent.vue';
-import ExeptionComponent from './ExeptionComponent.vue';
-import LoaderComponent from './LoaderComponent.vue';
+import ProfileShowcaseComponent from '../components/ProfileShowcaseComponent.vue';
+import ExeptionComponent from '../components/ExeptionComponent.vue';
+import LoaderComponent from '../components/LoaderComponent.vue';
 import store from '../store';
 import router from '../router';
 import Swal from 'sweetalert2';
@@ -42,7 +42,7 @@ import { mapMutations } from 'vuex';
 import {getAllBlockedUsers, updateBlockedUsers, getUser} from '../services/user.service';
 
 export default {
-    name: 'BlockedUsersComponent',
+    name: 'BlockedUsersPage',
     data() {
         return {
             blockedUsers: null,

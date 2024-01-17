@@ -1,14 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import WelcomePage from '../views/WelcomePage.vue'
 import MainPage from '../views/MainPage.vue'
-import HomeComponent from '../components/HomeComponent.vue'
-import ExploreComponent from '../components/ExploreComponent.vue'
-import BookmarksComponent from '../components/BookmarksComponent.vue'
-import BlockedUsersComponent from '../components/BlockedUsersComponent.vue'
-import ProfileComponent from '../components/ProfileComponent.vue'
-import ExpandedPostComponent from '../components/ExpandedPostComponent.vue'
-import ShowFollowComponent from '../components/ShowFollowComponent.vue'
-import ErrorPageComponent from '../components/ErrorPageComponent.vue'
+import HomePage from '../views/HomePage.vue'
+import ExplorePage from '../views/ExplorePage.vue'
+import BookmarksPage from '../views/BookmarksPage.vue'
+import BlockedUsersPage from '../views/BlockedUsersPage.vue'
+import ProfilePage from '../views/ProfilePage.vue'
+import ExpandedPostPage from '../views/ExpandedPostPage.vue'
+import ShowFollowPage from '../views/ShowFollowPage.vue'
+import ErrorPage from '../views/ErrorPage.vue'
 
 const routes = [
   {
@@ -19,7 +19,7 @@ const routes = [
   {
     path: '/errorpage',
     name: 'Error',
-    component: ErrorPageComponent
+    component: ErrorPage
   },
   {
     path: '/',
@@ -29,42 +29,42 @@ const routes = [
       {
         path: '/home',
         name: 'Home',
-        component: HomeComponent
+        component: HomePage
       },
       {
         path: '/explore',
         name: 'Explore',
-        component: ExploreComponent
+        component: ExplorePage
       },
       {
         path: '/:id/bookmarks',
         name: 'Booksmarks',
-        component: BookmarksComponent
+        component: BookmarksPage
       },
       {
         path: '/:id/blockedUsers',
         name: 'BlockedUsers',
-        component: BlockedUsersComponent
+        component: BlockedUsersPage
       },
       {
         path: '/:username',
         name: 'Profile',
-        component: ProfileComponent
+        component: ProfilePage
       },
       {
         path: '/:username/:id',
         name: 'Post',
-        component: ExpandedPostComponent
+        component: ExpandedPostPage
       },
       {
         path: '/:username/followers',
         name: 'Followers',
-        component: ShowFollowComponent
+        component: ShowFollowPage
       },
       {
         path: '/:username/following',
         name: 'Following',
-        component: ShowFollowComponent
+        component: ShowFollowPage
       },
     ]
   }

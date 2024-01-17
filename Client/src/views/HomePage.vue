@@ -38,17 +38,17 @@
     </div>
 </template>
 <script>
-import CreatingPostComponent from './CreatingPostComponent.vue';
-import PostComponent from './PostComponent.vue';
-import ExeptionComponent from './ExeptionComponent.vue';
-import LoaderComponent from './LoaderComponent.vue';
+import CreatingPostComponent from '../components/CreatingPostComponent.vue';
+import PostComponent from '../components/PostComponent.vue';
+import ExeptionComponent from '../components/ExeptionComponent.vue';
+import LoaderComponent from '../components/LoaderComponent.vue';
 import store from '../store';
 import router from '../router';
 import { reloadPage } from '../utils/utils';
 import { createPost, getPostsByFollowedUsers } from '../services/post.service';
 
 export default {
-    name: 'HomeComponent',
+    name: 'HomePage',
     components: {
         CreatingPostComponent,
         PostComponent,

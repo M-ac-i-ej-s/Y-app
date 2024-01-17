@@ -19,15 +19,15 @@
     </div>
 </template>
 <script>
-import ExploreSlotsComponent from './ExploreSlotsComponent.vue';
+import ExploreSlotsComponent from '../components/ExploreSlotsComponent.vue';
 import { getPostsExplore } from '../services/post.service';
 import { getUsersExplore } from '../services/user.service';
 import router from '../router';
 import store from '../store';
-import LoaderComponent from './LoaderComponent.vue';
+import LoaderComponent from '../components/LoaderComponent.vue';
 
 export default {
-    name: 'ExploreComponent',
+    name: 'ExplorePage',
     components: {
         ExploreSlotsComponent,
         LoaderComponent

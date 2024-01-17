@@ -1,5 +1,5 @@
 <template>
-    <div class="expandedPostComponent">
+    <div class="expandedPostPage">
         <div class="expanded-post-label">
             <span class="expanded-post-label-value">
                 Post
@@ -45,12 +45,13 @@
 </template>
 <script>
 import { getPost, postReply, getPostReplies } from '../services/post.service';
-import PostComponent from './PostComponent.vue';
+import PostComponent from '../components/PostComponent.vue';
 import store from '../store';
 import router from '../router';
 import { reloadPage } from '../utils/utils';
 
 export default {
+    name: 'ExpandedPostPage',
     components: {
         PostComponent
     },
@@ -107,7 +108,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.expandedPostComponent {
+.expandedPostPage {
     width: 600px; 
     min-height: 150vh;
     border-left:1px solid #e0e0e0;

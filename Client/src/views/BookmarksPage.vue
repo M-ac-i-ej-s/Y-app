@@ -26,13 +26,14 @@
 <script>
 import { getAllSavedPosts, savePost } from '../services/post.service';
 import Swal from 'sweetalert2';
-import PostComponent from './PostComponent.vue';
-import ExeptionComponent from './ExeptionComponent.vue';
-import LoaderComponent from './LoaderComponent.vue';
+import PostComponent from '../components/PostComponent.vue';
+import ExeptionComponent from '../components/ExeptionComponent.vue';
+import LoaderComponent from '../components/LoaderComponent.vue';
 import store from '../store';
 import router from '../router';
 
 export default {
+    name: 'BookmarksPage',
     components: {
         PostComponent,
         ExeptionComponent,

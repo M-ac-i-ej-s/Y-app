@@ -18,9 +18,9 @@
     </div>
 </template>
 <script>
-import ProfileCardComponent from './ProfileCardComponent.vue';
-import ProfileSlotsComponent from './ProfileSlotsComponent.vue';
-import LoaderComponent from './LoaderComponent.vue';
+import ProfileCardComponent from '../components/ProfileCardComponent.vue';
+import ProfileSlotsComponent from '../components/ProfileSlotsComponent.vue';
+import LoaderComponent from '../components/LoaderComponent.vue';
 import { getUser, updateBothFollow, updateBlockedUsers } from '../services/user.service';
 import { getUsersPosts } from '../services/post.service';
 import router from '../router';

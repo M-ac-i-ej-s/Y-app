@@ -1,4 +1,3 @@
--data in user object
 -avatar / background changes
 -images to posts
 -who to follow component
