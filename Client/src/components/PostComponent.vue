@@ -2,13 +2,13 @@
         <div class="postComponent" v-if="post && user" @click="redirectToPost">
             <div class="post-component-values">
                 <div class="post-component-values-container">
-                    <div class="post-component-values-container-image">
+                    <div class="post-component-values-container-image" @click.stop="redirectToProfile">
                         <img class="post-component-values-container-image-value" src="../assets/dummy-avatar.png" alt="">
                     </div>
                     <div class="post-component-values-container-user-info">
                         <div class="post-component-values-container-user-info-values">
                             <div>
-                                <span class="post-component-values-container-user-info-values-login">{{ user?.login }}</span>
+                                <span class="post-component-values-container-user-info-values-login" @click.stop="redirectToProfile">{{ user.login }}</span>
                                 <v-icon icon="mdi-circle-small"></v-icon>
                                 <span class="post-component-values-container-user-info-values-date">{{ post.date.toLocaleString('en-us', { month: 'short' }) }} {{ post.date.getDate() }} {{ post.date.getFullYear() }}</span>
                                 <span v-if="post.isReply" class="post-component-values-container-user-info-values-link" @click.stop="redirectToReplied">
@@ -205,6 +205,9 @@ export default {
         redirectToRepost() {
             router.push('/' + this.repostPost.user + '/' + this.repostPost._id);
         },
+        redirectToProfile() {
+            router.push('/' + this.post.user);
+        },
         readActions() {
             this.numLikes = this.post.likes.length;
             this.numSaves = this.post.saves.length;
@@ -270,6 +273,9 @@ export default {
                     .post-component-values-container-user-info-values-login {
                         font-weight: 600;
                         font-size: 14px;
+                        &:hover {
+                            text-decoration: underline;
+                        }
                     }
                     .post-component-values-container-user-info-values-date {
                         font-weight: 400;

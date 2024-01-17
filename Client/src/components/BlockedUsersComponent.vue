@@ -13,7 +13,7 @@
                     </span>
                 </div>
             </div>
-            <div class="blocked-users-label-icon">
+            <div class="blocked-users-label-icon" @click="unblockAllUsersService">
                 <v-icon icon="mdi-account-check" size="x-large"/>
                 <v-tooltip activator="parent" location="bottom">Unblock all users</v-tooltip>
             </div>
@@ -37,13 +37,16 @@ import ExeptionComponent from './ExeptionComponent.vue';
 import LoaderComponent from './LoaderComponent.vue';
 import store from '../store';
 import router from '../router';
-import {getAllBlockedUsers} from '../services/user.service';
+import Swal from 'sweetalert2';
+import { mapMutations } from 'vuex';
+import {getAllBlockedUsers, updateBlockedUsers, getUser} from '../services/user.service';
 
 export default {
     name: 'BlockedUsersComponent',
     data() {
         return {
-            blockedUsers: null
+            blockedUsers: null,
+            user: null
         }
     },
     components: {
@@ -52,6 +55,18 @@ export default {
         LoaderComponent
     },
     methods: {
+        async getUserService() {
+            try {
+                const res = await getUser(store.state.data.user.user.login);
+                if(!res) {
+                    router.push('/404');
+                }
+                this.user = res;
+                this.user.joinDate = new Date(this.user.joinDate);
+            } catch (error) {
+                router.push('/errorpage');
+            }
+        },
         async getAllBlockedUsersService() {
             try {
                 const res = await getAllBlockedUsers(store.state.data.user.user.login);
@@ -61,6 +76,35 @@ export default {
                 router.push('/errorpage');
             }
         },
+        async unblockAllUsersService() {
+            Swal.fire({
+                title: "Do you want to unblock all users?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Unblock all users"
+                }).then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        this.blockedUsers.forEach(async user => {
+                            await updateBlockedUsers(store.state.data.user.user.login, user.login);
+                        });
+                        await this.getUserService();
+                        this.reLogUser(this.user);
+                        this.blockedUsers = [];
+                    } catch (error) {
+                        router.push('/errorpage');
+                    
+                    }
+                    Swal.fire({
+                        title: "Cleared !",
+                        icon: "success"
+                    });
+                }
+                });
+        },
+        ...mapMutations(['reLogUser'])
     },
     mounted() {
         this.getAllBlockedUsersService();
