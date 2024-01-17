@@ -47,6 +47,7 @@
 import { getPost, postReply, getPostReplies } from '../services/post.service';
 import PostComponent from './PostComponent.vue';
 import store from '../store';
+import router from '../router';
 import { reloadPage } from '../utils/utils';
 
 export default {
@@ -69,7 +70,7 @@ export default {
 
                 this.post = res;
             } catch (error) {
-                console.error('Error in getPost:', error);
+                router.push('/errorpage');
             }
         },
         async postReply() {
@@ -77,7 +78,7 @@ export default {
                 await postReply(this.$route.params.id,this.$refs.text.textContent ,store.state.data.user.user.login,this.$route.params.username);
                 reloadPage();
             } catch (error) {
-                console.error('Error in postReply:', error);
+                router.push('/errorpage');
             }
         },
         async getPostReplies() {
@@ -92,7 +93,7 @@ export default {
 
                 this.postReplies = res;
             } catch (error) {
-                console.error('Error in getPostReplies:', error);
+                router.push('/errorpage');
             }
         }
     },

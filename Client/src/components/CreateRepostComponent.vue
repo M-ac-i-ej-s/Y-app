@@ -37,6 +37,7 @@ import BaseDialog from '../base/BaseDialog.vue';
 import { postRepost } from '../services/post.service';
 import { reloadPage } from '../utils/utils';
 import store from '../store';
+import router from '../router';
 
 export default {
     name: 'CreateRepostComponent',
@@ -62,7 +63,7 @@ export default {
                     await reloadPage();
                 }
             } catch (error) {
-                console.error('Error in postReply:', error);
+                router.push('/errorpage');
             }
         }
     }

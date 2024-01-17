@@ -36,6 +36,7 @@ import ProfileShowcaseComponent from './ProfileShowcaseComponent.vue';
 import ExeptionComponent from './ExeptionComponent.vue';
 import LoaderComponent from './LoaderComponent.vue';
 import store from '../store';
+import router from '../router';
 import {getAllBlockedUsers} from '../services/user.service';
 
 export default {
@@ -57,7 +58,7 @@ export default {
                 console.log(res)
                 this.blockedUsers = res;
             } catch (error) {
-                console.error('Error in getAllBlockedUsers:', error);
+                router.push('/errorpage');
             }
         },
     },

@@ -181,3 +181,33 @@ export const getUsersExplore = async (login, text, seenIds) => {
         throw error; // You might want to handle errors appropriately in your component
     }
 };
+
+export const checkIfUserExists = async (login) => {
+    try {
+        const response = await axios.get(API_URL + login + '/exists');
+        return response.data.User;
+    } catch (error) {
+        console.error('Error fetching user users:', error);
+        throw error; // You might want to handle errors appropriately in your component
+    }
+};
+
+export const checkIfEmailExists = async (email) => {
+    try {
+        const response = await axios.get(API_URL + email + '/email');
+        return response.data.User;
+    } catch (error) {
+        console.error('Error fetching user users:', error);
+        throw error; // You might want to handle errors appropriately in your component
+    }
+};
+
+export const checkIfPhoneExists = async (telNumber) => {
+    try {
+        const response = await axios.get(API_URL + telNumber + '/phone');
+        return response.data.User;
+    } catch (error) {
+        console.error('Error fetching user users:', error);
+        throw error; // You might want to handle errors appropriately in your component
+    }
+};

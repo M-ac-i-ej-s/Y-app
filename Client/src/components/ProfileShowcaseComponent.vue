@@ -88,7 +88,7 @@ export default {
                 await this.reLogUser(this.userCloud);
                 this.isFollowed = !this.isFollowed;
             } catch (error) {
-                console.error('Error in updateBothFollowService:', error);
+                router.push('/errorpage');
             }
         },
         async updateBlockedUsersService() {
@@ -98,7 +98,7 @@ export default {
                 await this.reLogUser(this.userCloud);
                 this.isBlocked = !this.isBlocked;
             } catch (error) {
-                console.error('Error in updateBlockedUsersService:', error);
+                router.push('/errorpage');
             }
         },
         async getUserFromCloudService() {
@@ -107,7 +107,7 @@ export default {
                 this.userCloud = res;
                 this.userCloud.joinDate = new Date(this.userCloud.joinDate);
             } catch (error) {
-                console.error('Error in getUser:', error);
+                router.push('/errorpage');
             }
         },
         ...mapMutations(['reLogUser'])

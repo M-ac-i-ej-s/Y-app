@@ -127,7 +127,7 @@ export default {
         },
         goToFollowing() {
             this.$router.push(`/${this.user.login}/following`);
-        }
+        },
     },
 }
 

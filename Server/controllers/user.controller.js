@@ -21,6 +21,87 @@ export const getUser = async (req, res) => {
         });
 };
 
+export const checkIfUserExists = async (req, res) => {
+    const userLogin = req.params.login;
+    try {
+        const user = await User.find({login: userLogin})
+        if(user.length) {
+            res.status(200).json({
+                success: true,
+                message: 'Single User',
+                User: true,
+            });
+        } else {
+            res.status(200).json({
+                success: true,
+                message: 'Single User',
+                User: false,
+            });
+        }
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: 'This user does not exist',
+            error: err.message,
+        });
+    
+    }
+};
+
+export const checkIfEmailExists = async (req, res) => {
+    const userEmail = req.params.email;
+    try {
+        const user = await User.find({email: userEmail})
+        if(user.length) {
+            res.status(200).json({
+                success: true,
+                message: 'Single User',
+                User: true,
+            });
+        } else {
+            res.status(200).json({
+                success: true,
+                message: 'Single User',
+                User: false,
+            });
+        }
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: 'This user does not exist',
+            error: err.message,
+        });
+    
+    }
+};
+
+export const checkIfPhoneExists = async (req, res) => {
+    const userPhone = req.params.phone;
+    try {
+        const user = await User.find({telNumber: userPhone})
+        if(user.length) {
+            res.status(200).json({
+                success: true,
+                message: 'Single User',
+                User: true,
+            });
+        } else {
+            res.status(200).json({
+                success: true,
+                message: 'Single User',
+                User: false,
+            });
+        }
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: 'This user does not exist',
+            error: err.message,
+        });
+    
+    }
+};
+
 export const createUser = async (req, res) => {
     const hashedPwd = await bcrypt.hash(req.body.password, 10);
     User.find({ email: req.body.email }, (err, users) => {

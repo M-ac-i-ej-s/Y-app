@@ -17,6 +17,11 @@ const routes = [
     component: WelcomePage,
   },
   {
+    path: '/errorpage',
+    name: 'Error',
+    component: ErrorPageComponent
+  },
+  {
     path: '/',
     name: 'MainPage',
     component: MainPage,
@@ -61,11 +66,6 @@ const routes = [
         name: 'Following',
         component: ShowFollowComponent
       },
-      {
-        path: '/:pathMatch(.*)*',
-        name: 'Error',
-        component: ErrorPageComponent
-      }
     ]
   }
 ]

@@ -13,6 +13,9 @@
                         v-model="login"
                         prepend-icon="mdi-account-outline"
                     ></v-text-field>
+                    <span class="sign-component-nescessary-error login" v-if="loginErrorMessage">
+                        {{ loginErrorMessage }}
+                    </span>
                     <v-text-field
                         class="sign-component-nescessary-value"
                         label="Email*"
@@ -20,6 +23,9 @@
                         v-model="email"
                         prepend-icon="mdi-email-outline"
                     ></v-text-field>
+                    <span class="sign-component-nescessary-error email" v-if="emailErrorMessage">
+                        {{ emailErrorMessage }}
+                    </span>
                     <v-text-field
                         class="sign-component-nescessary-value"
                         label="Telephone Number*"
@@ -27,14 +33,20 @@
                         v-model="telNumber"
                         prepend-icon="mdi-phone-outline"
                     ></v-text-field>
+                    <span class="sign-component-nescessary-error tel" v-if="telNumberErrorMessage">
+                        {{ telNumberErrorMessage }}
+                    </span>
                     <v-text-field
-                        class="sign-component-nescessary-value"
+                        :class="`sign-component-nescessary-value ${passwordColor}`"
                         label="Password*"
                         variant="outlined"
                         v-model="password"
                         prepend-icon="mdi-lock-outline"
                         type="password"
                     ></v-text-field>
+                    <span class="sign-component-nescessary-error password" v-if="passwordErrorMessage">
+                        {{ passwordErrorMessage }}
+                    </span>
                 </div>
                 <div class="sign-component-not-nescessary">
                     <div v-if="!avatar" class="sign-component-not-nescessary-avatar">
@@ -51,10 +63,10 @@
                     <span class="sign-component-info-label">* - nescessary to complete creating the account</span>
                 </div>
                 <div class="sign-component-buttons">
-                    <v-btn class="sign-component-buttons-label" rounded="xl" color="grey">
+                    <v-btn class="sign-component-buttons-label" rounded="xl" color="grey" @click="onClear">
                         Clear
                     </v-btn>
-                    <v-btn class="sign-component-buttons-label" rounded="xl" color="purple-darken-2" @click="onRegister">
+                    <v-btn class="sign-component-buttons-label" rounded="xl" color="purple-darken-2" @click="onRegister" :disabled="loginError || emailError || telNumberError || passwordError">
                         Create account 
                     </v-btn>
                 </div>
@@ -65,13 +77,14 @@
 <script>
 import BaseDialog from '../base/BaseDialog.vue'
 import router from '../router';
+import { checkIfUserExists, checkIfEmailExists, checkIfPhoneExists } from '../services/user.service';
 import { register } from '../services/auth.service';
 import authHeader from '../services/auth-header';
 import { mapMutations } from 'vuex';
 
 export default {
     components: {
-        BaseDialog
+        BaseDialog,
     },
     data() {
         return {
@@ -80,7 +93,20 @@ export default {
             email: '',
             telNumber: '',
             password: '',
-            bio: ''
+            bio: '',
+            loginError: true,
+            loginTimer: null,
+            loginErrorMessage: '',
+            emailError: true,
+            emailTimer: null,
+            emailErrorMessage: '',
+            telNumberError: true,
+            telNumberTimer: null,
+            telNumberErrorMessage: '',
+            passwordStrength: 0,
+            passwordError: true,
+            passwordErrorMessage: '',
+            passwordColor: ''
         }
     },
     methods : {
@@ -95,11 +121,157 @@ export default {
                     authHeader();
                 })
                 .catch((err) => {
-                    console.log(err);
+                    router.push('/errorpage');
                 });
+        },
+        validateEmail() {
+            return String(this.email)
+                .toLowerCase()
+                .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                );
+        },
+        validatePhone() {
+            const phoneNum = this.telNumber.replace(/[^\d]/g, '');
+            if(phoneNum.length > 6 && phoneNum.length < 11) {
+                  return true;  
+            } else {
+                return false;
+            }
+        },
+        checkpassword() {
+            if(this.password === ''){
+                this.passwordColor = '';
+                this.passwordStrength = 0;
+                return;
+            }
+
+            if (this.password.length < 6) {
+                this.passwordError = true;
+                this.passwordColor = 'red';
+                this.passwordErrorMessage = 'minimum number of characters is 6';
+                return;
+            } else {
+                this.passwordError = false;
+                this.passwordErrorMessage = '';
+            }
+
+            if (this.password.match(/[0-9]+/) && this.password.match(/[$@#&!]+/)) {
+                this.passwordColor = 'green';
+                this.passwordStrength = 2;
+            } else if (this.password.match(/[0-9]+/) || this.password.match(/[$@#&!]+/)) {
+                this.passwordColor = 'orange';
+                this.passwordStrength = 1;
+            } else {
+                this.passwordErrorMessage = 'password not strong enough';
+                this.passwordColor = 'red';
+                this.passwordError = true;
+                this.passwordStrength = 0;
+            }
+        },
+        onClear() {
+            this.login = '';
+            this.email = '';
+            this.telNumber = '';
+            this.password = '';
+            this.bio = '';
+            this.avatar = null;
         },
         ...mapMutations(['loggedIn', 'loggedOut']),
     },
+    watch: {
+        login: async function() {
+            if(this.loginTimer) {
+                clearTimeout(this.loginTimer);
+            }
+
+            if(this.login === '') {
+                this.loginErrorMessage = '';
+                return;
+            }
+
+            this.loginTimer = setTimeout(async () => {
+                    try {
+                        const res = await checkIfUserExists(this.login);
+                        console.log(res)
+                        if (res) {
+                            this.loginError = true;
+                            this.loginErrorMessage = 'This login is already taken';
+                        } else {
+                            this.loginError = false;
+                            this.loginErrorMessage = '';
+                        }
+                    } catch (error) {
+                        router.push('/errorpage');
+                    }
+            }, 500);
+        },
+        email: async function() {
+            if(this.emailTimer) {
+                clearTimeout(this.emailTimer);
+            }
+
+            if(this.email === '') {
+                this.emailErrorMessage = '';
+                return;
+            }
+
+            if(this.validateEmail()) {
+                this.emailTimer = setTimeout(async () => {
+                    try {
+                        const res = await checkIfEmailExists(this.email);
+                        console.log(res)
+                        if (res) {
+                            this.emailError = true;
+                            this.emailErrorMessage = 'This email is already taken';
+                        } else {
+                            this.emailError = false;
+                            this.emailErrorMessage = '';
+                        }
+                    } catch (error) {
+                        router.push('/errorpage');
+                    }
+                 }, 500);
+            } else {
+                this.emailError = true;
+                this.emailErrorMessage = 'This email is not valid';
+            }
+        },
+        telNumber: function() {
+            if (this.telNumberTimer) {
+                clearTimeout(this.telNumberTimer);
+            }
+
+            if(this.telNumber === '') {
+                this.telNumberErrorMessage = '';
+                return;
+            }
+
+            if(this.validatePhone()) {
+                this.telNumberTimer = setTimeout(async () => {
+                    try {
+                        const res = await checkIfPhoneExists(this.telNumber);
+                        console.log(res)
+                        if (res) {
+                            this.telNumberError = true;
+                            this.telNumberErrorMessage = 'This phone number is already taken';
+                        } else {
+                            this.telNumberError = false;
+                            this.telNumberErrorMessage = '';
+                        }
+                    } catch (error) {
+                        router.push('/errorpage');
+                    }
+                 }, 500);
+            } else {
+                this.telNumberError = true;
+                this.telNumberErrorMessage = 'This phone number is not valid';
+            }
+        },
+        password: function() {
+            this.checkpassword(this.password);
+        }
+    }
 }
 </script>
 <style scoped lang="scss">
@@ -130,6 +302,32 @@ export default {
             width: 100%;
             .sign-component-nescessary-value {
                 width: 100%;
+                &.red {
+                    color: red;
+                }
+                &.orange {
+                    color: orange;
+                }
+                &.green {
+                    color: green;
+                }
+            }
+            .sign-component-nescessary-error {
+                position: absolute;
+                color: red;
+                font-size: 12px;
+                &.login {
+                    margin: 60px 0 0 50px;
+                }
+                &.email {
+                    margin: 142px 0 0 50px;
+                }
+                &.tel {
+                    margin: 224px 0 0 50px;
+                }
+                &.password {
+                    margin: 306px 0 0 50px;
+                }
             }
         }
         .sign-component-not-nescessary {

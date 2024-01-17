@@ -13,13 +13,19 @@ import {
     getAllFollowing,
     getAllBlockedUsers,
     updateBlockedUsers,
-    getSearchUsers
+    getSearchUsers,
+    checkIfUserExists,
+    checkIfEmailExists,
+    checkIfPhoneExists
 } from '../controllers/user.controller.js';
 import { loggedIn } from '../middleware/auth.middleware.js';
 
 const userRouter = express.Router();
 
 userRouter.get('/:login/search', loggedIn, getSearchUsers);
+userRouter.get('/:login/exists', checkIfUserExists);
+userRouter.get('/:email/email', checkIfEmailExists);
+userRouter.get('/:telNumber/phone', checkIfPhoneExists);
 userRouter.get('/:login',loggedIn, getUser)
 userRouter.post('/', createUser);
 userRouter.put('/:id',loggedIn, updateUser);

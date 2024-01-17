@@ -45,7 +45,7 @@
                 <v-btn class="edit-profile-buttons-label" rounded="xl" color="grey">
                     Clear
                 </v-btn>
-                <v-btn class="edit-profile-buttons-label" rounded="xl" color="#582b5a" @click="this.updateUserService">
+                <v-btn class="edit-profile-buttons-label" rounded="xl" color="#582b5a" :disabled="loginError" @click="this.updateUserService">
                     Save changes 
                 </v-btn>
             </div>
@@ -54,8 +54,9 @@
 </template>
 <script>
 import BaseDialog from '../base/BaseDialog.vue';
-import { updateUser } from '../services/user.service.js';
+import { updateUser, checkIfUserExists } from '../services/user.service.js';
 import { reloadPage } from '../utils/utils';
+import router from '../router';
 
 export default {
     components: {
@@ -73,6 +74,9 @@ export default {
                 location: this.user.location,
                 website: this.user.website
             },
+            loginTimer: null,
+            loginError: false,
+            loginErrorMessage: '',
         }
     },
     methods: {
@@ -84,10 +88,54 @@ export default {
                 await updateUser(this.user._id, this.userEdited);
                 reloadPage();
             } catch (error) {
-                console.error('Error in updateUser:', error);
+                router.push('/errorpage');
             }
         },
+        onClear() {
+            this.userEdited = {
+                login: '',
+                bio: '',
+                location: '',
+                website: ''
+            }
+            this.loginError = false;
+            this.loginErrorMessage = '';
+            this.loginTimer = null;
+        }
     },
+    watch: {
+        'userEdited.login': async function() {
+            if(this.userEdited.login === this.user.login) {
+                this.loginError = false;
+                this.loginErrorMessage = '';
+                return;
+            }
+            if(this.loginTimer) {
+                clearTimeout(this.loginTimer);
+            }
+
+            if(this.login === '') {
+                this.loginErrorMessage = '';
+                return;
+            }
+
+            this.loginTimer = setTimeout(async () => {
+                    try {
+                        const res = await checkIfUserExists(this.userEdited.login);
+                        console.log(res)
+                        if (res) {
+                            this.loginError = true;
+                            this.loginErrorMessage = 'This login is already taken';
+                        } else {
+                            this.loginError = false;
+                            this.loginErrorMessage = '';
+                        }
+                    } catch (error) {
+                        router.push('/errorpage');
+                    }
+            }, 500);
+        },
+    }
 }
 </script>
 <style lang="scss">

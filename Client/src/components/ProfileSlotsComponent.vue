@@ -71,6 +71,7 @@
 <script>
 import { getUsersPosts, getAllLikedPosts, getAllReplies } from '../services/post.service';
 import PostComponent from './PostComponent.vue';
+import router from '../router';
 import ExeptionComponent from './ExeptionComponent.vue';
 
 export default {
@@ -112,7 +113,7 @@ export default {
 
                 this.posts = res.reverse();
             } catch (error) {
-                console.error('Error in getUsersPostService:', error);
+                router.push('/errorpage');
             }
         },
         async getAllLikedPostsService() {
@@ -125,7 +126,7 @@ export default {
 
                 this.likedPosts = res.reverse();
             } catch (error) {
-                console.error('Error in getAllLikedPostsService:', error);
+                router.push('/errorpage');
             }
         },
         async getAllRepliesService() {
@@ -138,7 +139,7 @@ export default {
 
                 this.replies = res.reverse();
             } catch (error) {
-                console.error('Error in getAllRepliesService:', error);
+                router.push('/errorpage');
             }
         },
     },

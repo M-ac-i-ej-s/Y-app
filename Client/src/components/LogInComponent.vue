@@ -24,10 +24,15 @@
                     type="password"
                     ></v-text-field>
                 </div>
+                <div class="login-component-actions-error" v-if="errorMessage">
+                    <span>
+                        {{errorMessage}}
+                    </span>
+                </div>
                 <div class="login-component-actions-login">
-                <v-btn class="login-component-actions-login-button" rounded="xl" color="purple-darken-2" @click="onLogin">
-                    Log In
-                </v-btn>
+                    <v-btn class="login-component-actions-login-button" rounded="xl" color="purple-darken-2" @click="onLogin">
+                        Log In
+                    </v-btn>
                 </div>
             </div>
     </BaseDialog>
@@ -47,6 +52,7 @@ export default {
         return {
             email: null,
             password: null,
+            errorMessage: ''
         }
     },
     methods: {
@@ -57,7 +63,13 @@ export default {
                     router.push('/home');
                 })
                 .catch((err) => {
-                    console.log(err);
+                    console.log(err)
+                    if(err.response.status === 400) {
+                        this.password = null;
+                        this.errorMessage = err.response.data.message;
+                    } else {
+                        router.push('/errorpage');
+                    }
             })
         },
         ...mapMutations(['loggedIn', 'loggedOut']),
@@ -100,6 +112,12 @@ export default {
             width: 100%;
         }
 
+    }
+    .login-component-actions-error {
+        position: absolute;
+        margin: 265px 0 0 55px; 
+        color: red;
+        font-weight: 700;
     }
 }
 .login-component-button {

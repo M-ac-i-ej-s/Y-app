@@ -105,7 +105,7 @@ export default {
                 const res = await getUser(this.post.user);
                 this.user = res;
             } catch (error) {
-                console.error('Error in getUser:', error);
+                router.push('/errorpage');
             }
         },
         deletePost() {
@@ -122,7 +122,7 @@ export default {
                         try {
                             await updateReplies(this.post._id);
                         } catch (error) {
-                            console.error('Error in deletePost:', error);
+                            router.push('/errorpage');
                         }
                     }
 
@@ -178,7 +178,7 @@ export default {
             try {
                 likePost(this.post._id, this.userState);
             } catch (error) {
-                console.error('Error in onLike:', error);
+                router.push('/errorpage');
             }
         },
         onSave() {
@@ -193,7 +193,7 @@ export default {
             try {
                 savePost(this.post._id, this.userState);
             } catch (error) {
-                console.error('Error in onSave:', error);
+                router.push('/errorpage');
             }
         },
         redirectToPost() {

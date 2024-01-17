@@ -43,6 +43,7 @@ import PostComponent from './PostComponent.vue';
 import ExeptionComponent from './ExeptionComponent.vue';
 import LoaderComponent from './LoaderComponent.vue';
 import store from '../store';
+import router from '../router';
 import { reloadPage } from '../utils/utils';
 import { createPost, getPostsByFollowedUsers } from '../services/post.service';
 
@@ -69,10 +70,10 @@ export default {
                         reloadPage();
                     })
                     .catch((err) => {
-                        console.log(err);
+                        router.push('/errorpage');
                     })
             } catch (err) {
-                console.log(err);
+                router.push('/errorpage');
             }
         },
         async getPostsByFollowedUsersService(lazyLoad = false) {
@@ -92,9 +93,13 @@ export default {
                     } else {
                         this.posts = [...this.posts, response]
                     }
+                } else {
+                    if(!lazyLoad) {
+                        this.posts = [[]]
+                    }
                 }
             } catch (err) {
-                console.log(err);
+                router.push('/errorpage');
             }
         },
         checkScroll() {
@@ -115,6 +120,7 @@ export default {
 </script>
 <style lang="scss">
 .Home {
+    min-height: 150vh;
     border-left:1px solid #e0e0e0;
     border-right:1px solid #e0e0e0;
     .home-writing {

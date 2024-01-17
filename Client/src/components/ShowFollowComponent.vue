@@ -20,7 +20,12 @@
         <v-window v-model="tabs">
             <v-window-item :value="1">
                 <div v-if="following">
-                    <ProfileShowcaseComponentVue v-for="follow in following" :key="follow._id" :user="follow"/>
+                    <div v-if="following.length > 0">
+                        <ProfileShowcaseComponentVue v-for="follow in following" :key="follow._id" :user="follow"/>
+                    </div>
+                    <div v-else>
+                        <ExeptionComponent text="users who you are following"/>
+                    </div>
                 </div>
                 <div v-else>
                     <LoaderComponent/>
@@ -28,7 +33,12 @@
             </v-window-item>
             <v-window-item :value="2">
                 <div v-if="followers">
-                    <ProfileShowcaseComponentVue v-for="follow in followers" :key="follow._id" :user="follow"/>
+                    <div v-if="followers.length > 0">
+                        <ProfileShowcaseComponentVue v-for="follow in followers" :key="follow._id" :user="follow"/>
+                    </div>
+                    <div v-else>
+                        <ExeptionComponent text="users who are following you"/>
+                    </div>
                 </div>
                 <div v-else>
                     <LoaderComponent/>
@@ -40,6 +50,7 @@
 <script>
 import ProfileShowcaseComponentVue from './ProfileShowcaseComponent.vue';
 import LoaderComponent from './LoaderComponent.vue';
+import ExeptionComponent from './ExeptionComponent.vue';
 import { getUser, getAllFollowers, getAllFollowing } from '../services/user.service';
 import router from '../router';
 
@@ -47,7 +58,8 @@ export default {
     name: 'ShowFollowComponent',
     components: {
         ProfileShowcaseComponentVue,
-        LoaderComponent
+        LoaderComponent,
+        ExeptionComponent
     },
     data() {
         return {
@@ -64,7 +76,7 @@ export default {
                 this.user = res;
                 this.user.joinDate = new Date(this.user.joinDate);
             } catch (error) {
-                console.error('Error in getUser:', error);
+                router.push('/errorpage');
             }
         },
         async getAllFollowersService() {
@@ -72,7 +84,7 @@ export default {
                 const res = await getAllFollowers(this.$route.params.username);
                 this.followers = res;
             } catch (error) {
-                console.error('Error in getAllFollowers:', error);
+                router.push('/errorpage');
             }
         },
         async getAllFollowingService() {
@@ -80,7 +92,7 @@ export default {
                 const res = await getAllFollowing(this.$route.params.username);
                 this.following = res;
             } catch (error) {
-                console.error('Error in getAllFollowing:', error);
+                router.push('/errorpage');
             }
         },
         switchRoutesToIng() {

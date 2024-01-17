@@ -68,7 +68,7 @@ export default {
                     }
                 }
             } catch (error) {
-                console.error('Error in getPostsExploreService:', error);
+                router.push('/errorpage');
             }
         },
         async getUsersExploreService(lazyLoad = false) {
@@ -87,7 +87,7 @@ export default {
                 }
                 console.log(this.users)
             } catch (error) {
-                console.error('Error in getUsersExploreService:', error);
+                router.push('/errorpage');
             }
         },
         onSearch() {

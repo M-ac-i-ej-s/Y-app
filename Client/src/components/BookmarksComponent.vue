@@ -30,6 +30,7 @@ import PostComponent from './PostComponent.vue';
 import ExeptionComponent from './ExeptionComponent.vue';
 import LoaderComponent from './LoaderComponent.vue';
 import store from '../store';
+import router from '../router';
 
 export default {
     components: {
@@ -53,7 +54,7 @@ export default {
 
                 this.savedPosts = res;
             } catch (error) {
-                console.error('Error in getAllSavedPostsService:', error);
+                router.push('/errorpage');
             }
         },
         clearAllBookmarks() {
@@ -72,7 +73,7 @@ export default {
                         });
                         this.savedPosts = [];
                     } catch (error) {
-                        console.error('Error in clearAllBookmarks:', error);
+                        router.push('/errorpage');
                     
                     }
                     Swal.fire({

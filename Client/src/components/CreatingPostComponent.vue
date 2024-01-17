@@ -20,6 +20,7 @@
 import BaseDialog from '../base/BaseDialog.vue'
 import { createPost } from '../services/post.service.js'
 import { reloadPage } from '../utils/utils';
+import router from '../router';
 
 export default {
     props: {
@@ -41,7 +42,7 @@ export default {
                     reloadPage();
                 })
                 .catch((err) => {
-                    console.log(err);
+                    router.push('/errorpage');
                 })
         }
     },

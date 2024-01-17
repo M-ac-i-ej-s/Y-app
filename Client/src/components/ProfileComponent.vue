@@ -51,7 +51,7 @@ export default {
                 this.user = res;
                 this.user.joinDate = new Date(this.user.joinDate);
             } catch (error) {
-                console.error('Error in getUser:', error);
+                router.push('/errorpage');
             }
         },
         async updateFollowersService() {
@@ -61,7 +61,7 @@ export default {
                 await this.reLogUser(this.userCloud);
                 this.isFollowed = !this.isFollowed;
             } catch (error) {
-                console.error('Error in followUser:', error);
+                router.push('/errorpage');
             }
         },
         checkIfFollowed() {
@@ -92,7 +92,7 @@ export default {
                 this.userCloud = res;
                 this.user.joinDate = new Date(this.user.joinDate);
             } catch (error) {
-                console.error('Error in getUser:', error);
+                router.push('/errorpage');
             }
         },
         async updateBlockedUsersService() {
@@ -102,7 +102,7 @@ export default {
                 await this.reLogUser(this.userCloud);
                 this.isBlocked = !this.isBlocked;
             } catch (error) {
-                console.error('Error in updateBlockedUsersService:', error);
+                router.push('/errorpage');
             }
         },
         ...mapMutations(['reLogUser'])
@@ -122,7 +122,7 @@ export default {
             this.checkIfProfile();
             this.checkIfBlocked();
         },
-    }
+    },
 
 }
 </script>

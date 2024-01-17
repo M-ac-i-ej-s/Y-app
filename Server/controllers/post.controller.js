@@ -331,7 +331,7 @@ export const getPostsByFollowedUsers = async (req, res) => {
         seenIds = req.query.seenIds.split(',');
     }
     const user = await User.find({ login: login });
-    await Post.find({ user: {$in: user[0].following}, _id: {$nin: seenIds} }).sort({date:-1}).limit(10).then((posts) => {
+    await Post.find({ user: {$in: user[0].following, $nin: user[0].blockedUsers}, _id: {$nin: seenIds} }).sort({date:-1}).limit(10).then((posts) => {
         res.status(200).json({
             success: true,
             message: 'Followed users posts',
