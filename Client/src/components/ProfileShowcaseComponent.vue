@@ -18,7 +18,7 @@
             </div>
         </div>
         <div class="profile-showcase-button">
-            <v-menu v-if="!isFollowed" v-model="menu" :close-on-content-click="false" location="start" class="profile-card-values-buttons-follow-block">
+            <v-menu v-if="!isFollowed && !isToFollow" v-model="menu" :close-on-content-click="false" location="start" class="profile-card-values-buttons-follow-block">
                 <template v-slot:activator="{ props }">
                     <v-btn v-bind="props" icon="mdi-dots-horizontal" size="x-small"/>
                 </template>
@@ -55,11 +55,16 @@ export default {
         user: {
             type: [Object, null],
         },
+        isToFollow: {
+            type: Boolean,
+            default: false
+        }
     },
     data() {
         return {
             isFollowed: false,
             isHovering: false,
+            isBlocked: false,
             userCloud: null,
             menu: false,
         }
@@ -72,7 +77,7 @@ export default {
                 this.isFollowed = false;
             }
         },
-        isBlocked() {
+        isBlock() {
             if(store.state.data.user.user.blockedUsers.includes(this.user.login)) {
                 this.isBlocked = true;
             } else {
@@ -114,7 +119,7 @@ export default {
     },
     mounted() {
         this.isFollow();
-        this.isBlocked();
+        this.isBlock();
     }
 }
 </script>

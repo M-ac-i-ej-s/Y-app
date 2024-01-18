@@ -159,3 +159,21 @@ export const checkIfPhoneExists = async (telNumber) => {
         throw error; // You might want to handle errors appropriately in your component
     }
 };
+
+export const getSomeoneToFollow = async (login, seenIds) => {
+    try {
+        const response = await axios.get(API_URL + login + '/fiveFollow',{
+            params: {
+                seenIds: seenIds.join(','),
+            },
+            headers: {
+                ...authHeader(),
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data.Users;
+    } catch (error) {
+        console.error('Error fetching user users:', error);
+        throw error; // You might want to handle errors appropriately in your component
+    }
+}

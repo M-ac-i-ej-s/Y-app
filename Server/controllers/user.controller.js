@@ -441,3 +441,19 @@ export const getSearchUsers = async (req, res) => {
         })
         })
 };
+
+export const getSomeoneToFollow = async (req, res) => {
+    const userLogin = req.params.login;
+    let seenIds = [];
+    if(req.query.seenIds !== '') {
+        seenIds = req.query.seenIds.split(',');
+    }
+
+    await User.find({ _id: {$nin: seenIds}, login: {$nin: userLogin}, followers: {$nin: userLogin} }).sort({followers: -1}).limit(5).then((users) => {
+        res.status(200).json({
+            success: true,
+            message: 'Search users',
+            Users: users || [],
+        })
+        })
+};

@@ -16,7 +16,8 @@ import {
     getSearchUsers,
     checkIfUserExists,
     checkIfEmailExists,
-    checkIfPhoneExists
+    checkIfPhoneExists,
+    getSomeoneToFollow
 } from '../controllers/user.controller.js';
 import { loggedIn } from '../middleware/auth.middleware.js';
 
@@ -25,6 +26,7 @@ const userRouter = express.Router();
 userRouter.get('/:login/search', loggedIn, getSearchUsers);
 userRouter.get('/:login/exists', checkIfUserExists);
 userRouter.get('/:email/email', checkIfEmailExists);
+userRouter.get('/:login/fiveFollow', loggedIn, getSomeoneToFollow);
 userRouter.get('/:telNumber/phone', checkIfPhoneExists);
 userRouter.get('/:login',loggedIn, getUser)
 userRouter.post('/', createUser);

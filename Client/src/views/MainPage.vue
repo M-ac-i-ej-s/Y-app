@@ -4,14 +4,17 @@
         <div class="main-page-router">
             <router-view/>
         </div>
+        <WhoToFollowComponent/>
     </div>
 </template>
 <script>
 import NavBarComponent from '../components/NavBarComponent.vue';
+import WhoToFollowComponent from '../components/WhoToFollowComponent.vue';
 
 export default {
     components: {
-        NavBarComponent
+        NavBarComponent,
+        WhoToFollowComponent
     }
 }
 </script>
