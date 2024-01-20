@@ -18,7 +18,7 @@
         <div class="expanded-post-writing">
             <div class="expanded-post-writing-info">
                 <div class="expanded-post-writing-info-image">
-                    <img class="expanded-post-writing-info-image-value" src="../assets/dummy-avatar.png" alt="">
+                    <img class="expanded-post-writing-info-image-value" :src="avatar" alt="avatar">
                 </div>
                 <div class="expanded-post-writing-info-text">
                     <span class="expanded-post-writing-info-text-value" ref="text" role="textbox" placeholder="Post your reply" contenteditable></span>
@@ -59,6 +59,7 @@ export default {
         return {
             post: null,
             postReplies: [],
+            avatar: store.state.data.user.user.avatar
         }
     },
     methods: {

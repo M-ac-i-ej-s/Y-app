@@ -42,7 +42,7 @@
         </div>
         <div class="navbar-profile" @click="logOut">
             <div class="navbar-profile-data">
-                <img class="navbar-profile-data-value" src="../assets/dummy-avatar.png" alt="avatar">
+                <img class="navbar-profile-data-value" :src="avatar" alt="avatar">
                 <span v-if="width > 1200" class="navbar-profile-data-login">{{userLogin}}</span>
             </div>
             <div v-if="width > 1200" class="navbar-profile-more">
@@ -74,6 +74,7 @@ export default {
             width: window.innerWidth,
             userLogin: store.state.data.user.user.login,
             userId: store.state.data.user.user._id,
+            avatar: store.state.data.user.user.avatar
         }
     },
     methods: {
@@ -228,6 +229,7 @@ export default {
             .navbar-profile-data-value {
                 border-radius: 90px;
                 width: 70px;
+                height: 70px;
             }
             .navbar-profile-data-login {
                 font-size: 1vw;

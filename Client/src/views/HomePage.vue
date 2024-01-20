@@ -3,7 +3,7 @@
         <div class="home-writing">
             <div class="home-writing-info">
                 <div class="home-writing-info-image">
-                    <img class="home-writing-info-image-value" src="../assets/dummy-avatar.png" alt="">
+                    <img class="home-writing-info-image-value" :src="avatar" alt="avatar">
                 </div>
                 <div class="home-writing-info-text">
                     <span class="home-writing-info-text-value" ref="text" role="textbox" placeholder="What is happening!?" contenteditable></span>
@@ -58,6 +58,7 @@ export default {
     data() {
         return {
             userLogin: store.state.data.user.user.login,
+            avatar: store.state.data.user.user.avatar,
             posts: null,
             seenIds: []
         }
@@ -119,6 +120,7 @@ export default {
 </script>
 <style lang="scss">
 .Home {
+    width: 600px;
     min-height: 150vh;
     border-left:1px solid #e0e0e0;
     border-right:1px solid #e0e0e0;

@@ -21,63 +21,75 @@
         </v-tabs>
         <v-window class="profile-slot-windows" v-model="tabs">
             <v-window-item :value="1">
-                <div class="profile-slot-windows-post" v-if="posts">
-                    <div v-if="posts.length > 0">
-                        <div v-for="post in posts" :key="post._id" >
-                            <PostComponent v-if="!post.isReply" :post="post" :user="user"/>
-                        </div>  
+                <div class="profile-slot-windows-post" v-if="posts[0].length > 0">
+                    <div v-for="(pages, index) in posts" :key="index">
+                        <div v-for="post in pages" :key="post._id">
+                            <PostComponent :post="post"/>
+                        </div>
+                        <div class="profile-slot-windows-post-exaption" v-if="pages.length < 10">
+                            There are no more posts
+                            <v-icon icon="mdi-cancel" color="#582b5a"/>
+                        </div>
+                        <div v-if="pages.length === 10 && posts[posts.length-1] === pages">
+                            <LoaderComponent/>
+                        </div>        
                     </div>
-                    <div v-else>
-                        <ExeptionComponent text="posts"/>
-                    </div>    
                 </div>
                 <div v-else>
-                    ...loading
+                    <ExeptionComponent text="posts of that user"/>
                 </div>
             </v-window-item>
             <v-window-item :value="2">
-                <div class="profile-slot-windows-post" v-if="replies">
-                    <div v-if="replies.length > 0">
-                        <div v-for="post in replies" :key="post._id">
-                            <PostComponent :post="post" :user="user"/>
+                <div class="profile-slot-windows-post" v-if="replies[0].length > 0">
+                    <div v-for="(pages, index) in replies" :key="index">
+                        <div v-for="post in pages" :key="post._id">
+                            <PostComponent :post="post"/>
                         </div>
-                    </div>
-                    <div v-else>
-                        <ExeptionComponent text="replies"/>
+                        <div class="profile-slot-windows-post-exaption" v-if="pages.length < 10">
+                            There are no more replies
+                            <v-icon icon="mdi-cancel" color="#582b5a"/>
+                        </div>
+                        <div v-if="pages.length === 10 && replies[replies.length-1] === pages">
+                            <LoaderComponent/>
+                        </div>        
                     </div>
                 </div>
                 <div v-else>
-                    ...loading
+                    <ExeptionComponent text="users with that login"/>
                 </div>
             </v-window-item>
             <v-window-item :value="3">
-                <div class="profile-slot-windows-post" v-if="likedPosts">
-                    <div v-if="likedPosts.length > 0">
-                        <div v-for="post in likedPosts" :key="post._id">
-                            <PostComponent :post="post" :user="user"/>
+                <div class="profile-slot-windows-post" v-if="likedPosts[0].length > 0">
+                    <div v-for="(pages, index) in likedPosts" :key="index">
+                        <div v-for="post in pages" :key="post._id">
+                            <PostComponent :post="post"/>
                         </div>
+                        <div class="profile-slot-windows-post-exaption" v-if="pages.length < 10">
+                            There are no more liked posts
+                            <v-icon icon="mdi-cancel" color="#582b5a"/>
+                        </div>
+                        <div v-if="pages.length === 10 && likedPosts[likedPosts.length-1] === pages">
+                            <LoaderComponent/>
+                        </div>        
                     </div>
-                    <div v-else>
-                        <ExeptionComponent text="likes"/>
-                    </div>    
                 </div>
                 <div v-else>
-                    ...loading
+                    <ExeptionComponent text="users with that login"/>
                 </div>
             </v-window-item>
         </v-window>
     </div>
 </template>
 <script>
-import { getUsersPosts, getAllLikedPosts, getAllReplies } from '../services/post.service';
 import PostComponent from './PostComponent.vue';
-import router from '../router';
 import ExeptionComponent from './ExeptionComponent.vue';
+import LoaderComponent from './LoaderComponent.vue';
 
 export default {
     components: {
         PostComponent,
-        ExeptionComponent
+        ExeptionComponent,
+        LoaderComponent,
     },
     props: {
         user: {
@@ -85,6 +97,14 @@ export default {
             required: true
         },
         posts: {
+            type: Array,
+            required: true
+        },
+        likedPosts: {
+            type: Array,
+            required: true
+        },
+        replies: {
             type: Array,
             required: true
         },
@@ -100,54 +120,25 @@ export default {
     data() {
       return {
         tabs: null,
-        likedPosts: null,
-        replies: null
       }
     },
     methods: {
-        async getAllLikedPostsService() {
-            try {
-                const res = await getAllLikedPosts(this.user?.login);
-                
-                res.forEach(post => {
-                    post.date = new Date(post.date);
-                });
-
-                this.likedPosts = res.reverse();
-            } catch (error) {
-                console.log(error);
-                router.push('/errorpage');
-            }
-        },
-        async getAllRepliesService() {
-            try {
-                const res = await getAllReplies(this.user?.login);
-                
-                res.forEach(post => {
-                    post.date = new Date(post.date);
-                });
-
-                this.replies = res.reverse();
-            } catch (error) {
-                console.log(error);
-                router.push('/errorpage');
+        checkScroll() {
+            const maxScrollPosition = document.documentElement.scrollHeight - window.innerHeight;
+            if (window.scrollY === maxScrollPosition) {
+                this.$emit('tabChange', this.tabs)
             }
         },
     },
     mounted() {
-        this.getAllLikedPostsService();
-        this.getAllRepliesService();
+        window.addEventListener('scroll', this.checkScroll);
     },
-    watch: {
-        '$route.params.username': function() {
-
-            this.getAllLikedPostsService();
-            this.getAllRepliesService();
-        }
-    }  
+    beforeDestroy() {
+        window.removeEventListener('scroll', this.checkScroll);
+    },
   }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .profileSlot {
     padding: 175px 0 0 0;
     @media screen and (max-width: 850px) {
@@ -172,6 +163,14 @@ export default {
             @media screen and (max-width: 850px) {
                 display: flex;
                 flex-direction: column;
+            }
+            .profile-slot-windows-post-exaption {
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+                padding: 30px 20px 30px 20px;
+                font-size: 20px;
+                font-weight: 700;
             }
         }
     }

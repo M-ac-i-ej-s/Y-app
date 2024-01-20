@@ -49,13 +49,13 @@
                     </span>
                 </div>
                 <div class="sign-component-not-nescessary">
-                    <div v-if="!avatar" class="sign-component-not-nescessary-avatar">
+                    <div v-if="!avatarPreview" class="sign-component-not-nescessary-avatar">
                         <input class="sign-component-not-nescessary-avatar-input" type="file" @change="saveAvatar">
                         <v-icon icon="mdi-camera-outline"></v-icon>
                     </div>
                     <div v-else class="sign-component-not-nescessary-avatar">
                         <input class="sign-component-not-nescessary-avatar-input" type="file" @change="saveAvatar">
-                        <v-img class="sign-component-not-nescessary-avatar-value" :src="avatar" alt="avatar" aspect-ratio="1/1" :width="100"/>
+                        <v-img class="sign-component-not-nescessary-avatar-value" :src="avatarPreview" alt="avatar" aspect-ratio="1/1" :width="100"/>
                     </div>
                     <v-textarea class="sign-component-not-nescessary-bio" label="bio, describe yourself" variant="outlined" v-model="bio"/>
                 </div>
@@ -88,6 +88,8 @@ export default {
     },
     data() {
         return {
+            formData: new FormData(),
+            avatarPreview: null,
             avatar: null,
             login: '',
             email: '',
@@ -111,7 +113,8 @@ export default {
     },
     methods : {
         saveAvatar(event) {
-            this.avatar = URL.createObjectURL(event.target.files[0])
+            this.avatarPreview = URL.createObjectURL(event.target.files[0])
+            this.avatar = event.target.files[0];
         },
         onRegister() {
             register(this.login, this.email, this.telNumber, this.password, this.bio, this.avatar)

@@ -91,6 +91,7 @@ export default {
         },
         onSearch() {
             if(this.type === '') {
+                window.addEventListener('scroll', this.checkScroll);
                 router.push(`/explore?q=${this.text}`)
             } else {
                 router.push(`/explore?q=${this.text}&f=${this.type}`)
@@ -118,6 +119,7 @@ export default {
     },
     mounted() {
         if(this.$route.query.q !== undefined) {
+            window.addEventListener('scroll', this.checkScroll);
             this.getPostsExploreService();
             this.getUsersExploreService();
         }
@@ -125,14 +127,15 @@ export default {
     unmounted() {
         this.posts = null;
         this.users = null;
-        this.seenPostsIds = [];
+        this.seenPostsTopIds = [];
+        this.seenPostsLatestIds = [];
         this.seenUsersIds = [];
+        window.removeEventListener('scroll', this.checkScroll);
     },  
     watch: {
         '$route.query.q': function() {
             if(this.$route.query.q !== undefined) {
                 this.text = this.$route.query.q;
-                window.addEventListener('scroll', this.checkScroll);
                 this.getPostsExploreService();
                 this.getUsersExploreService();
             } else {
@@ -144,13 +147,13 @@ export default {
             }
         },
         '$route.query.y': function() {
-            if(this.$route.query.y !== undefined) {
-                this.getPostsExploreService();
-            }
+            this.posts = null;
+            this.seenPostsLatestIds = [];
+            this.seenPostsTopIds = [];
+            this.seenUsersIds = [];
+            this.type = this.$route.query.y || '';
+            this.getPostsExploreService();
         }
-    },
-    beforeDestroy() {
-        window.removeEventListener('scroll', this.checkScroll);
     },
 }
 </script>

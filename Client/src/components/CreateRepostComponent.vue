@@ -12,7 +12,7 @@
             <div class="create-writing-repost-to">
                 <div class="create-writing-repost-to-container">
                     <div class="create-writing-repost-to-container-image">
-                        <img class="create-writing-repost-to-container-image-value" src="../assets/dummy-avatar.png" alt="">
+                        <img class="create-writing-repost-to-container-image-value" :src="user.avatar" alt="avatar">
                     </div>
                     <div>
                         <span class="create-writing-repost-to-container-values login">{{ user?.login }}</span>

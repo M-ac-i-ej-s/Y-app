@@ -101,7 +101,11 @@ export const getPost = async (req, res) => {
 
 export const getUsersPosts = async (req, res) => {
     const id = req.params.id;
-    await Post.find({ user: id }).then((posts) => {
+    let seenIds = [];
+    if(req.query.seenIds !== '') {
+        seenIds = req.query.seenIds.split(',');
+    }
+    await Post.find({ user: id, _id: {$nin: seenIds} }).sort({date:-1}).limit(10).then((posts) => {
         res.status(200).json({
             success: true,
             message: 'Users posts',
@@ -201,7 +205,13 @@ export const savePost = async (req, res) => {
 
 export const getAllLikedPosts = async (req, res) => {
     const login = req.params.login;
-    await Post.find({ likes: login }).then((posts) => {
+
+    let seenIds = [];
+    if(req.query.seenIds !== '') {
+        seenIds = req.query.seenIds.split(',');
+    }
+
+    await Post.find({ likes: login, _id: {$nin: seenIds} }).sort({date:-1}).limit(10).then((posts) => {
         res.status(200).json({
             success: true,
             message: 'Liked posts',
@@ -281,7 +291,11 @@ export const updateReplies = async (req, res) => {
 
 export const getAllReplies = async (req, res) => {
     const login = req.params.login;
-    await Post.find({ user: login, isReply: true }).then((posts) => {
+    let seenIds = [];
+    if(req.query.seenIds !== '') {
+        seenIds = req.query.seenIds.split(',');
+    }
+    await Post.find({ user: login, isReply: true, _id:{$nin: seenIds} }).sort({date:-1}).limit(10).then((posts) => {
         res.status(200).json({
             success: true,
             message: 'Replies',

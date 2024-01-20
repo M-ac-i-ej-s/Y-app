@@ -28,7 +28,7 @@
             <div v-if="isRepost && repostPost" class="create-writing-repost-to" @click.stop="redirectToRepost">
                 <div class="create-writing-repost-to-container">
                     <div class="create-writing-repost-to-container-image">
-                        <img class="create-writing-repost-to-container-image-value" src="../assets/dummy-avatar.png" alt="">
+                        <img class="create-writing-repost-to-container-image-value" :src="user.avatar" alt="avatar">
                     </div>
                     <div>
                         <span class="create-writing-repost-to-container-values login">{{ repostPost.user }}</span>
@@ -154,7 +154,6 @@ export default {
             if(store.state.data.user.user.blockedUsers.includes(this.post.user)) {
                 this.isBlocked = true;
             }
-            console.log(this.isBlocked)
         },
         async checkIfRepost() {
             if(this.post.isRepost) {

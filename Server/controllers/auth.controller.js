@@ -3,6 +3,9 @@ import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 
+import { dataUri } from '../middleware/multer.middleware.js';
+import { uploader } from '../config/cloudinaryConfig.js';
+
 const jwtSecret = toString(process.env.TOKEN_SECRET);
 
 export const Login = async (req, res) => {
@@ -41,6 +44,23 @@ export const Login = async (req, res) => {
 };
 
 export const Register = async (req, res) => {
+    let imageUrl = null;
+    if(req.file) {
+        const file = dataUri(req).content;
+        await uploader.upload(file).then((result) => {
+            imageUrl = result.url
+        }).catch((err) => {
+            console.log(err)
+        });
+    } else {
+        const file = '../assets/userDeafult.jpg';
+        await uploader.upload(file).then((result) => {
+            imageUrl = result.url
+        }).catch((err) => {
+            console.log(err)
+        });
+    }
+
     const hashedPwd = await bcrypt.hash(req.body.password, 10);
     User.find({ email: req.body.email }, (err, users) => {
         if (users.length) {
@@ -56,7 +76,7 @@ export const Register = async (req, res) => {
                 telNumber: req.body.telNumber,
                 password: hashedPwd,
                 bio:req.body.bio,
-                avatar: req.body.avatar,
+                avatar: imageUrl,
                 location: null,
                 website: null,
                 birthDay: null,

@@ -3,7 +3,7 @@
         <div class="creatingPostComponent">
             <div class="creating-post">
                 <div class="creating-post-avatar">
-                    <img class="creating-post-avatar-value" src="../assets/dummy-avatar.png" alt="">
+                    <img class="creating-post-avatar-value" :src="avatar" alt="avatar">
                 </div>
                 <div class="creating-post-textarea">
                     <textarea v-model="text" class="creating-post-textarea-value" maxlength="200" placeholder="What is happening!?"></textarea>
@@ -21,11 +21,13 @@ import BaseDialog from '../base/BaseDialog.vue'
 import { createPost } from '../services/post.service.js'
 import { reloadPage } from '../utils/utils';
 import router from '../router';
+import store from '../store';
 
 export default {
     props: {
         width: Number,
-        login: String
+        login: String,
+        avatar: store.state.data.user.user.avatar
     },
     data() {
         return {

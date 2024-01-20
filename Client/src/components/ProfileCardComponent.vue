@@ -14,7 +14,7 @@
         <div class="profile-card-values">
             <div class="profile-card-values-credentials">
                 <div class="profile-card-values-credentials-image">
-                    <img class="profile-card-values-credentials-image-value" src="../assets/dummy-avatar.png" alt="">
+                    <img class="profile-card-values-credentials-image-value" :src="user.avatar" alt="avatar">
                 </div>
                 <div class="profile-card-values-credentials-login">
                     <span>{{ user.login }}</span>

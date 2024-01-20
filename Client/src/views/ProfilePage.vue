@@ -1,6 +1,6 @@
 <template>
     <div class="Profile">
-        <div class="profileComponent" v-if="user && isFollowed !== null && posts">
+        <div class="profileComponent" v-if="user && isFollowed !== null && posts && likedPosts && replies">
             <ProfileCardComponent 
                 :isYourProfile="isYourProfile" 
                 :isFollowed="isFollowed" 
@@ -10,7 +10,14 @@
                 :postsLength="posts.length"
                 :updateFollowers="updateFollowersService"
                 :updateBlockedUsers="updateBlockedUsersService"/>
-            <ProfileSlotsComponent :isYourProfile="isYourProfile" :isFollowed="isFollowed" :user="user" :posts="posts"/>
+            <ProfileSlotsComponent 
+                :isYourProfile="isYourProfile" 
+                :isFollowed="isFollowed" 
+                :user="user" 
+                :posts="posts"
+                :likedPosts="likedPosts"
+                :replies="replies"
+                @tab-change="onTabChange"/>
         </div>
         <div class="profile-loader" v-else>
             <LoaderComponent/>
@@ -22,7 +29,7 @@ import ProfileCardComponent from '../components/ProfileCardComponent.vue';
 import ProfileSlotsComponent from '../components/ProfileSlotsComponent.vue';
 import LoaderComponent from '../components/LoaderComponent.vue';
 import { getUser, updateBothFollow, updateBlockedUsers } from '../services/user.service';
-import { getUsersPosts } from '../services/post.service';
+import { getUsersPosts, getAllLikedPosts, getAllReplies } from '../services/post.service';
 import router from '../router';
 import { mapMutations } from 'vuex';
 import store from '../store'
@@ -41,6 +48,12 @@ export default {
             isBlocked: false,
             user: null,
             posts: null,
+            likedPosts: null,
+            replies: null,
+            seenPostsIds: [],
+            seenLikedPostsIds: [],
+            seenRepliesIds: [],
+            seenPostsIds: [],
             userCloud: null
         }
     },
@@ -54,6 +67,8 @@ export default {
                 this.user = res;
                 this.user.joinDate = new Date(this.user.joinDate);
                 this.getUsersPostService();
+                this.getAllLikedPostsService();
+                this.getAllRepliesService();
             } catch (error) {
                 router.push('/errorpage');
             }
@@ -108,18 +123,79 @@ export default {
                 router.push('/errorpage');
             }
         },
-        async getUsersPostService() {
+        async getUsersPostService(lazyLoad = false) {
+            const seenIDs = (lazyLoad) ? this.seenPostsIds : [];
             try {
-                const res = await getUsersPosts(this.user?.login);
-
+                const res = await getUsersPosts(this.user.login, seenIDs);
                 res.forEach(post => {
                     post.date = new Date(post.date);
+                    this.seenPostsIds.push(post._id);
                 });
 
-                this.posts = res.reverse();
+                if(!lazyLoad) {
+                    this.posts = [res]
+                } else {
+                    if(res.length !== 0){
+                        this.posts = [...this.posts, res]
+                    }
+                }
+
             } catch (error) {
-                console.log(error);
                 router.push('/errorpage');
+            }
+        },
+        async getAllLikedPostsService(lazyLoad = false) {
+            const seenIDs = (lazyLoad) ? this.seenLikedPostsIds : [];
+            try {
+                const res = await getAllLikedPosts(this.user.login, seenIDs);
+                
+                res.forEach(post => {
+                    post.date = new Date(post.date);
+                    this.seenLikedPostsIds.push(post._id);
+                });
+
+                if(!lazyLoad) {
+                    this.likedPosts = [res]
+                } else {
+                    if(res.length !== 0){
+                        this.likedPosts = [...this.likedPosts, res]
+                    }
+                }
+
+            } catch (error) {
+                router.push('/errorpage');
+            }
+        },
+        async getAllRepliesService(lazyLoad = false) {
+            const seenIDs = (lazyLoad) ? this.seenRepliesIds : [];
+            try {
+                const res = await getAllReplies(this.user.login, seenIDs);
+                
+                res.forEach(post => {
+                    post.date = new Date(post.date);
+                    this.seenRepliesIds.push(post._id);
+                });
+
+                if(!lazyLoad) {
+                    this.replies = [res]
+                } else {
+                    if(res.length !== 0) {
+                        this.replies = [...this.replies, res]
+                    }
+                }
+
+            } catch (error) {
+                router.push('/errorpage');
+            }
+        },
+        onTabChange(tab) {
+            console.log(tab)
+            if(tab === 1) {
+                this.getUsersPostService(true);
+            } else if(tab === 2) {
+                this.getAllRepliesService(true);
+            } else if(tab === 3) {
+                this.getAllLikedPostsService(true);
             }
         },
         ...mapMutations(['reLogUser'])
@@ -134,13 +210,18 @@ export default {
     watch: {
         '$route.params.username': function() {
             this.user = null;
+            this.posts = null;
+            this.likedPosts = null;
+            this.replies = null;
+            this.seenPostsIds = [];
+            this.seenLikedPostsIds = [];
+            this.seenRepliesIds = [];
             this.getUserService();
             this.checkIfFollowed();
             this.checkIfProfile();
             this.checkIfBlocked();
         },
     },
-
 }
 </script>
 <style lang="scss">

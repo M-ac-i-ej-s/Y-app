@@ -1,7 +1,6 @@
 import express from 'express';
 import {
     getUser,
-    createUser,
     updateUser,
     updateLikedPosts,
     updateSavedPosts,
@@ -29,7 +28,6 @@ userRouter.get('/:email/email', checkIfEmailExists);
 userRouter.get('/:login/fiveFollow', loggedIn, getSomeoneToFollow);
 userRouter.get('/:telNumber/phone', checkIfPhoneExists);
 userRouter.get('/:login',loggedIn, getUser)
-userRouter.post('/', createUser);
 userRouter.put('/:id',loggedIn, updateUser);
 userRouter.patch('/:login/likedPosts',loggedIn, updateLikedPosts);
 userRouter.patch('/:login/savedPosts',loggedIn, updateSavedPosts);

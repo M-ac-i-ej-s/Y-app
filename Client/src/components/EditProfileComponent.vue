@@ -8,13 +8,13 @@
                 </div>
             </div>
             <div class="edit-profile">
-                <div v-if="!avatar" class="edit-profile-avatar">
+                <div v-if="!userEdited.avatar" class="edit-profile-avatar">
                     <input class="edit-profile-avatar-input" type="file" @change="saveAvatar">
                     <v-icon icon="mdi-camera-outline"></v-icon>
                 </div>
                 <div v-else class="edit-profile-avatar">
                     <input class="edit-profile-avatar-input" type="file" @change="saveAvatar">
-                    <v-img class="edit-profile-avatar-value" :src="avatar" alt="avatar" aspect-ratio="1/1" :width="100"/>
+                    <v-img class="edit-profile-avatar-value" :src="userEdited.avatar" alt="avatar" aspect-ratio="1/1" :width="100"/>
                 </div>
                 <v-text-field
                     label="Login"
@@ -67,8 +67,8 @@ export default {
     },
     data() {
         return {
-            avatar: null,
             userEdited: {
+                avatar: this.user.avatar,
                 login: this.user.login,
                 bio: this.user.bio,
                 location: this.user.location,

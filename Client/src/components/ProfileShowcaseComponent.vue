@@ -2,7 +2,7 @@
     <div class="ProfileShowcase" @click="goToUser">
         <div class="profile-showcase">
             <div class="profile-showcase-image">
-                <img class="profile-showcase-image-value" src="../assets/dummy-avatar.png" alt="">
+                <img class="profile-showcase-image-value" :src="user.avatar" alt="avatar">
             </div>
             <div class="profile-showcase-info">
                 <div class="profile-showcase-info-login">

@@ -3,12 +3,18 @@ import authHeader from "./auth-header";
 
 const API_URL = 'http://localhost:3001/posts/';
 
-export const getUsersPosts = async (login) => { 
+export const getUsersPosts = async (login, seenIds) => { 
     try {
         const response = await axios.get(API_URL + login,
-        {
-            headers: authHeader(),
-        }
+            {
+                params: {
+                    seenIds: seenIds.join(','),
+                },
+                headers: {
+                    ...authHeader(),
+                    'Content-Type': 'application/json',
+                },
+            }
         );
     
         return response.data.Posts;
@@ -57,10 +63,16 @@ export const likePost = async (id, login) => {
     });
 }
 
-export const getAllLikedPosts = async (login) => {
+export const getAllLikedPosts = async (login, seenIds) => {
     try {
         const response = await axios.get(API_URL + login + '/likedPosts', {
-            headers: authHeader(),
+            params: {
+                seenIds: seenIds.join(','),
+            },
+            headers: {
+                ...authHeader(),
+                'Content-Type': 'application/json',
+            },
         });
         return response.data.Posts;
     } catch (error) {
@@ -139,10 +151,16 @@ export const updateReplies = async (id) => {
     });
 }
 
-export const getAllReplies = async (login) => {
+export const getAllReplies = async (login, seenIds) => {
     try {
         const response = await axios.get(API_URL + login + '/allReplies', {
-            headers: authHeader(),
+            params: {
+                seenIds: seenIds.join(','),
+            },
+            headers: {
+                ...authHeader(),
+                'Content-Type': 'application/json',
+            },
         });
         return response.data.Posts;
     } catch (error) {

@@ -26,13 +26,15 @@
 <script>
 import ProfileShowcaseComponent from '../components/ProfileShowcaseComponent.vue';
 import ExeptionComponent from '../components/ExeptionComponent.vue';
+import LoaderComponent from '../components/LoaderComponent.vue';
 import { getSomeoneToFollow } from '../services/user.service';
 
 export default {
     name: 'WhoToFollowComponent',
     components: {
         ProfileShowcaseComponent,
-        ExeptionComponent
+        ExeptionComponent,
+        LoaderComponent
     },
     data() {
         return {
