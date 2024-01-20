@@ -1,4 +1,4 @@
--avatar / background changes
+-avatar (css to be fixed) / background changes
 -images to posts
--infinite scroll in profile
+-infinite scroll in expanded post
 -block/unblock bug
