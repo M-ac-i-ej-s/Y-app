@@ -1,5 +1,4 @@
 -avatar / background changes
 -images to posts
 -infinite scroll in profile
--code cleanup
--sockets
+-block/unblock bug
