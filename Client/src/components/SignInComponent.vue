@@ -49,13 +49,13 @@
                     </span>
                 </div>
                 <div class="sign-component-not-nescessary">
-                    <div v-if="!avatarPreview" class="sign-component-not-nescessary-avatar">
+                    <div class="sign-component-not-nescessary-avatar" v-if="!avatarPreview">
                         <input class="sign-component-not-nescessary-avatar-input" type="file" @change="saveAvatar">
                         <v-icon icon="mdi-camera-outline"></v-icon>
                     </div>
                     <div v-else class="sign-component-not-nescessary-avatar">
                         <input class="sign-component-not-nescessary-avatar-input" type="file" @change="saveAvatar">
-                        <v-img class="sign-component-not-nescessary-avatar-value" :src="avatarPreview" alt="avatar" aspect-ratio="1/1" :width="100"/>
+                        <img class="sign-component-not-nescessary-avatar-value" :src="avatarPreview" alt="avatar"/>
                     </div>
                     <v-textarea class="sign-component-not-nescessary-bio" label="bio, describe yourself" variant="outlined" v-model="bio"/>
                 </div>
@@ -347,7 +347,10 @@ export default {
                 border: 1px solid #c5c5c5;
                 .sign-component-not-nescessary-avatar-value {
                     border-radius:90px;
+                    width: 150px;
+                    height: 150px;
                     background-color:transparent;
+                    object-fit: cover;
                     cursor: pointer;
                 }
                 .sign-component-not-nescessary-avatar-input {

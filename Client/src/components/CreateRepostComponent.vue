@@ -3,7 +3,7 @@
         <div class="create-writing">
             <div class="create-writing-info">
                 <div class="create-writing-info-image">
-                    <img class="create-writing-info-image-value" src="../assets/dummy-avatar.png" alt="">
+                    <img class="create-writing-info-image-value" :src="avatar" alt="">
                 </div>
                 <div class="create-writing-info-text">
                     <span class="create-writing-info-text-value" ref="text" role="textbox" placeholder="Post your reply" contenteditable></span>
@@ -52,6 +52,11 @@ export default {
         user: {
             type: Object,
             required: true
+        }
+    },
+    data() {
+        return {
+            avatar: store.state.data.user.user.avatar
         }
     },
     methods: {

@@ -14,7 +14,7 @@
                 </div>
                 <div v-else class="edit-profile-avatar">
                     <input class="edit-profile-avatar-input" type="file" @change="saveAvatar">
-                    <v-img class="edit-profile-avatar-value" :src="userEdited.avatar" alt="avatar" aspect-ratio="1/1" :width="100"/>
+                    <img class="edit-profile-avatar-value" :src="userEdited.avatar" alt="avatar"/>
                 </div>
                 <v-text-field
                     label="Login"
@@ -174,13 +174,16 @@ export default {
                 height: 150px;
                 top: 225px;
                 cursor: pointer;
-                border: 5px solid #ffffff;
                 @media screen and (max-width: 700px) {
                     top: 200px;
                     margin: 0 0 0 20px;
                 }
                 .edit-profile-avatar-value {
+                    width: 150px;
+                    height: 150px;
+                    object-fit: cover;
                     border-radius:90px;
+                    border: 4px solid #ffffff;
                     background-color:transparent;
                     cursor: pointer;
                 }

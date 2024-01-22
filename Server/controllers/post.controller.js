@@ -14,6 +14,7 @@ export const createPost = async (req, res) => {
         date: new Date(),
         saves: [],
         isReply: false,
+        isRepost: false,
     });
     try {
         await newPost.save();
@@ -100,12 +101,13 @@ export const getPost = async (req, res) => {
 }
 
 export const getUsersPosts = async (req, res) => {
-    const id = req.params.id;
+    const login = req.params.login;
     let seenIds = [];
     if(req.query.seenIds !== '') {
         seenIds = req.query.seenIds.split(',');
     }
-    await Post.find({ user: id, _id: {$nin: seenIds} }).sort({date:-1}).limit(10).then((posts) => {
+    console.log(login, seenIds)
+    await Post.find({ user: login, _id: {$nin: seenIds} }).sort({date:-1}).limit(10).then((posts) => {
         res.status(200).json({
             success: true,
             message: 'Users posts',

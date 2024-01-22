@@ -228,6 +228,7 @@ export default {
             align-items: center;
             .navbar-profile-data-value {
                 border-radius: 90px;
+                object-fit: cover;
                 width: 70px;
                 height: 70px;
             }

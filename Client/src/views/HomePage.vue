@@ -137,6 +137,7 @@ export default {
                 .home-writing-info-image-value {
                     width: 50px;
                     height: 50px;
+                    object-fit: cover;
                     border-radius: 50%;
                 }
             }

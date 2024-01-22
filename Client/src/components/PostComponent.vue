@@ -3,7 +3,7 @@
             <div class="post-component-values">
                 <div class="post-component-values-container">
                     <div class="post-component-values-container-image" @click.stop="redirectToProfile">
-                        <img class="post-component-values-container-image-value" src="../assets/dummy-avatar.png" alt="">
+                        <img class="post-component-values-container-image-value" :src="user.avatar" alt="avatar">
                     </div>
                     <div class="post-component-values-container-user-info">
                         <div class="post-component-values-container-user-info-values">
@@ -54,7 +54,7 @@
                 </div>
                 <div class="post-component-stats-values">
                     <CreateRepostComponent :post="post" :user="user"/>
-                    <span>{{ post.repeats.length }}</span>
+                    <span>{{ post.reposts.length }}</span>
                 </div>
                 <div class="post-component-stats-values" @click.stop="onSave">
                     <v-icon v-if="!isSavedByUser" icon="mdi-bookmark-outline" class="post-component-stats-values-icon bookmark"/>
@@ -94,7 +94,7 @@ export default {
             numLikes: this.post.likes.length,
             numSaves: this.post.saves.length,
             numReplies: this.post.replies.length,
-            numRepost: this.post.repeats.length,
+            numRepost: this.post.reposts.length,
             userState: store.state.data.user.user.login,
             repostPost: null
         }

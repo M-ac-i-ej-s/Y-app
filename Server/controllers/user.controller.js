@@ -2,6 +2,9 @@ import mongoose from 'mongoose';
 import User from '../models/user.model.js';
 import bcrypt from 'bcrypt';
 
+import { dataUri } from '../middleware/multer.middleware.js';
+import { uploader } from '../config/cloudinaryConfig.js';
+
 export const getUser = async (req, res) => {
     const userLogin = req.params.login;
     await User.find({login: userLogin})
@@ -104,7 +107,20 @@ export const checkIfPhoneExists = async (req, res) => {
 
 export const updateUser = async (req, res) => {
     const userId = req.params.id;
+
+    let imageUrl = req.body.avatar;
+    if(req.file) {
+        const file = dataUri(req).content;
+        await uploader.upload(file).then((result) => {
+            imageUrl = result.url
+        }).catch((err) => {
+            console.log(err)
+        });
+    }
+
+    req.body.avatar = imageUrl;
     const updateObject = req.body;
+
     await User.updateOne({ _id: userId }, { $set: updateObject })
         .then(() => {
             res.status(200).json({

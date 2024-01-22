@@ -1,6 +1,6 @@
 <template>
     <div class="Profile">
-        <div class="profileComponent" v-if="user && isFollowed !== null && posts && likedPosts && replies">
+        <div class="profileComponent" v-if="user && posts && likedPosts && replies && isFollowed !== null && isBlocked !== null">
             <ProfileCardComponent 
                 :isYourProfile="isYourProfile" 
                 :isFollowed="isFollowed" 
@@ -125,6 +125,7 @@ export default {
         },
         async getUsersPostService(lazyLoad = false) {
             const seenIDs = (lazyLoad) ? this.seenPostsIds : [];
+            console.log(this.user.login)
             try {
                 const res = await getUsersPosts(this.user.login, seenIDs);
                 res.forEach(post => {
@@ -132,6 +133,7 @@ export default {
                     this.seenPostsIds.push(post._id);
                 });
 
+                console.log(res)
                 if(!lazyLoad) {
                     this.posts = [res]
                 } else {

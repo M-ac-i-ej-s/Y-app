@@ -25,11 +25,11 @@
                 <div class="profile-card-values-credentials-annotations">
                     <div v-if="user.location" class="profile-card-values-credentials-annotations-value">
                         <v-icon icon="mdi-map-marker-outline"/>
-                        <span>Gdańsk, PL</span>
+                        <span>{{ user.location }}</span>
                     </div>
                     <div v-if="user.website" class="profile-card-values-credentials-annotations-value">
                         <v-icon icon="mdi-link"/>
-                        <a href="facebook.com">facebook.com</a>
+                        <a href="facebook.com">{{ user.website }}</a>
                     </div>
                     <div class="profile-card-values-credentials-annotations-value">
                         <v-icon icon="mdi-calendar-month-outline"/>
@@ -189,7 +189,8 @@ export default {
                 .profile-card-values-credentials-image-value {
                     width: 150px;
                     height: 150px;
-                    border-radius: 50%;
+                    border-radius: 90px;
+                    object-fit: cover;
                     border: white 4px solid;
                 }
             }

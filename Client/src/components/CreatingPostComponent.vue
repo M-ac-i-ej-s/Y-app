@@ -27,11 +27,11 @@ export default {
     props: {
         width: Number,
         login: String,
-        avatar: store.state.data.user.user.avatar
     },
     data() {
         return {
-            text: ''
+            text: '',
+            avatar: store.state.data.user.user.avatar
         }
     },
     components: {
@@ -60,6 +60,7 @@ export default {
             .creating-post-avatar-value {
                 width: 50px;
                 height: 50px;
+                object-fit: cover;
                 border-radius: 50%;
             }
         }

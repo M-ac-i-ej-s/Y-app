@@ -25,7 +25,7 @@ postRouter.get('/',loggedIn, getAllPosts);
 postRouter.post('/',loggedIn, createPost);
 postRouter.post('/:id/repost',loggedIn, postRepost);
 postRouter.get('/search', loggedIn, getSearchedPosts)
-postRouter.get('/:id',loggedIn, getUsersPosts);
+postRouter.get('/:login',loggedIn, getUsersPosts);
 postRouter.delete('/:id',loggedIn, deletePost);
 postRouter.patch('/:id/likePost',loggedIn, likePost);
 postRouter.get('/:login/likedPosts',loggedIn, getAllLikedPosts);
