@@ -9,7 +9,8 @@
             </div>
         </div>
         <div class="profile-card-background-photo">
-            <img class="profile-card-background-photo-value" src="../assets/dummy-background.jpg" alt="">
+            <img v-if="user.backgroundPhoto" class="profile-card-background-photo-value" :src="user.backgroundPhoto" alt="background">
+            <div v-else class="profile-card-background-photo-default"/>
         </div>
         <div class="profile-card-values">
             <div class="profile-card-values-credentials">
@@ -156,7 +157,7 @@ export default {
         max-height: 200px;
         background-color: rgb(216, 216, 216);
         @media screen and (max-width: 850px) {
-                width: 450px;
+                width: 480px;
                 height: auto;
                 max-height: 200px;
         }
@@ -168,6 +169,14 @@ export default {
                 width: 100%;
                 height: auto;
                 max-height: 200px;
+            }
+        }
+        .profile-card-background-photo-default {
+            width: 600px;
+            height: 200px;
+            @media screen and (max-width: 850px) {
+                width: 100%;
+                height: 200px;
             }
         }
     }

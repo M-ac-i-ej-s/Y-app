@@ -2,19 +2,23 @@
     <BaseDialog buttonColor="#582b5a" buttonLabel="Edit profile" :dialogWidth="750" :width="500">
         <div class="editProfile">
             <div class="edit-profile-background">
-                <div class="edit-profile-background-help">
-                    <img src="" alt="">
+                <div v-if="!backgroundPreview" class="edit-profile-background-help">
+                    <input class="edit-profile-background-input" type="file" @change="saveBackground">
                     <v-icon icon="mdi-camera-outline"></v-icon>
+                </div>
+                <div v-else class="edit-profile-background-help">
+                    <input class="edit-profile-background-input" type="file" @change="saveBackground">
+                    <img class="edit-profile-background-value" :src="backgroundPreview" alt="avatar"/>
                 </div>
             </div>
             <div class="edit-profile">
-                <div v-if="!userEdited.avatar" class="edit-profile-avatar">
+                <div v-if="!avatarPreview" class="edit-profile-avatar">
                     <input class="edit-profile-avatar-input" type="file" @change="saveAvatar">
                     <v-icon icon="mdi-camera-outline"></v-icon>
                 </div>
                 <div v-else class="edit-profile-avatar">
                     <input class="edit-profile-avatar-input" type="file" @change="saveAvatar">
-                    <img class="edit-profile-avatar-value" :src="userEdited.avatar" alt="avatar"/>
+                    <img class="edit-profile-avatar-value" :src="avatarPreview" alt="avatar"/>
                 </div>
                 <v-text-field
                     label="Login"
@@ -45,7 +49,7 @@
                 <v-btn class="edit-profile-buttons-label" rounded="xl" color="grey">
                     Clear
                 </v-btn>
-                <v-btn class="edit-profile-buttons-label" rounded="xl" color="#582b5a" :disabled="loginError" @click="this.updateUserService">
+                <v-btn class="edit-profile-buttons-label" rounded="xl" color="#582b5a" :loading="submit" :disabled="loginError" @click="this.updateUserService">
                     Save changes 
                 </v-btn>
             </div>
@@ -54,8 +58,9 @@
 </template>
 <script>
 import BaseDialog from '../base/BaseDialog.vue';
-import { updateUser, checkIfUserExists } from '../services/user.service.js';
+import { updateUser, checkIfUserExists, getUser } from '../services/user.service.js';
 import { reloadPage } from '../utils/utils';
+import { mapMutations } from 'vuex';
 import router from '../router';
 
 export default {
@@ -69,24 +74,59 @@ export default {
         return {
             userEdited: {
                 avatar: this.user.avatar,
+                backgroundPhoto: this.user.backgroundPhoto || '',
                 login: this.user.login,
                 bio: this.user.bio,
                 location: this.user.location,
                 website: this.user.website
             },
+            avatarPreview: this.user.avatar,
+            backgroundPreview: this.user.backgroundPhoto || '',
             loginTimer: null,
             loginError: false,
             loginErrorMessage: '',
+            avatarChanged: false,
+            backgroundChanged: false,
+            submit: false
         }
     },
     methods: {
         saveAvatar(event) {
-            this.avatar = URL.createObjectURL(event.target.files[0])
+            this.avatarChanged = true;
+            this.avatarPreview = URL.createObjectURL(event.target.files[0])
+            this.userEdited.avatar = event.target.files[0];
+        },
+        saveBackground(event) {
+            this.backgroundChanged = true;
+            this.backgroundPreview = URL.createObjectURL(event.target.files[0])
+            this.userEdited.backgroundPhoto = event.target.files[0];
         },
         async updateUserService() {
+            this.submit = true;
             try {
-                await updateUser(this.user._id, this.userEdited);
+                let type;
+                if(this.avatarChanged && this.backgroundChanged) {
+                    type = 'both';
+                } else if(this.avatarChanged) {
+                    type = 'avatar';
+                } else if(this.backgroundChanged) {
+                    type = 'background';
+                } else {
+                    type = 'none';
+                }
+
+                const updUser = await updateUser(this.user._id, this.userEdited, type);
+                const newUser = await this.getUserService(updUser.login);
+                this.reLogUser(newUser);
                 reloadPage();
+            } catch (error) {
+                router.push('/errorpage');
+            }
+        },
+        async getUserService(login) {
+            try {
+                const res = await getUser(login);
+                return res
             } catch (error) {
                 router.push('/errorpage');
             }
@@ -101,7 +141,8 @@ export default {
             this.loginError = false;
             this.loginErrorMessage = '';
             this.loginTimer = null;
-        }
+        },
+        ...mapMutations(['reLogUser'])
     },
     watch: {
         'userEdited.login': async function() {
@@ -156,6 +197,19 @@ export default {
             background-color: #d1b2d3;
             margin-bottom: 20px;
             cursor: pointer;
+            .edit-profile-background-input {
+                opacity: 0;
+                position: absolute;
+                cursor: pointer;
+                width: 600px;
+                height: 200px;
+            }
+            .edit-profile-background-value {
+                width: 600px;
+                height: 200px;
+                object-fit: cover;
+                cursor: pointer;
+            }
         }
     }
     .edit-profile {

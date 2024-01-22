@@ -15,13 +15,24 @@ export const getUser = async (login) => {
     }
 }
 
-export const updateUser = async (id, data) => {
+export const updateUser = async (id, data, type) => {
+    const formData = new FormData();
+    formData.append('login', data.login);
+    formData.append('bio', data.bio);
+    formData.append('location', data.location);
+    formData.append('website', data.website);
+    formData.append('images', data.avatar);
+    formData.append('images', data.backgroundPhoto);
     try {
-        const response = await axios.put(API_URL + id, data,{
-            headers: authHeader(),
+        const response = await axios.put(API_URL + id, formData,{
+            params: {
+                type: type,
+            },
+            headers: {
+                ...authHeader(),
+            },
         })
-        console.log(response.data);
-        return response.data;
+        return response.data.updateUser;
     } catch (error) {
         console.error('Error updating user:', error);
         throw error; // You might want to handle errors appropriately in your component

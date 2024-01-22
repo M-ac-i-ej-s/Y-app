@@ -8,7 +8,8 @@ export const register = (login, email, telNumber, password, bio, avatar ) => {
     formData.append('telNumber', telNumber);
     formData.append('password', password);
     formData.append('bio', bio);
-    formData.append('avatar', avatar);
+    formData.append('images', avatar);
+    formData.append('images', '');
     return axios
         .post(API_URL + 'register', formData)
         .then((response) => {

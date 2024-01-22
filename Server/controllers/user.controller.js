@@ -108,17 +108,37 @@ export const checkIfPhoneExists = async (req, res) => {
 export const updateUser = async (req, res) => {
     const userId = req.params.id;
 
-    let imageUrl = req.body.avatar;
-    if(req.file) {
-        const file = dataUri(req).content;
-        await uploader.upload(file).then((result) => {
-            imageUrl = result.url
-        }).catch((err) => {
-            console.log(err)
-        });
+    let avatarUrl = req.body.avatar;
+    let backgroundUrl = req.body.backgroundPhoto;
+    const type = req.query.type;
+    if(req.files) {
+        const arrFile = dataUri(req);
+        if(type === 'avatar' || type === 'both') {
+            const file = arrFile[0].content;
+            console.log('isHere2')
+            await uploader.upload(file).then((result) => {
+                avatarUrl = result.url
+            }).catch((err) => {
+                console.log(err)
+            });
+        }
+        if(type === 'background' || type === 'both') {
+            let index = 0;
+            console.log('isHere')
+            if(type === 'both') {
+                index = 1;
+            }
+            const file = arrFile[index].content;
+            await uploader.upload(file).then((result) => {
+                backgroundUrl = result.url
+            }).catch((err) => {
+                console.log(err)
+            });
+        }
     }
 
-    req.body.avatar = imageUrl;
+    req.body.avatar = avatarUrl;
+    req.body.backgroundPhoto = backgroundUrl;
     const updateObject = req.body;
 
     await User.updateOne({ _id: userId }, { $set: updateObject })
