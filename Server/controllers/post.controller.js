@@ -17,8 +17,13 @@ export const createPost = async (req, res) => {
         isRepost: false,
     });
     try {
-        await newPost.save();
-        res.status(201).json(newPost);
+        await newPost.save().then(async (posts) => {
+            res.status(201).json({
+                success: true,
+                message: 'Users posts',
+                Posts: posts,
+            });
+        });
     } catch (error) {
         res.status(409).json({ message: error.message });
     }

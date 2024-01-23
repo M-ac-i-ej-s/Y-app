@@ -134,6 +134,9 @@ export default {
             this.$router.push(`/${this.user.login}/following`);
         },
     },
+    mounted() {
+        console.log(this.user.avatar)
+    }
 }
 
 </script>

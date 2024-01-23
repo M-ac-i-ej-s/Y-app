@@ -1,5 +1,6 @@
 import axios from "axios";
 import authHeader from "./auth-header";
+import { socket } from '../socket'
 
 const API_URL = 'http://localhost:3001/posts/';
 
@@ -37,7 +38,8 @@ export const createPost = async (text, login) => {
                 },
             },
             ).then(async (response) => {
-                return response.data.Post;
+                socket.emit('newPost', response.data.Posts);
+                return response.data.Posts;
             }).catch((error) => {
                 console.log(error);
             });

@@ -13,6 +13,31 @@ import { cloudinaryConfig } from './config/cloudinaryConfig.js'
 dotenv.config();
 const app = express();
 
+import {createServer} from 'http';
+const server = createServer(app);
+
+import { Server } from "socket.io";
+const io = new Server(server, {
+    cors: {
+      origin: "*"
+    }
+});
+
+io.on('connection', (socket) => {
+    let user = null;
+
+    socket.on('setUser', (userSend) => {
+        userSend.following.forEach((user) => {
+            socket.join(user);
+        })
+        user = userSend;
+    });
+
+    socket.on('newPost', () => {
+        socket.to(user.login).emit('newPosts', 'new posts available');
+    });
+});
+
 mongoose.set('strictQuery', false)
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -41,6 +66,6 @@ app.use('/users', userRouter);
 app.use('/auth',authRouter  );
 app.use('/posts', postRouter);
 
-app.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
     console.log(`Our server is running on port ${process.env.PORT}`);
 });

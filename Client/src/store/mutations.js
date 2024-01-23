@@ -1,3 +1,5 @@
+import { socket } from "../socket.js";
+
 const loggedIn = (state, user) => {
     state.data.user = user;
     state.data.isLogged = true;
