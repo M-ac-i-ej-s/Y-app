@@ -28,7 +28,7 @@
             <div v-if="isRepost && repostPost" class="create-writing-repost-to" @click.stop="redirectToRepost">
                 <div class="create-writing-repost-to-container">
                     <div class="create-writing-repost-to-container-image">
-                        <img class="create-writing-repost-to-container-image-value" :src="user.avatar" alt="avatar">
+                        <img class="create-writing-repost-to-container-image-value" :src="userRepostFrom.avatar" alt="avatar">
                     </div>
                     <div>
                         <span class="create-writing-repost-to-container-values login">{{ repostPost.user }}</span>
@@ -96,6 +96,7 @@ export default {
             numReplies: this.post.replies.length,
             numRepost: this.post.reposts.length,
             userState: store.state.data.user.user.login,
+            userRepostFrom: null,
             repostPost: null
         }
     },
@@ -160,9 +161,11 @@ export default {
                 this.isRepost = true;
                 try {
                     const response = await getPost(this.post.repostFrom.id);
+                    const user = await getUser(response.user);
 
                     response.date = new Date(response.date);
 
+                    this.userRepostFrom = user;
                     this.repostPost = response;
                 } catch (error) {
                     router.push('/errorpage');

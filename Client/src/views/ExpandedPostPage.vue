@@ -25,7 +25,7 @@
                 </div>
             </div>
             <div class="expanded-post-writing-button">
-                <v-btn class="expanded-post-writing-button-value" rounded="xl" color="#582b5a" @click="postReply">Reply</v-btn>
+                <v-btn class="expanded-post-writing-button-value" rounded="xl" color="#582b5a" @click="postReplyService">Reply</v-btn>
             </div>
         </div>
         <div class="expanded-post-label">
@@ -74,10 +74,11 @@ export default {
                 router.push('/errorpage');
             }
         },
-        async postReply() {
+        async postReplyService() {
             try {
+                console.log(this.$route.params.id,this.$refs.text.textContent ,store.state.data.user.user.login,this.$route.params.username)
                 await postReply(this.$route.params.id,this.$refs.text.textContent ,store.state.data.user.user.login,this.$route.params.username);
-                reloadPage();
+                // reloadPage();
             } catch (error) {
                 router.push('/errorpage');
             }

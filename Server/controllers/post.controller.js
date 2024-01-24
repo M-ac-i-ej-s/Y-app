@@ -46,7 +46,8 @@ export const postReply = async (req, res) => {
         replyTo: {
             id: id,
             user: user,
-        }
+        },
+        isRepost: false,
     });
     try {
         await newPost.save();

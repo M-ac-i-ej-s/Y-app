@@ -118,13 +118,14 @@ export const getPost = async (id) => {
 };
 
 export const postReply = async (id, text, login, user) => {
-    await axios.post(API_URL + id, {
+    await axios.post(API_URL + id + '/reply', {
         text: text,
         login: login,
         user: user
     }, {
         headers: authHeader(),
-    }).then(async (response) => {
+    }).then((response) => {
+        console.log('s')
         return response.data;   
     }).catch((error) => {
         console.log(error);

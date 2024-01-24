@@ -90,7 +90,8 @@ export default {
         async updateBothFollowService() {
             try {
                 await updateBothFollow(store.state.data.user.user.login, this.user.login);
-                await this.reLogUser(this.userCloud);
+                await this.getUserFromCloudService();
+                this.reLogUser(this.userCloud);
                 this.isFollowed = !this.isFollowed;
             } catch (error) {
                 router.push('/errorpage');
@@ -100,7 +101,7 @@ export default {
             try {
                 await updateBlockedUsers(store.state.data.user.user.login, this.user.login);
                 await this.getUserFromCloudService();
-                await this.reLogUser(this.userCloud);
+                this.reLogUser(this.userCloud);
                 this.isBlocked = !this.isBlocked;
             } catch (error) {
                 router.push('/errorpage');
