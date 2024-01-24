@@ -3,12 +3,15 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import passport from 'passport';
 
 import userRouter from './routes/user.route.js';
 import authRouter from './routes/auth.route.js';
 import postRouter from './routes/post.route.js';
 
 import { cloudinaryConfig } from './config/cloudinaryConfig.js'
+
+import { Strategy, ExtractJwt } from 'passport-jwt';
 
 dotenv.config();
 const app = express();
@@ -39,6 +42,8 @@ io.on('connection', (socket) => {
 });
 
 mongoose.set('strictQuery', false)
+
+app.use(passport.initialize());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
