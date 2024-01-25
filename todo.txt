@@ -1,3 +1,1 @@
 -images to posts
--infinite scroll in expanded post
--block/unblock bug
