@@ -125,7 +125,6 @@ export const postReply = async (id, text, login, user) => {
     }, {
         headers: authHeader(),
     }).then((response) => {
-        console.log('s')
         return response.data;   
     }).catch((error) => {
         console.log(error);

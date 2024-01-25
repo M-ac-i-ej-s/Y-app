@@ -115,7 +115,6 @@ export const updateUser = async (req, res) => {
         const arrFile = dataUri(req);
         if(type === 'avatar' || type === 'both') {
             const file = arrFile[0].content;
-            console.log('isHere2')
             await uploader.upload(file).then((result) => {
                 avatarUrl = result.url
             }).catch((err) => {
@@ -124,7 +123,6 @@ export const updateUser = async (req, res) => {
         }
         if(type === 'background' || type === 'both') {
             let index = 0;
-            console.log('isHere')
             if(type === 'both') {
                 index = 1;
             }
@@ -440,7 +438,9 @@ export const getSomeoneToFollow = async (req, res) => {
         seenIds = req.query.seenIds.split(',');
     }
 
-    await User.find({ _id: {$nin: seenIds}, login: {$nin: userLogin}, followers: {$nin: userLogin} }).sort({followers: -1}).limit(5).then((users) => {
+    const user = await User.findOne({ login: userLogin });
+
+    await User.find({ _id: {$nin: seenIds}, login: {$nin: [userLogin, ...user.blockedUsers]}, followers: {$nin: userLogin} }).sort({followers: -1}).limit(5).then((users) => {
         res.status(200).json({
             success: true,
             message: 'Search users',

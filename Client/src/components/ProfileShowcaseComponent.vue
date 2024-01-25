@@ -47,6 +47,7 @@ import router from '../router';
 import store from '../store';
 import { mapMutations } from 'vuex';
 import { updateBothFollow, updateBlockedUsers, getUser } from '../services/user.service';
+import { createWebHistory } from 'vue-router';
 
 
 export default {
@@ -65,13 +66,12 @@ export default {
             isFollowed: false,
             isHovering: false,
             isBlocked: false,
-            userCloud: null,
             menu: false,
         }
     },
     methods: {
         isFollow() {
-            if(this.user.followers.includes(this.user.login)) {
+            if(store.state.data.user.user.following.includes(this.user.login)) {
                 this.isFollowed = true;
             } else {
                 this.isFollowed = false;
@@ -90,18 +90,19 @@ export default {
         async updateBothFollowService() {
             try {
                 await updateBothFollow(store.state.data.user.user.login, this.user.login);
-                await this.getUserFromCloudService();
-                this.reLogUser(this.userCloud);
+                const user = await this.getUserFromCloudService();
+                this.reLogUser(user);
                 this.isFollowed = !this.isFollowed;
             } catch (error) {
+                console.log(error)
                 router.push('/errorpage');
             }
         },
         async updateBlockedUsersService() {
             try {
                 await updateBlockedUsers(store.state.data.user.user.login, this.user.login);
-                await this.getUserFromCloudService();
-                this.reLogUser(this.userCloud);
+                const user = await this.getUserFromCloudService();
+                this.reLogUser(user);
                 this.isBlocked = !this.isBlocked;
             } catch (error) {
                 router.push('/errorpage');
@@ -110,9 +111,10 @@ export default {
         async getUserFromCloudService() {
             try {
                 const res = await getUser(store.state.data.user.user.login);
-                this.userCloud = res;
-                this.userCloud.joinDate = new Date(this.userCloud.joinDate);
+                res.joinDate = new Date(res.joinDate);
+                return res;
             } catch (error) {
+                console.log(error)
                 router.push('/errorpage');
             }
         },

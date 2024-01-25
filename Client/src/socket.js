@@ -8,6 +8,5 @@ export const socketState = reactive({
 });
 
 socket.on('newPosts', (message) => {
-    console.log(message)
     socketState.message = message;
 });

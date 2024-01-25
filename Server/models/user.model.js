@@ -16,12 +16,8 @@ const UserSchema = new mongoose.Schema(
         joinDate: {type: Date, required: false},
         followers: [{type: String}],
         following: [{type: String}],
-        // posts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
         blockedUsers:  [{type: String}],
-        // savedPosts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
         backgroundPhoto: {type: String, required: false},
-        // likedPosts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
-        // repliedPosts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
     }
 );
 

@@ -4,8 +4,8 @@ import { multerUploads } from '../middleware/multer.middleware.js';
 
 const authRouter = express.Router();
 
+authRouter.get('/logout', Logout);
 authRouter.post('/login', Login);
 authRouter.post('/register', multerUploads, Register);
-authRouter.get('/logout', Logout);
 
 export default authRouter;

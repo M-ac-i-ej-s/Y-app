@@ -45,7 +45,6 @@ export const Login = async (req, res) => {
 
 export const Register = async (req, res) => {
     let imageUrl = null;
-    console.log(dataUri(req)[0].content)
     if(dataUri(req)[0].content) {
         const file = dataUri(req)[0].content;
         await uploader.upload(file).then((result) => {

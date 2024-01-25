@@ -7,7 +7,7 @@
                 :isHovering="isHovering" 
                 :isBlocked="isBlocked" 
                 :user="user" 
-                :postsLength="posts.length"
+                :postsLength="postsLength"
                 :updateFollowers="updateFollowersService"
                 :updateBlockedUsers="updateBlockedUsersService"/>
             <ProfileSlotsComponent 
@@ -54,7 +54,8 @@ export default {
             seenLikedPostsIds: [],
             seenRepliesIds: [],
             seenPostsIds: [],
-            userCloud: null
+            userCloud: null,
+            postsLength: null,
         }
     },
     methods: {
@@ -125,7 +126,6 @@ export default {
         },
         async getUsersPostService(lazyLoad = false) {
             const seenIDs = (lazyLoad) ? this.seenPostsIds : [];
-            console.log(this.user.login)
             try {
                 const res = await getUsersPosts(this.user.login, seenIDs);
                 res.forEach(post => {
@@ -133,7 +133,6 @@ export default {
                     this.seenPostsIds.push(post._id);
                 });
 
-                console.log(res)
                 if(!lazyLoad) {
                     this.posts = [res]
                 } else {
@@ -142,6 +141,8 @@ export default {
                     }
                 }
 
+                this.postsLength = this.posts.flat().length;
+            
             } catch (error) {
                 router.push('/errorpage');
             }
@@ -191,7 +192,6 @@ export default {
             }
         },
         onTabChange(tab) {
-            console.log(tab)
             if(tab === 1) {
                 this.getUsersPostService(true);
             } else if(tab === 2) {

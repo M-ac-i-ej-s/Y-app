@@ -44,7 +44,6 @@ export const updateFollowers = async (login, user) => {
         const response = await axios.patch(API_URL + login + '/followers', {user}, {
             headers: authHeader(),
         })
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error('Error updating user:', error);
@@ -57,7 +56,6 @@ export const updateFollowing = async (login, user) => {
         const response = await axios.patch(API_URL + login + '/following', {user}, {
             headers: authHeader(),
         })
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error('Error updating user:', error);
@@ -102,7 +100,6 @@ export const updateBlockedUsers = async (login, user) => {
         const response = await axios.patch(API_URL + login + '/blockedUsers', {user}, {
             headers: authHeader(),
         })
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error('Error updating user:', error);

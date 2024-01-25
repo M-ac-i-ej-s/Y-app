@@ -112,7 +112,6 @@ export const getUsersPosts = async (req, res) => {
     if(req.query.seenIds !== '') {
         seenIds = req.query.seenIds.split(',');
     }
-    console.log(login, seenIds)
     await Post.find({ user: login, _id: {$nin: seenIds} }).sort({date:-1}).limit(10).then((posts) => {
         res.status(200).json({
             success: true,

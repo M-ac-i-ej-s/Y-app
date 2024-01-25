@@ -29,6 +29,9 @@ userRouter.get('/:email/email', checkIfEmailExists);
 userRouter.get('/:login/fiveFollow', loggedIn, getSomeoneToFollow);
 userRouter.get('/:telNumber/phone', checkIfPhoneExists);
 userRouter.get('/:login',loggedIn, getUser)
+userRouter.get('/:login/followers',loggedIn, getAllFollowers);
+userRouter.get('/:login/following',loggedIn, getAllFollowing);
+userRouter.get('/:login/blockedUsers',loggedIn, getAllBlockedUsers);
 userRouter.put('/:id',loggedIn, multerUploads, updateUser);
 userRouter.patch('/:login/likedPosts',loggedIn, updateLikedPosts);
 userRouter.patch('/:login/savedPosts',loggedIn, updateSavedPosts);
@@ -36,9 +39,6 @@ userRouter.patch('/:login/posts',loggedIn, updatePosts);
 userRouter.patch('/:login/replies',loggedIn, updateReplies);
 userRouter.patch('/:login/followers',loggedIn, updateFollowers);
 userRouter.patch('/:login/following',loggedIn, updateFollowing);
-userRouter.get('/:login/followers',loggedIn, getAllFollowers);
-userRouter.get('/:login/following',loggedIn, getAllFollowing);
-userRouter.get('/:login/blockedUsers',loggedIn, getAllBlockedUsers);
 userRouter.patch('/:login/blockedUsers',loggedIn, updateBlockedUsers);
 
 export default userRouter;

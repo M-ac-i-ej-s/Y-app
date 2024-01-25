@@ -18,7 +18,7 @@ const vuetify = createVuetify({
     aliases,
     sets: {
       mdi,
-    }, // This is already the default value - only for display purposes
+    },
   },
 })
 
