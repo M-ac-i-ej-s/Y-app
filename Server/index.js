@@ -37,7 +37,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('newPost', () => {
-        socket.to(user.login).emit('newPosts', 'new posts available');
+        socket.to(user.login).emit('newPosts', Math.random());
     });
 });
 

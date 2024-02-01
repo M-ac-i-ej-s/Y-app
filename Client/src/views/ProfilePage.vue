@@ -32,6 +32,7 @@ import { getUser, updateBothFollow, updateBlockedUsers } from '../services/user.
 import { getUsersPosts, getAllLikedPosts, getAllReplies } from '../services/post.service';
 import router from '../router';
 import { mapMutations } from 'vuex';
+import { socket } from '../socket';
 import store from '../store'
 
 export default {
@@ -79,6 +80,7 @@ export default {
                 await updateBothFollow(store.state.data.user.user.login, this.$route.params.username);
                 await this.getUserFromCloudService();
                 this.reLogUser(this.userCloud);
+                socket.emit('setUser', this.userCloud);
                 this.isFollowed = !this.isFollowed;
             } catch (error) {
                 router.push('/errorpage');

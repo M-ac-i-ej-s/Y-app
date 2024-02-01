@@ -47,7 +47,7 @@ import router from '../router';
 import store from '../store';
 import { mapMutations } from 'vuex';
 import { updateBothFollow, updateBlockedUsers, getUser } from '../services/user.service';
-import { createWebHistory } from 'vue-router';
+import {socket} from '../socket';
 
 
 export default {
@@ -92,6 +92,7 @@ export default {
                 await updateBothFollow(store.state.data.user.user.login, this.user.login);
                 const user = await this.getUserFromCloudService();
                 this.reLogUser(user);
+                socket.emit('setUser', user);
                 this.isFollowed = !this.isFollowed;
             } catch (error) {
                 console.log(error)
@@ -134,6 +135,7 @@ export default {
     padding: 20px;
     border-bottom: 1px solid #e5e5e5;
     cursor: pointer;
+    transition: 0.2s ease;
     &:hover {
         background-color: #f5f5f5;
     }

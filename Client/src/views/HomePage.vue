@@ -13,6 +13,12 @@
                 <v-btn class="home-writing-button-value" rounded="xl" color="#582b5a" @click="onPost">Post</v-btn>
             </div>
         </div>
+        <div class="home-refresh">
+            <v-badge color="red" :content="numberOfnewPosts" v-if="numberOfnewPosts !== 0">
+                <v-btn class="home-refresh-button" icon="mdi-arrow-up" color="#582b5a" @click="getNewPosts"/>
+            </v-badge>
+            <v-btn v-else class="home-refresh-button" icon="mdi-arrow-up" color="#582b5a" @click="getNewPosts"/>
+        </div>
         <div v-if="posts">
             <div v-if="posts[0].length > 0">
                 <div v-for="(pages, index) in posts" :key="index">
@@ -46,6 +52,8 @@ import store from '../store';
 import router from '../router';
 import { reloadPage } from '../utils/utils';
 import { createPost, getPostsByFollowedUsers } from '../services/post.service';
+import { socketState } from '../socket';
+import { watch } from 'vue';
 
 export default {
     name: 'HomePage',
@@ -60,7 +68,9 @@ export default {
             userLogin: store.state.data.user.user.login,
             avatar: store.state.data.user.user.avatar,
             posts: null,
-            seenIds: []
+            seenIds: [],
+            socketState: socketState,
+            numberOfnewPosts: 0
         }
     },
     methods: {
@@ -108,6 +118,12 @@ export default {
                 this.getPostsByFollowedUsersService(true);
             }
         },
+        getNewPosts() {
+            this.numberOfnewPosts = 0;
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+            this.posts = null;
+            this.getPostsByFollowedUsersService();
+        }
     },
     mounted() {
         window.addEventListener('scroll', this.checkScroll);
@@ -115,6 +131,15 @@ export default {
     },
     beforeDestroy() {
         window.removeEventListener('scroll', this.checkScroll);
+    },
+    watch: {
+        socketState: {
+            handler() {
+                this.numberOfnewPosts++;
+            },
+            deep: true
+        }
+    
     }
 }
 </script>
@@ -180,6 +205,15 @@ export default {
         padding: 30px 20px 30px 20px;
         font-size: 20px;
         font-weight: 700;
+    }
+    .home-refresh {
+        margin-left: 500px;
+        margin-top: 73vh;
+        @media screen and (max-width: 850px) {
+            margin-left: 350px;
+        }
+        z-index: 10;
+        position: fixed;
     }
 }
 </style>
