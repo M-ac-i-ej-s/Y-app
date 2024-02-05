@@ -53,7 +53,6 @@ import router from '../router';
 import { reloadPage } from '../utils/utils';
 import { createPost, getPostsByFollowedUsers } from '../services/post.service';
 import { socketState } from '../socket';
-import { watch } from 'vue';
 
 export default {
     name: 'HomePage',
@@ -114,14 +113,15 @@ export default {
         },
         checkScroll() {
             const maxScrollPosition = document.documentElement.scrollHeight - window.innerHeight;
-            if (window.scrollY === maxScrollPosition) {
+            if (window.scrollY === maxScrollPosition && this.posts) {
                 this.getPostsByFollowedUsersService(true);
             }
         },
         getNewPosts() {
-            this.numberOfnewPosts = 0;
             window.scrollTo({ top: 0, behavior: 'smooth' })
+            this.numberOfnewPosts = 0;
             this.posts = null;
+            this.seenIds = [];
             this.getPostsByFollowedUsersService();
         }
     },

@@ -63,15 +63,13 @@ export default {
         async getUserService() {
             try {
                 const res = await getUser(this.$route.params.username);
-                if(!res) {
-                    router.push('/404');
-                }
                 this.user = res;
                 this.user.joinDate = new Date(this.user.joinDate);
                 this.getUsersPostService();
                 this.getAllLikedPostsService();
                 this.getAllRepliesService();
             } catch (error) {
+                console.log(error)
                 router.push('/errorpage');
             }
         },
@@ -83,6 +81,7 @@ export default {
                 socket.emit('setUser', this.userCloud);
                 this.isFollowed = !this.isFollowed;
             } catch (error) {
+                console.log(error)
                 router.push('/errorpage');
             }
         },
@@ -111,8 +110,9 @@ export default {
             try {
                 const res = await getUser(store.state.data.user.user.login);
                 this.userCloud = res;
-                this.user.joinDate = new Date(this.user.joinDate);
+                this.userCloud.joinDate = new Date(this.userCloud.joinDate);
             } catch (error) {
+                console.log(error)
                 router.push('/errorpage');
             }
         },
@@ -123,6 +123,7 @@ export default {
                 this.reLogUser(this.userCloud);
                 this.isBlocked = !this.isBlocked;
             } catch (error) {
+                console.log(error)
                 router.push('/errorpage');
             }
         },

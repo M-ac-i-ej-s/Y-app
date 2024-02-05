@@ -2,7 +2,7 @@ import axios from "axios";
 import authHeader from "./auth-header";
 import { socket } from '../socket'
 
-const API_URL = 'http://localhost:3001/posts/';
+const API_URL = 'http://localhost:3001/api/posts/';
 
 export const getUsersPosts = async (login, seenIds) => { 
     try {

@@ -77,7 +77,7 @@ export default {
         async postReplyService() {
             try {
                 await postReply(this.$route.params.id,this.$refs.text.textContent ,store.state.data.user.user.login,this.$route.params.username);
-                // reloadPage();
+                reloadPage();
             } catch (error) {
                 router.push('/errorpage');
             }
