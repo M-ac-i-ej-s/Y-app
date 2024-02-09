@@ -1,6 +1,6 @@
 import axios from "axios";
 import authHeader from "./auth-header";
-const API_URL = 'http://localhost:3001/api/users/';
+const API_URL = `https://${window.location.hostname}:3001/api/users/`;
 
 export const getUser = async (login) => {
     try {

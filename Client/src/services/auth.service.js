@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_URL = 'http://localhost:3001/api/auth/';
+const API_URL = `https://${window.location.hostname}:3001/api/auth/`;
 
 export const register = (login, email, telNumber, password, bio, avatar ) => {
     const formData = new FormData();
@@ -14,6 +14,9 @@ export const register = (login, email, telNumber, password, bio, avatar ) => {
         .post(API_URL + 'register', formData)
         .then((response) => {
             return response.data;
+        })
+        .catch(err => {
+            console.log(err)
         });
 };
 

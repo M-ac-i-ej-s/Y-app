@@ -6,7 +6,8 @@
         </div>
         <div v-if="this.$route.query.q !== undefined">
             <div v-if="posts && users">
-                <ExploreSlotsComponent :posts="posts" :users="users" :switchRoutes="switchRoutes"/>
+                <ExeptionComponent v-if="posts[0].length === 0 && users[0].length === 0" text="users or posts with that text"/>
+                <ExploreSlotsComponent v-else :posts="posts" :users="users" :switchRoutes="switchRoutes"/>
             </div>
             <div v-else>
                 <LoaderComponent/>
@@ -20,6 +21,7 @@
 </template>
 <script>
 import ExploreSlotsComponent from '../components/ExploreSlotsComponent.vue';
+import ExeptionComponent from '../components/ExeptionComponent.vue';
 import { getPostsExplore } from '../services/post.service';
 import { getUsersExplore } from '../services/user.service';
 import router from '../router';
@@ -30,7 +32,8 @@ export default {
     name: 'ExplorePage',
     components: {
         ExploreSlotsComponent,
-        LoaderComponent
+        LoaderComponent,
+        ExeptionComponent
     },
     data() {
         return {
@@ -66,6 +69,8 @@ export default {
                     } else {
                         this.posts = [...this.posts, response]
                     }
+                } else {
+                    this.posts = [[]]
                 }
             } catch (error) {
                 router.push('/errorpage');

@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import passport from 'passport';
 import path from 'path';
+import https from 'https';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 import userRouter from './routes/user.route.js';
@@ -13,22 +15,23 @@ import postRouter from './routes/post.route.js';
 
 import { cloudinaryConfig } from './config/cloudinaryConfig.js'
 
-import { Strategy, ExtractJwt } from 'passport-jwt';
-
 dotenv.config();
 const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-import {createServer} from 'http';
-const server = createServer(app);
+const server = https.createServer({
+    key:fs.readFileSync(path.join('./cert/key.pem')),
+    cert:fs.readFileSync(path.join('./cert/cert.pem'))
+}, app)
 
 import { Server } from "socket.io";
 const io = new Server(server, {
     cors: {
       origin: "*"
-    }
+    },
+    rejectUnauthorized: false
 });
 
 io.on('connection', (socket) => {
@@ -76,11 +79,11 @@ app.use('/api/users', userRouter);
 app.use('/api/auth',authRouter  );
 app.use('/api/posts', postRouter);
 
-// app.use(express.static(path.join(__dirname, '../Client/dist')));
+app.use(express.static(path.join(__dirname, '../Client/dist')));
 
-// app.get(/^\/(?!api).*/, function (req, res) {
-//   res.sendFile(path.join(__dirname, '../', 'Client', 'dist', 'index.html'));
-// });
+app.get(/^\/(?!api).*/, function (req, res) {
+  res.sendFile(path.join(__dirname, '../', 'Client', 'dist', 'index.html'));
+});
 
 server.listen(process.env.PORT, () => {
     console.log(`Our server is running on port ${process.env.PORT}`);

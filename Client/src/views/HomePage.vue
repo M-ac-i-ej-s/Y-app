@@ -69,6 +69,7 @@ export default {
             posts: null,
             seenIds: [],
             socketState: socketState,
+            following: store.state.data.user.user.following.length,
             numberOfnewPosts: 0
         }
     },
@@ -138,8 +139,7 @@ export default {
                 this.numberOfnewPosts++;
             },
             deep: true
-        }
-    
+        },
     }
 }
 </script>
