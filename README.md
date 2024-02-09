@@ -21,7 +21,9 @@ Front:
 - Sweetalert
 - Vuex
 - axios
-  Back:
+
+Back:
+
 - socket.io
 - mongoose
 - passport-jwt
